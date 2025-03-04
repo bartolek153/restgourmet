@@ -1,0 +1,33 @@
+@hostname = http://localhost
+@port = 8080
+@host = {{hostname}}:{{port}}
+@contentType = application/json
+
+
+POST {{host}}/api/auth/register
+Accept: */*
+Content-Type: application/json
+
+{
+  "identifier": "johndoe@test.com",
+  "password": "password"
+}
+
+###
+
+POST {{host}}/api/auth/login
+Accept: */*
+Content-Type: {{contentType}}
+
+{
+  "identifier": "johndoe@test.com",
+  "password": "password"
+}
+
+###
+
+GET {{host}}/api/users
+Accept: */*
+Content-Type: application/json
+Cookie: restgourmet-jwt=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHktand0Iiwic3ViIjoid2lzZV9oYXdrXzM0NTgiLCJleHAiOjE3NDEwNjQwNDQsImlhdCI6MTc0MTAyODA0NH0.Rmxd2wlnciraaEPqZsWNVpkrjFES89TanaHJ4c5rtNw
+

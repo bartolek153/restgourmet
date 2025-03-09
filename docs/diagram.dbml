@@ -1,0 +1,552 @@
+Table auth.users {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	name varchar
+	email varchar [ not null ]
+	password varchar [ not null ]
+	role int [ not null default: 1]
+	phone varchar
+	created_at timestamp [ default: CURRENT_TIMESTAMP]
+
+	indexes {
+		(email, password) [ name: 'auth.users_index_0' unique ]
+	}
+}
+
+Table hr.employees {
+	id uuid [ pk not null unique ]
+	user_id uuid [ not null unique ]
+	hire_date date
+	dimissal_date date
+	work_schedule_id uuid [ not null ]
+	status int [ not null default: 1]
+	role_id uuid [ not null ]
+}
+
+Table shared.tenants {
+	id int [ pk increment not null unique ]
+	name varchar [ not null ]
+	created_at timestamp [ not null default: CURRENT_TIMESTAMP]
+}
+
+Table hr.work_schedules {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	lunch_time_mins int
+	max_overtime_mins int
+	schedule_id uuid [ not null ]
+}
+
+Table shared.schedules {
+	id uuid [ pk not null unique ]
+}
+
+Table shared.schedule_days {
+	id uuid [ pk not null unique ]
+	week_day uuid [ not null ]
+	schedule_id uuid [ not null ]
+}
+
+Table shared.week_days {
+	id uuid [ pk not null unique ]
+	day_number int [ not null ]
+}
+
+Table hr.employee_attendances {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	attendance_date date [ not null ]
+	clock_in_time time
+	clock_out_time time
+	overtime_mins int [ default: 0]
+	work_mins smallint [ default: 0]
+	note varchar
+	employee_id uuid [ not null ]
+}
+
+Table wh.products {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	sku varchar
+	description varchar [ not null ]
+	group_id uuid
+	origin int [ not null default: 0]
+	status int [ not null default: 0]
+	purchase_unit_id uuid
+	inventory_unit_id uuid
+	price decimal
+
+	indexes {
+		(sku) [ name: 'wh.products_index_0' unique ]
+	}
+}
+
+Table wh.product_groups {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	description varchar [ not null ]
+	family_id uuid
+}
+
+Table shared.units {
+	id uuid [ pk not null unique ]
+	description varchar [ not null ]
+	short_description varchar
+}
+
+Table wh.product_families {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	description varchar [ not null ]
+	category_id uuid
+}
+
+Table wh.product_categories {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	description varchar [ not null ]
+	show_in_menu boolean
+}
+
+Table wh.unit_measures {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	description varchar [ not null ]
+	short_description varchar
+	base_unit_id uuid [ not null ]
+	conversion_factor decimal [ not null default: 1]
+}
+
+Table wh.receipts {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	issue_date timestamp [ not null ]
+	supplier_id uuid
+	total_amount decimal
+	tax_amount decimal
+	discount_amount decimal
+}
+
+Table wh.receipt_lines {
+	id uuid [ pk not null unique ]
+	receipt_id uuid [ not null ]
+	item_code varchar
+	item_description varchar
+	item_unit varchar
+	quantity decimal
+	unit_price decimal
+	total_price decimal
+	discount_amount decimal
+	tax_amount decimal
+}
+
+Table wh.nfe_receipt {
+	id uuid [ pk not null unique ]
+	receipt_id uuid [ not null ]
+	nota_fiscal int [ not null ]
+	serie int
+	cnpj_emitente varchar
+	id_nfe varchar
+}
+
+Table wh.suppliers {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	name varchar [ not null ]
+}
+
+Table wh.product_inventory {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	product_id uuid [ not null ]
+	quantity_on_hand decimal [ not null default: 0]
+	minimum_stock_quantity decimal
+	minimum_stock_unit_id uuid
+	maximum_stock_quantity decimal
+	maximum_stock_unit_id uuid
+}
+
+Table wh.inventory_positions {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	product_id uuid [ not null ]
+	position_date timestamp [ not null default: CURRENT_TIMESTAMP]
+	reported_by uuid
+	quantity decimal
+	status int
+	purchase_supplier_id uuid
+}
+
+Table wh.product_supplier {
+	id uuid [ pk not null unique ]
+	supplier_id uuid [ not null ]
+	inventory_product_id uuid [ not null ]
+	supplier_product_id varchar
+	supplier_product_description varchar
+}
+
+Table hr.employee_days_off {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	reason_id uuid [ not null ]
+	employee_id uuid [ not null ]
+}
+
+Table hr.employee_roles {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	description varchar
+}
+
+Table hr.employee_notifications {
+	id int [ pk increment not null unique ]
+	base_notification_id uuid [ not null ]
+	employee_id uuid [ not null ]
+}
+
+Table shared.notifications {
+	id uuid [ pk not null unique ]
+	sent_date timestamp [ not null default: CURRENT_TIMESTAMP]
+}
+
+Table hr.employee_day_off_reasons {
+	id uuid [ pk not null unique ]
+	tenant_id int
+	description varchar [ not null ]
+}
+
+Table shared.holidays {
+	id uuid [ pk not null unique ]
+	description varchar [ not null ]
+	holiday_date date [ not null ]
+}
+
+Table hr.activities {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	title varchar [ not null ]
+	status int [ default: 1]
+	priority int
+	due_date timestamp [ default: CURRENT_TIMESTAMP]
+	created_at timestamp [ default: CURRENT_TIMESTAMP]
+	updated_at timestamp [ default: CURRENT_TIMESTAMP]
+}
+
+Table hr.activity_tasks {
+	id uuid [ pk not null unique ]
+	activity_id uuid [ not null ]
+	description varchar
+	done boolean
+	finished_at timestamp [ default: CURRENT_TIMESTAMP]
+}
+
+Table restaurant.orders {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	table_num varchar [ not null ]
+	order_date timestamp [ not null default: CURRENT_TIMESTAMP]
+}
+
+Table restaurant.tables {
+	id uuid [ pk not null unique ]
+	tenant_id int [ not null ]
+	number varchar [ not null unique ]
+	created_at timestamp [ default: CURRENT_TIMESTAMP]
+}
+
+Table restaurant.order_lines {
+	id uuid [ pk not null unique ]
+	order_id uuid [ not null ]
+	product_id uuid [ not null ]
+	quantity decimal
+}
+
+Table proj.projects {
+	id uuid [ pk not null unique ]
+	title varchar [ not null ]
+	description text
+	start_date datetime
+	end_date datetime
+	status int
+	priority int
+	created_by uuid [ not null ]
+}
+
+Table proj.tasks {
+	id uuid [ pk not null unique ]
+	project_id uuid [ not null ]
+	description varchar [ not null ]
+	assigned_to uuid
+	status int
+	priority int
+	due_date datetime
+	parent_task_id uuid
+}
+
+Table proj.task_dependencies {
+	id uuid [ pk not null unique ]
+	task_id uuid [ not null ]
+	dependency_task_id uuid [ not null ]
+	dependency_type int [ not null ]
+}
+
+Table proj.comments {
+	id int [ pk increment not null unique ]
+}
+
+Table proj.resource_capacity {
+	id uuid [ pk not null unique ]
+	user_id uuid
+	project_id uuid
+	total_available_hours int
+	allocated_hours int
+	remaining_hours int
+}
+
+Table proj.financials {
+	id uuid [ pk not null unique ]
+	project_id uuid
+	total_cost decimal
+	total_revenue decimal
+	roi_percentage decimal
+
+	indexes {
+		() [ name: 'proj.financials_index_0' ]
+	}
+}
+
+Table proj.payback_data {
+	id uuid [ pk not null unique ]
+	project_id uuid [ not null ]
+	total_cost decimal
+	expected_monthly_profit decimal
+	payback_period_months 
+}
+
+Table proj.project_members {
+	id uuid [ pk not null unique ]
+	project_id uuid
+	user_id uuid
+	role int
+	added_at datetime
+}
+
+Ref hr.employees_user_id_fk {
+	hr.employees.user_id - auth.users.id [ delete: no action, on update: no action ]
+}
+
+Ref shared.tenants_id_fk {
+	auth.users.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.employees_work_schedule_id_fk {
+	hr.employees.work_schedule_id < hr.work_schedules.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.work_schedules_schedule_id_fk {
+	hr.work_schedules.schedule_id - shared.schedules.id [ delete: no action, on update: no action ]
+}
+
+Ref shared.schedule_days_schedule_id_fk {
+	shared.schedule_days.schedule_id < shared.schedules.id [ delete: no action, on update: no action ]
+}
+
+Ref shared.schedule_days_week_day_fk {
+	shared.schedule_days.week_day < shared.week_days.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.employee_attendances_employee_id_fk {
+	hr.employee_attendances.employee_id < hr.employees.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.products_tenant_id_fk {
+	wh.products.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.products_group_id_fk {
+	wh.products.group_id < wh.product_groups.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.product_groups_tenant_id_fk {
+	wh.product_groups.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.product_families_tenant_id_fk {
+	wh.product_families.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.product_groups_family_id_fk {
+	wh.product_groups.family_id > wh.product_families.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.product_families_category_id_fk {
+	wh.product_families.category_id - wh.product_categories.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.product_categories_tenant_id_fk {
+	wh.product_categories.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.unit_measures_tenant_id_fk {
+	wh.unit_measures.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.unit_measures_base_unit_id_fk {
+	wh.unit_measures.base_unit_id < shared.units.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.products_purchase_unit_id_fk {
+	wh.products.purchase_unit_id < wh.unit_measures.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.products_inventory_unit_id_fk {
+	wh.products.inventory_unit_id < wh.unit_measures.id [ delete: no action, on update: no action ]
+}
+
+Ref purchase_invoices_tenant_id_fk {
+	wh.receipts.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.invoice_lines_invoice_id_fk {
+	wh.receipt_lines.receipt_id < wh.receipts.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.nfe_invoices_invoice_id_fk {
+	wh.nfe_receipt.receipt_id - wh.receipts.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.suppliers_tenant_id_fk {
+	wh.suppliers.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.receipts_supplier_id_fk {
+	wh.receipts.supplier_id < wh.suppliers.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.product_inventory_tenant_id_fk {
+	wh.product_inventory.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.product_inventory_product_id_fk {
+	wh.product_inventory.product_id - wh.products.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.product_supplier_supplier_id_fk {
+	wh.product_supplier.supplier_id < wh.suppliers.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.product_supplier_inventory_product_id_fk {
+	wh.product_supplier.inventory_product_id < wh.products.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.inventory_positions_tenant_id_fk {
+	wh.inventory_positions.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.inventory_positions_reported_by_fk {
+	wh.inventory_positions.reported_by < hr.employees.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.inventory_positions_product_id_fk {
+	wh.inventory_positions.product_id < wh.products.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.employee_roles_id_fk {
+	hr.employees.role_id < hr.employee_roles.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.employee_days_off_tenant_id_fk {
+	hr.employee_days_off.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.employee_notifications_base_notification_id_fk {
+	hr.employee_notifications.base_notification_id - shared.notifications.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.employee_days_off_employee_id_fk {
+	hr.employee_days_off.employee_id < hr.employees.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.employee_days_off_reason_id_fk {
+	hr.employee_days_off.reason_id < hr.employee_day_off_reasons.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.employee_day_off_reasons_tenant_id_fk {
+	hr.employee_day_off_reasons.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.employee_notifications_employee_id_fk {
+	hr.employee_notifications.employee_id < hr.employees.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.employee_roles_tenant_id_fk {
+	hr.employee_roles.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.employee_attendances_tenant_id_fk {
+	hr.employee_attendances.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.work_schedules_tenant_id_fk {
+	hr.work_schedules.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.tasks_tenant_id_fk {
+	hr.activities.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref hr.activity_tasks_activity_id_fk {
+	hr.activity_tasks.activity_id < hr.activities.id [ delete: no action, on update: no action ]
+}
+
+Ref restaurant.orders_tenant_id_fk {
+	restaurant.orders.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref restaurant.order_lines_order_id_fk {
+	restaurant.order_lines.order_id < restaurant.orders.id [ delete: no action, on update: no action ]
+}
+
+Ref restaurant.tables_tenant_id_fk {
+	restaurant.tables.tenant_id < shared.tenants.id [ delete: no action, on update: no action ]
+}
+
+Ref restaurant.orders_table_num_fk {
+	restaurant.orders.table_num < restaurant.tables.number [ delete: no action, on update: no action ]
+}
+
+Ref restaurant.order_lines_product_id_fk {
+	restaurant.order_lines.product_id < wh.products.id [ delete: no action, on update: no action ]
+}
+
+Ref wh.suppliers_id_fk {
+	wh.inventory_positions.purchase_supplier_id < wh.suppliers.id [ delete: no action, on update: no action ]
+}
+
+Ref fk_proj.tasks_project_id_proj.projects {
+	proj.tasks.project_id > proj.projects.id [ delete: no action, on update: no action ]
+}
+
+Ref fk_proj.task_dependencies_task_id_proj.tasks {
+	proj.task_dependencies.task_id - proj.tasks.id [ delete: no action, on update: no action ]
+}
+
+Ref fk_proj.project_members_project_id_proj.projects {
+	proj.project_members.project_id > proj.projects.id [ delete: no action, on update: no action ]
+}
+
+Ref fk_proj.project_members_user_id_auth.users {
+	proj.project_members.user_id > auth.users.id [ delete: no action, on update: no action ]
+}
+
+Ref fk_proj.resource_capacity_project_id_proj.projects {
+	proj.resource_capacity.project_id - proj.projects.id [ delete: no action, on update: no action ]
+}
+
+Ref fk_proj.financials_project_id_proj.projects {
+	proj.financials.project_id > proj.projects.id [ delete: no action, on update: no action ]
+}
+
+Ref fk_proj.payback_data_project_id_proj.projects {
+	proj.payback_data.project_id > proj.projects.id [ delete: no action, on update: no action ]
+}

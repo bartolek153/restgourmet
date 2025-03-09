@@ -11,12 +11,13 @@ import app.restgourmet.api.usermanagement.dto.user.EditProfileDto;
 import app.restgourmet.api.usermanagement.dto.user.EditUserDto;
 import app.restgourmet.api.usermanagement.dto.user.ListUserFiltersDto;
 import app.restgourmet.api.usermanagement.dto.user.UserDto;
+import app.restgourmet.api.usermanagement.dto.user.UserListDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 
 public interface IUserService {
-  public PagedModel<UserDto> listUsers(PageRequest pageRequest, ListUserFiltersDto filters);
+  public PagedModel<UserListDto> listUsers(PageRequest pageRequest, ListUserFiltersDto filters);
 
-  public UserEntity getUser(UUID id);
+  public UserDto getUser(UUID id);
 
   public CreateUserDto createUser(CreateUserDto data);
   

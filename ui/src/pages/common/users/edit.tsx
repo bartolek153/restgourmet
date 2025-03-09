@@ -1,23 +1,14 @@
-import { Edit, useForm } from "@refinedev/antd";
-import { axiosInstance } from "@refinedev/simple-rest";
-import { Checkbox, Col, Form, GetProp, Input, message, Row, Select, Upload, UploadProps } from "antd";
-import { useState } from "react";
-import { AiOutlineLoading, AiOutlinePlus } from "react-icons/ai";
+import { Edit, getValueFromEvent, useForm } from "@refinedev/antd";
+import { Button, Checkbox, Col, Form, GetProp, Input, message, Row, Select, Upload, UploadProps } from "antd";
+import { useEffect, useState } from "react";
 import { API_URL } from "../../../constants";
+import { LoadingOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 
 type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
-const getBase64 = (img: FileType, callback: (url: string) => void) => {
-  const reader = new FileReader();
-  reader.addEventListener('load', () => callback(reader.result as string));
-  reader.readAsDataURL(img);
-};
 
 export const UserEdit = () => {
-  const { formProps, saveButtonProps, formLoading } = useForm({});
-
-  const [loading, setLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>();
+  const { formProps, saveButtonProps } = useForm({});
 
   const beforeUpload = (file: FileType) => {
     const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
@@ -28,131 +19,99 @@ export const UserEdit = () => {
     if (!isLt3M) {
       message.error('Image must smaller than 3MB!');
     }
+
     return isJpgOrPng && isLt3M;
   };
 
-  const handleChange: UploadProps['onChange'] = (info) => {
-    if (info.file.status === 'uploading') {
-      setLoading(true);
-      return;
-    }
-    if (info.file.status === 'done') {
 
-      // Get this url from response in real world.
-      getBase64(info.file.originFileObj as FileType, (url) => {
-        setLoading(false);
-        setImageUrl(url);
-      });
-    }
-  };
-
-  const uploadButton = (
-    <button style={{ border: 0, background: 'none' }} type="button">
-      {loading ? <AiOutlineLoading /> : <AiOutlinePlus />}
-      <div style={{ marginTop: 8 }}>Upload</div>
-    </button>
-  );
-
-  const customUpload = async (options: any) => {
-    const { file, onSuccess, onError } = options;
-
-    var formData = new FormData();
-    formData.append("file", file);
-
-    await axiosInstance.post(`${API_URL}/upload`, formData)
-      .then((res) => {
-        onSuccess("Ok");
-        formProps.form?.setFieldsValue({ pictureId: res.data });
-      })
-      .catch((err) => { onError({ err }); });
-  };
 
   return (
     <Edit saveButtonProps={saveButtonProps}>
-      <Form {...formProps} layout="vertical">
-        <Row gutter={24}>
-          <Col flex={3}>
-            <Form.Item
-              label={"Name"}
-              name={["name"]}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label={"Email"}
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  type: "email",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label={"Nickname"}
-              name="nickname"
-            >
-              <Input placeholder="(optional)" />
-            </Form.Item>
-            <Form.Item
-              label={"Permissions"}
-              name={"permissions"}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Checkbox.Group options={['READ_USERS', 'WRITE_USERS']} defaultValue={[]} />
-            </Form.Item>
-            <Form.Item
-              label={"Role"}
-              name={["role"]}
-              initialValue={"VIEWER"}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Select
-                defaultValue={"VIEWER"}
-                options={[
-                  { value: "ADMIN", label: "Administrator" },
-                  { value: "MODERATOR", label: "Moderator" },
-                  { value: "VIEWER", label: "Viewer" },
-                ]}
-                style={{ width: 120 }}
-              />
-            </Form.Item>
-          </Col>
-          <Col flex={1}>
-
-            <Form.Item
-              label={"Picture"}
-            >
-              <Upload
-                listType="picture-card"
-                showUploadList={false}
-                customRequest={customUpload}
-                beforeUpload={beforeUpload}
-                onChange={handleChange}
-              >
-                {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-              </Upload>
-              <Form.Item name="pictureId" hidden>
-                <Input />
-              </Form.Item>
-            </Form.Item>
-          </Col>
-        </Row>
+      <Form {...formProps}
+        layout="vertical"
+        wrapperCol={{ span: 6 }}
+        autoComplete="off">
+        <Form.Item
+          label={"Name"}
+          name={["name"]}
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label={"Email"}
+          name="email"
+          rules={[
+            {
+              required: true,
+              type: "email",
+            },
+          ]}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          label={"Nickname"}
+          name="nickname"
+          rules={[
+            {
+              required: true,
+            }
+          ]}
+        >
+          <Input placeholder="" />
+        </Form.Item>
+        <Form.Item
+          label={"Permissions"}
+          name={"permissions"}
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Checkbox.Group options={['READ_USERS', 'WRITE_USERS']} defaultValue={[]} />
+        </Form.Item>
+        <Form.Item
+          label={"Role"}
+          name={["role"]}
+          initialValue={"VIEWER"}
+          rules={[
+            {
+              required: true,
+            },
+          ]}
+        >
+          <Select
+            defaultValue={"VIEWER"}
+            options={[
+              { value: "ADMIN", label: "Administrator" },
+              { value: "MODERATOR", label: "Moderator" },
+              { value: "VIEWER", label: "Viewer" },
+            ]}
+            style={{ width: 200 }}
+          />
+        </Form.Item>
+        <Form.Item
+          name="picture"
+          valuePropName="fileList"
+          getValueFromEvent={getValueFromEvent}
+        >
+          <Upload
+            name="file"
+            action={`${API_URL}/upload`}
+            listType="picture"
+            accept="image/*"
+            maxCount={1}
+            beforeUpload={beforeUpload}
+          >
+            <Button icon={<UploadOutlined />}>Profile picture</Button>
+          </Upload>
+        </Form.Item>
       </Form>
     </Edit>
   );

@@ -7,6 +7,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -14,9 +15,9 @@ import javax.imageio.ImageIO;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import app.restgourmet.api.commondata.dto.UploadedFileDto;
 import app.restgourmet.api.commondata.service.spec.IStorageService;
 import app.restgourmet.api.config.StorageProperties;
 import app.restgourmet.api.exceptions.StorageException;
@@ -37,9 +38,9 @@ public class FileSystemStorageService implements IStorageService {
   }
 
   @Override
-  public UUID store(MultipartFile file, String subdir) {
-    UUID fileId = UUID.randomUUID();
-    
+  public UploadedFileDto store(MultipartFile file) {
+    String fileId = UUID.randomUUID().toString() + "." + getExtension(file.getOriginalFilename());
+
     try {
       if (file.isEmpty()) {
         throw new StorageException("Failed to store empty file.");
@@ -47,32 +48,32 @@ public class FileSystemStorageService implements IStorageService {
 
       Path destinationFile = this.rootLocation;
 
-      if (StringUtils.hasText(subdir))
-        destinationFile = this.rootLocation.resolve(subdir);
+      destinationFile = destinationFile.resolve(fileId);
 
-      destinationFile = destinationFile.resolve(fileId.toString());
-
-      if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
-        // This is a security check
+      if (!destinationFile.toAbsolutePath().normalize().startsWith(this.rootLocation.toAbsolutePath().normalize())) {
+        // security check
         throw new StorageException(
             "Cannot store file outside current directory.");
       }
 
+      BufferedImage image = isImage(file);
+
+      if (image != null) {
+        // add extension to image files
+
+        ImageIO.write(image, "jpg", destinationFile.toFile());
+      } else {
         try (InputStream inputStream = file.getInputStream()) {
-          // Files.copy(inputStream, destinationFile,
-          //     StandardCopyOption.REPLACE_EXISTING);
-
-          BufferedImage image = isImage(file);
-
-          if (image != null)
-            ImageIO.write(image, "jpg", destinationFile.toFile());
+          Files.copy(inputStream, destinationFile,
+              StandardCopyOption.REPLACE_EXISTING);
         }
-
-      } catch (IOException e) {
-        throw new StorageException("Failed to store file.", e);
       }
 
-    return fileId;
+    } catch (IOException e) {
+      throw new StorageException("Failed to store file.", e);
+    }
+
+    return new UploadedFileDto(fileId);
   }
 
   @Override
@@ -85,27 +86,40 @@ public class FileSystemStorageService implements IStorageService {
   }
 
   @Override
-	public Resource loadAsResource(String filename) {
-		try {
-			Path file = rootLocation.resolve(filename);
-			Resource resource = new UrlResource(file.toUri());
-			if (resource.exists() || resource.isReadable()) {
-				return resource;
-			}
-			else {
-				throw new StorageFileNotFoundException(
-						"Could not read file: " + filename);
-			}
-		}
-		catch (MalformedURLException e) {
-			throw new StorageFileNotFoundException("Could not read file: " + filename, e);
-		}
-	}
+  public Resource loadAsResource(String filename) {
+    try {
+      Path file = rootLocation.resolve(filename);
+      Resource resource = new UrlResource(file.toUri());
+      if (resource.exists() || resource.isReadable()) {
+        return resource;
+      } else {
+        throw new StorageFileNotFoundException(
+            "Could not read file: " + filename);
+      }
+    } catch (MalformedURLException e) {
+      throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+    }
+  }
 
   @Override
   public void delete(String filename) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    // remove file that match filename prefix
+    if (filename == null || filename.trim().length() == 0) {
+      return;
+    }
+
+    // if file not found, generate log
+    Path file = rootLocation.resolve(filename);
+    if (!Files.exists(file)) {
+      // log.warn("File not found: " + filename);
+      return;
+    }
+        
+    try {
+      Files.delete(file);
+    } catch (IOException e) {
+      throw new StorageException("Failed to delete file.", e);
+    }
   }
 
   private BufferedImage isImage(MultipartFile file) {
@@ -116,4 +130,38 @@ public class FileSystemStorageService implements IStorageService {
       return null;
     }
   }
+  
+    @Override
+    public boolean fileExists(String filename) {
+      if (filename == null || filename.trim().length() == 0) {
+        return false;
+      }
+
+      Path file = rootLocation.resolve(filename);
+      return Files.exists(file);
+    }  
+  
+  private static String getExtension(String fileName) {
+    int dotIndex = fileName.lastIndexOf('.');
+
+    if (dotIndex != -1) {
+      return fileName.substring(dotIndex + 1);
+    }  
+
+    return "";
+  }
+
+  // private static Path overwriteExtension(Path path, String newExtension) {
+  // String fileName = path.getFileName().toString();
+  // int dotIndex = fileName.lastIndexOf('.');
+
+  // if (dotIndex != -1) {
+  // fileName = fileName.substring(0, dotIndex);
+  // } else {
+  // fileName = fileName + "." + newExtension;
+  // }
+
+  // // set path to new extension
+  // return path.resolveSibling(fileName + "." + newExtension);
+  // }
 }

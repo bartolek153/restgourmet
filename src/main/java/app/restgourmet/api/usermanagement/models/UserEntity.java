@@ -18,7 +18,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -32,12 +32,12 @@ import lombok.Setter;
 @Table(name = "users")
 public class UserEntity extends AuditableEntity {
 
-  @NotEmpty
+  @NotNull
   @Length(max = 120)
   @Column(nullable = false, length = 120)
   private String name;
 
-  @NotEmpty
+  @NotNull
   @Length(max = 30)
   @Column(nullable = false, length = 30, unique = true)
   private String nickname;
@@ -63,7 +63,7 @@ public class UserEntity extends AuditableEntity {
   private List<Permission> permissions = new ArrayList<>();
 
   @Column
-  private UUID pictureId;
+  private String picture;
 
   public void eraseCredentials() {
     this.password = null;

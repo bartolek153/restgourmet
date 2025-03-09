@@ -23,6 +23,7 @@ import app.restgourmet.api.usermanagement.dto.user.CreateUserDto;
 import app.restgourmet.api.usermanagement.dto.user.EditProfileDto;
 import app.restgourmet.api.usermanagement.dto.user.EditUserDto;
 import app.restgourmet.api.usermanagement.dto.user.ListUserFiltersDto;
+import app.restgourmet.api.usermanagement.dto.user.UserDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 import app.restgourmet.api.usermanagement.service.spec.IUserService;
 import app.restgourmet.api.utils.AppConstants;
@@ -62,7 +63,7 @@ public class UserController {
   @GetMapping("/{id}")
   @Operation(summary = "Get a user by id")
   @PreAuthorize(AppConstants.Security.Authorizations.USER_READ)
-  public ResponseEntity<UserEntity> getUser(@PathVariable UUID id) {
+  public ResponseEntity<UserDto> getUser(@PathVariable UUID id) {
     return ResponseEntity.ok(userService.getUser(id));
   }
 
@@ -76,7 +77,7 @@ public class UserController {
   @PutMapping("/{id}")
   @Operation(summary = "Edit an existing user")
   @PreAuthorize(AppConstants.Security.Authorizations.USER_WRITE)
-  public ResponseEntity<?> editUser(@RequestBody EditUserDto user, UUID id) {
+  public ResponseEntity<?> editUser(@RequestBody @Valid EditUserDto user, @PathVariable UUID id) {
     return ResponseEntity.ok(userService.editUser(id, user));
   }
 

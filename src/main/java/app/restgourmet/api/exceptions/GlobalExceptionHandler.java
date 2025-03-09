@@ -81,6 +81,16 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity.badRequest().body(err);
   }
+
+  @ExceptionHandler(AppValidationException.class)
+  public ResponseEntity<ErrorObject> handleCustomValidation(AppValidationException e) {
+    ErrorObject err = ErrorObject.builder()
+        .message("Cannot proceed due to validation errors")
+        .errors(e.getErrors())
+        .build();
+
+    return ResponseEntity.badRequest().body(err);
+  }
   
   /**
    * Handles bad payloads in requests.

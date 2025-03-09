@@ -15,13 +15,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import app.restgourmet.api.commondata.service.impl.FileSystemStorageService;
 import app.restgourmet.api.exceptions.BadRequestException;
 import app.restgourmet.api.exceptions.ResourceNotFoundException;
+import app.restgourmet.api.exceptions.AppValidationException;
 import app.restgourmet.api.usermanagement.dto.user.CreateUserDto;
 import app.restgourmet.api.usermanagement.dto.user.EditProfileDto;
 import app.restgourmet.api.usermanagement.dto.user.EditUserDto;
 import app.restgourmet.api.usermanagement.dto.user.ListUserFiltersDto;
 import app.restgourmet.api.usermanagement.dto.user.UserDto;
+import app.restgourmet.api.usermanagement.dto.user.UserListDto;
 import app.restgourmet.api.usermanagement.mappers.IUserMapper;
 import app.restgourmet.api.usermanagement.models.Permission;
 import app.restgourmet.api.usermanagement.models.UserEntity;
@@ -39,6 +42,7 @@ public class UserService implements IUserService {
   private final PermissionRepository permissionRepository;
   private final NicknameGenerator nicknameGenerator;
   private final PasswordEncoder passwordEncoder;
+  private final FileSystemStorageService storageService;
 
   @Autowired
   private IUserMapper userMapper;
@@ -47,32 +51,33 @@ public class UserService implements IUserService {
       UserRepository userRepository,
       NicknameGenerator nicknameGenerator,
       PasswordEncoder passwordEncoder,
-      PermissionRepository permissionRepository) {
+      PermissionRepository permissionRepository,
+      FileSystemStorageService storageService) {
     this.userRepository = userRepository;
     this.nicknameGenerator = nicknameGenerator;
     this.passwordEncoder = passwordEncoder;
     this.permissionRepository = permissionRepository;
+    this.storageService = storageService;
   }
 
   @Override
-  public PagedModel<UserDto> listUsers(PageRequest pageRequest, ListUserFiltersDto filters) {
+  public PagedModel<UserListDto> listUsers(PageRequest pageRequest, ListUserFiltersDto filters) {
     Specification<UserEntity> spec = UserSpec.filterBy(filters);
-    Page<UserDto> res = userRepository.findAll(spec, pageRequest).map(userMapper::toEntityDto);
+    Page<UserListDto> res = userRepository.findAll(spec, pageRequest).map(userMapper::entityToListDto);
     return new PagedModel<>(res);
   }
 
   @Override
-  public UserEntity getUser(UUID id) {
-    return userRepository.findById(id).orElse(null);
+  public UserDto getUser(UUID id) {
+    UserEntity user = userRepository.findById(id).orElseThrow(
+        () -> new BadRequestException("User not found"));
+    return userMapper.entityToUserDto(user);
   }
 
   @Override
   public CreateUserDto createUser(CreateUserDto data) {
-
-    data.normalizeEmail();
-
     if (userRepository.existsByEmail(data.getEmail())) {
-      throw new BadRequestException("Email already in use");
+      throw new AppValidationException("email", "Already in use");
     }
 
     // convert list of string permissions to entities
@@ -85,29 +90,16 @@ public class UserService implements IUserService {
     }
 
     if (StringUtils.hasText(data.getNickname())) {
-      data.normalizeNickname();
-      
       if (userRepository.existsByNickname(data.getNickname()))
-        throw new BadRequestException("Username already in use");
+        throw new AppValidationException("nickname", "Already in use");
     } else {
-      // if username is empty, generate a random one
-      data.setNickname(nicknameGenerator.generateNickname());
+      data.setNickname(nicknameGenerator.generateNickname()); // if username is empty, generate a random one
     }
 
-    // if password is empty, generate a random one
-    // if (!StringUtils.hasText(data.getPassword())) {
-    //   data.setPassword(UUID.randomUUID().toString());
-    // }
-    // encode password
-    // data.setPassword(passwordEncoder.encode(data.getPassword()));
+    UserEntity entity = userMapper.createDtoToEntity(data);
 
-    UserEntity entity = userMapper.createToEntity(data);
-    
-    try {
-      if (StringUtils.hasText(data.getPictureId()))
-        entity.setPictureId(UUID.fromString(data.getPictureId()));
-    } catch (Exception e) {
-      throw new BadRequestException("Picture is invalid");
+    if (entity.getPicture() != null && !storageService.fileExists(entity.getPicture())) {
+      throw new BadRequestException("Picture not uploaded");
     }
 
     entity.setEnabled(false);
@@ -120,21 +112,25 @@ public class UserService implements IUserService {
 
   @Override
   public EditUserDto editUser(UUID id, EditUserDto data) {
-    UserEntity user = userRepository.findById(id)
+    UserEntity entity = userRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(UserEntity.class, id));
 
     // check if the email or username is already in use
-    if (StringUtils.hasText(data.getEmail()) && !user.getEmail().equals(data.getEmail())
+    if (StringUtils.hasText(data.getEmail()) && !entity.getEmail().equals(data.getEmail())
         && userRepository.existsByEmail(data.getEmail())) {
-      throw new BadRequestException("Email already in use");
+      throw new AppValidationException("email", "Already in use");
     }
 
-    if (StringUtils.hasText(data.getNickname()) && !user.getNickname().equals(data.getNickname())
+    if (StringUtils.hasText(data.getNickname()) && !entity.getNickname().equals(data.getNickname())
         && userRepository.existsByNickname(data.getNickname())) {
-      throw new BadRequestException("Username already in use");
+      throw new AppValidationException("nickname", "Already in use");
     }
 
-    user = userMapper.editToEntity(data);
+    userMapper.updateEntity(data, entity);
+
+    if (entity.getPicture() != null && !storageService.fileExists(entity.getPicture())) {
+      throw new BadRequestException("Picture not uploaded");
+    }
 
     // convert list of string permissions to entities
     if (data.getPermissions().size() > 0) {
@@ -145,19 +141,10 @@ public class UserService implements IUserService {
             .orElseThrow(() -> new BadRequestException("Permission not found"));
         permissions.add(dbperm);
       }
-
-      user.setPictureId(UUID.fromString(data.getPictureId()));
-      user.setPermissions(permissions);
+      entity.setPermissions(permissions);
     }
 
-    try {
-      if (StringUtils.hasText(data.getPictureId()))
-        user.setPictureId(UUID.fromString(data.getPictureId()));
-    } catch (Exception e) {
-      throw new BadRequestException("Picture is invalid");
-    }
-
-    userRepository.save(user);
+    userRepository.save(entity);
 
     return data;
   }
@@ -206,7 +193,7 @@ public class UserService implements IUserService {
   public void editProfile(Authentication auth, EditProfileDto data) {
     UserDetailsImpl ud = (UserDetailsImpl) auth.getPrincipal();
     userRepository.findById(ud.getId()).ifPresent(user -> {
-      userMapper.editProfileToEntity(data);
+      userMapper.editProfileDtoToEntity(data);
       userRepository.save(user);
     });
   }

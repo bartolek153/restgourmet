@@ -1,17 +1,18 @@
 package app.restgourmet.api.controllers;
 
-import java.util.UUID;
-
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import app.restgourmet.api.commondata.dto.UploadedFileDto;
 import app.restgourmet.api.commondata.service.spec.IStorageService;
 import app.restgourmet.api.exceptions.StorageFileNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
@@ -35,9 +36,10 @@ public class FileUploadController {
     this.storageService = storageService;
   }
   
-  @PostMapping("/upload")
-  public ResponseEntity<UUID> handleFileUpload(@RequestParam MultipartFile file) throws InterruptedException {
-    return ResponseEntity.ok(storageService.store(file, AppConstants.Storage.USER_PIC_DIR));
+  @PostMapping(path = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)  
+  public ResponseEntity<UploadedFileDto> handleFileUpload(@RequestPart MultipartFile file) {
+    UploadedFileDto uploadedFile = storageService.store(file);
+    return ResponseEntity.ok().body(uploadedFile);
   }
 
   @GetMapping("/files/{filename:.+}")
@@ -57,5 +59,4 @@ public class FileUploadController {
 	public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
 		return ResponseEntity.notFound().build();
 	}
-
 }

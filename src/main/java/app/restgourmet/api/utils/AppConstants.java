@@ -3,7 +3,7 @@ package app.restgourmet.api.utils;
 public class AppConstants {
   public static class Security {
     public static final long ACCESS_TOKEN_EXPIRATION_TIME = (60 * 60) * 10; // 10 hours
-    public static final long REFRESH_TOKEN_EXPIRATION_TIME = (60 * 60 * 24) * 7; // (60 * 60 * 24) * 7; // 7 days
+    public static final long REFRESH_TOKEN_EXPIRATION_TIME = 60 * 60 * 24 * 1; // (60 * 60 * 24) * 7; // 7 days
     public static final String ACCESS_JWT_SECRET = "WDo3aLJeuou7EEFIUQqcK8TpK9qG3TvePQ+dvqSUcua3urAIRG+nleU2c+UgmgTP";
     public static final String REFRESH_JWT_SECRET = "rqWoQkseVZNPH+J1BZ2utQahvPzYitTkh/Ysu7pLjK9u/Kmq6ZKknXmNj82I/h03";
 

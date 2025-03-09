@@ -2,6 +2,7 @@ package app.restgourmet.api.usermanagement.dto.user;
 
 import java.util.List;
 
+import app.restgourmet.api.commondata.dto.ImageDto;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -32,13 +33,13 @@ public class CreateUserDto {
   private List<String> permissions;
 
   @Schema(description = "The profile image of the user")
-  private String pictureId;
+  private List<ImageDto> picture;
 
-  public void normalizeNickname() {
-    nickname = nickname.toLowerCase();
+  public String getEmail() {
+    return email.toLowerCase();
   }
 
-  public void normalizeEmail() {
-    email = email.toLowerCase();
+  public String getNickname() {
+    return nickname != null ? nickname.toLowerCase() : null;
   }
 }

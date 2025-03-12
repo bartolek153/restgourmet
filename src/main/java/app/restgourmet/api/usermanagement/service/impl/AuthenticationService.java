@@ -66,6 +66,7 @@ public class AuthenticationService implements IAuthenticationService {
 
   /**
    * Register a new user.
+   * 
    * @param request the registration request
    * @return a response entity with the result of the registration
    */
@@ -93,10 +94,13 @@ public class AuthenticationService implements IAuthenticationService {
   }
 
   /**
-   * Authenticates the user with the provided login credentials and generates JWT tokens for authentication.
+   * Authenticates the user with the provided login credentials and generates JWT
+   * tokens for authentication.
    *
-   * @param request the login request containing the user's identifier and password
-   * @return a ResponseEntity containing the generated access and refresh tokens as cookies
+   * @param request the login request containing the user's identifier and
+   *                password
+   * @return a ResponseEntity containing the generated access and refresh tokens
+   *         as cookies
    */
   public ResponseEntity<String> login(LoginRequestDto request) {
     if (StringUtils.isBlank(request.getIdentifier()) || StringUtils.isBlank(request.getPassword())) {
@@ -117,9 +121,9 @@ public class AuthenticationService implements IAuthenticationService {
 
     return ResponseEntity.ok()
         .header(HttpHeaders.SET_COOKIE,
-            createJwtCookie(refreshJwtCookie, refreshToken, Duration.ofDays(7), "/api"))
-        .header(HttpHeaders.SET_COOKIE,
             createJwtCookie(accessJwtCookie, accessToken, Duration.ofMinutes(15), "/api"))
+        .header(HttpHeaders.SET_COOKIE,
+            createJwtCookie(refreshJwtCookie, refreshToken, Duration.ofDays(7), "/api"))
         .body(accessToken);
   }
 
@@ -166,7 +170,7 @@ public class AuthenticationService implements IAuthenticationService {
         .header(HttpHeaders.SET_COOKIE, cleanCookie(refreshJwtCookie))
         .build();
   }
-  
+
   private String createJwtCookie(String name, String value, Duration duration, String path) {
     return ResponseCookie
         .from(name, value)

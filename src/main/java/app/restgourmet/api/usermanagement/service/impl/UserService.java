@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -36,6 +38,7 @@ import app.restgourmet.api.usermanagement.service.spec.IUserService;
 import jakarta.transaction.Transactional;
 
 @Service
+// @CacheConfig(cacheNames = "user")
 public class UserService implements IUserService {
 
   private final UserRepository userRepository;
@@ -68,6 +71,7 @@ public class UserService implements IUserService {
   }
 
   @Override
+  @Cacheable(value = "users", key = "#id")
   public UserDto getUser(UUID id) {
     UserEntity user = userRepository.findById(id).orElseThrow(
         () -> new BadRequestException("User not found"));

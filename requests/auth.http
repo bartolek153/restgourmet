@@ -20,14 +20,14 @@ Accept: */*
 Content-Type: {{contentType}}
 
 {
-  "identifier": "johndoe@test.com",
-  "password": "password"
+  "identifier": "admin",
+  "password": "admin"
 }
 
 ###
 
-GET {{host}}/api/users
+GET {{host}}/api/users/a558b8ed-93e1-4019-9166-40f2684d46f6
 Accept: */*
 Content-Type: application/json
-Cookie: restgourmet-jwt=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHktand0Iiwic3ViIjoid2lzZV9oYXdrXzM0NTgiLCJleHAiOjE3NDEwNjQwNDQsImlhdCI6MTc0MTAyODA0NH0.Rmxd2wlnciraaEPqZsWNVpkrjFES89TanaHJ4c5rtNw
+Cookie: restgourmet-jwt=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHktand0Iiwic3ViIjoiYWRtaW4iLCJleHAiOjE3NDE3NzkwOTIsImlhdCI6MTc0MTc0MzA5Mn0.SGcfQLMxXx19-6fVLzzy3JNlmIKOwLs386nFK3QZsgM
 

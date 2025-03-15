@@ -4,7 +4,9 @@ import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -35,7 +37,6 @@ import jakarta.validation.constraints.NotNull;
 
 @RestController
 @RequestMapping("/api/users")
-@PreAuthorize(AppConstants.Security.Authorizations.ADMIN)
 @Tag(name = "Users", description = "User endpoints")
 public class UserController {
   private final IUserService userService;
@@ -47,64 +48,57 @@ public class UserController {
 
   @GetMapping
   @Operation(summary = "List all users")
-  @PreAuthorize(AppConstants.Security.Authorizations.USER_READ)
+  @PreAuthorize("hasAnyAuthority(@permissions.ADMIN, @permissions.READ_USERS)")
   public ResponseEntity<?> listUsers(
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,
       @RequestParam(defaultValue = "name") final String sort,
-      final ListUserFiltersDto filters) {
-        log.info("Filters: {}", filters);
-        return ResponseEntity.ok(userService.listUsers(
-      CustomPageRequest.of(page, size, order, sort), filters)
-    );
+      @ParameterObject final ListUserFiltersDto filters) {
+    return ResponseEntity.ok(userService.listUsers(
+        CustomPageRequest.of(page, size, order, sort), filters));
   }
 
   @GetMapping("/{id}")
   @Operation(summary = "Get a user by id")
-  @PreAuthorize(AppConstants.Security.Authorizations.USER_READ)
+  @PreAuthorize("hasAnyAuthority(@permissions.ADMIN, @permissions.READ_USERS)")
   public ResponseEntity<UserDto> getUser(@PathVariable UUID id) {
     return ResponseEntity.ok(userService.getUser(id));
   }
 
   @PostMapping
   @Operation(summary = "Create a new user")
-  @PreAuthorize(AppConstants.Security.Authorizations.USER_WRITE)
+  @PreAuthorize("hasAnyAuthority(@permissions.ADMIN, @permissions.WRITE_USERS)")
   public ResponseEntity<CreateUserDto> createUser(@Valid @RequestBody CreateUserDto user) {
-    return ResponseEntity.ok(userService.createUser(user));
+    return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
   }
-  
+
   @PutMapping("/{id}")
   @Operation(summary = "Edit an existing user")
-  @PreAuthorize(AppConstants.Security.Authorizations.USER_WRITE)
+  @PreAuthorize("hasAnyAuthority(@permissions.ADMIN, @permissions.WRITE_USERS)")
   public ResponseEntity<?> editUser(@RequestBody @Valid EditUserDto user, @PathVariable UUID id) {
     return ResponseEntity.ok(userService.editUser(id, user));
   }
 
   @DeleteMapping("/{id}")
   @Operation(summary = "Delete a user by id")
-  @PreAuthorize(AppConstants.Security.Authorizations.USER_WRITE)
+  @PreAuthorize("hasAnyAuthority(@permissions.ADMIN, @permissions.WRITE_USERS)")
   public ResponseEntity<Void> deleteUser(@PathVariable @NotNull UUID id) {
     userService.deleteUser(id);
     return ResponseEntity.noContent().build();
   }
 
-  @PutMapping("/{id}/disable")
-  @Operation(summary = "Disable an user account")
-  public ResponseEntity<Void> disableUser(UUID id) {
-    userService.disableUser(id);
-    return ResponseEntity.noContent().build();
-  }
-
-  @PostMapping("/{id}/enable")
-  @Operation(summary = "Enable an user account")
-  public ResponseEntity<Void> enableUser(UUID id) {
-    userService.enableUser(id);
+  @PutMapping("/{id}/toggle")
+  @Operation(summary = "Toggle user activation status")
+  @PreAuthorize("hasAnyAuthority(@permissions.ADMIN, @permissions.WRITE_USERS)")
+  public ResponseEntity<Void> toggleUser(UUID id) {
+    // userService.disableUser(id);
     return ResponseEntity.noContent().build();
   }
 
   @PostMapping("/{id}/reset-password")
   @Operation(summary = "Reset the password of an user account")
+  @PreAuthorize("hasAnyAuthority(@permissions.ADMIN)")
   public ResponseEntity<Void> resetPassword(UUID id) {
     // TODO: Implement password reset functionality
     // userService.resetPassword(id);
@@ -113,7 +107,7 @@ public class UserController {
 
   @GetMapping("/profile")
   @Operation(summary = "Get the current authenticated user details")
-  @PreAuthorize(AppConstants.Security.Authorizations.AUTHENTICATED)
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<UserEntity> getProfile() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     return ResponseEntity.ok(userService.getProfile(auth));
@@ -121,7 +115,7 @@ public class UserController {
 
   @PutMapping("/profile")
   @Operation(summary = "Edit the current authenticated user details")
-  @PreAuthorize(AppConstants.Security.Authorizations.AUTHENTICATED)
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<Void> editProfile(@RequestBody EditProfileDto data) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     userService.editProfile(auth, data);

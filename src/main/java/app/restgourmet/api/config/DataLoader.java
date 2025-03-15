@@ -16,6 +16,7 @@ import app.restgourmet.api.usermanagement.repository.ParameterRepository;
 import app.restgourmet.api.usermanagement.repository.PermissionRepository;
 import app.restgourmet.api.usermanagement.repository.UserRepository;
 import app.restgourmet.api.utils.AppConstants;
+import app.restgourmet.api.utils.Permissions;
 import jakarta.transaction.Transactional;
 
 @Component
@@ -58,8 +59,8 @@ public class DataLoader implements CommandLineRunner {
     // initialize permissions
     permissionRepository.saveAll(
         List.of(
-            new Permission(AppConstants.Permissions.READ_USERS),
-            new Permission(AppConstants.Permissions.WRITE_USERS)));
+            new Permission(Permissions.READ_USERS),
+            new Permission(Permissions.WRITE_USERS)));
 
     // initialize users
     UserEntity admin = new UserEntity(

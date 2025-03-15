@@ -11,4 +11,8 @@ public class LoginRequestDto {
 
     @Schema(example = "password")
     private String password;
+
+    public String getIdentifier() {
+      return this.identifier.toLowerCase();
+    }
 }

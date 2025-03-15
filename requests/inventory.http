@@ -4,16 +4,6 @@
 @contentType = application/json
 @cookie = restgourmet-jwt=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHktand0Iiwic3ViIjoiYWRtaW4iLCJleHAiOjE3NDIwODI5NTIsImlhdCI6MTc0MjA0Njk1Mn0.muEkRc1UdCpgVaToa7Xxfa6BgsgJ6ShdqZGUTN6l7_4; Path=/api; Max-Age=900; Expires=Sat, 15 Mar 2025 14:10:52 GMT; HttpOnly,restgourmet-refresh-jwt=eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJzcHJpbmctc2VjdXJpdHktand0Iiwic3ViIjoiYWRtaW4iLCJleHAiOjE3NDIxMzMzNTIsImlhdCI6MTc0MjA0Njk1Mn0.G8INLMtzI5IVwhN9XtpAiMy2DYJAQPwf90cibiQe4Tc; Path=/api; Max-Age=604800; Expires=Sat, 22 Mar 2025 13:55:52 GMT; HttpOnly
 
-
-POST {{host}}/api/auth/register
-Accept: */*
-Content-Type: application/json
-
-{
-  "identifier": "johndoe@test.com",
-  "password": "password"
-}
-
 ###
 
 POST {{host}}/api/auth/login
@@ -27,8 +17,18 @@ Content-Type: {{contentType}}
 
 ###
 
-GET {{host}}/api/users
+GET {{host}}/api/products/categories
 Accept: */*
-Content-Type: application/json
+Content-Type: {{contentType}}
 Cookie: {{cookie}}
+
+###
+
+POST {{host}}/api/products/categories
+Content-Type: {{contentType}}
+Cookie: {{cookie}}
+
+{
+  "description": "A"
+}
 

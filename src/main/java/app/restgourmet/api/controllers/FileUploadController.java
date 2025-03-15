@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/api")
-@PreAuthorize(AppConstants.Security.Authorizations.AUTHENTICATED)
+@PreAuthorize("isAuthenticated()")
 @Tag(name = "File Upload", description = "File upload management")
 public class FileUploadController {
 

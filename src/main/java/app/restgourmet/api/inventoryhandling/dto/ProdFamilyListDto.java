@@ -2,12 +2,11 @@ package app.restgourmet.api.inventoryhandling.dto;
 
 import java.util.UUID;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class ProdFamilyDto {
-  @NotNull
+public class ProdFamilyListDto {
+  private UUID id;
   private String description;
   private UUID categoryId;
 }

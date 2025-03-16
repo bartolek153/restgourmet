@@ -12,18 +12,18 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
-@Table(name = "product_families")
-public class ProductFamily extends BaseEntity {
+@Table(name = "product_groups")
+public class ProductGroup extends BaseEntity {
   @NotNull
   @Column(nullable = false)
   private String description;
-
+  
   @ManyToOne
-  @JoinColumn(name = "category_id")
-  private ProductCategory category;
+  @JoinColumn(name = "family_id")
+  private ProductFamily family;
 }

@@ -8,10 +8,11 @@ import org.springframework.stereotype.Service;
 
 import app.restgourmet.api.inventoryhandling.dto.ListProdFamilyFiltersDto;
 import app.restgourmet.api.inventoryhandling.dto.ProdFamilyDto;
+import app.restgourmet.api.inventoryhandling.dto.ProdFamilyListDto;
 
 @Service
 public interface IProductFamilyService {
-  public PagedModel<ProdFamilyDto> list(PageRequest pageReq, ListProdFamilyFiltersDto filters);
+  public PagedModel<ProdFamilyListDto> list(PageRequest pageReq, ListProdFamilyFiltersDto filters);
 
   public ProdFamilyDto getOne(UUID id);
 

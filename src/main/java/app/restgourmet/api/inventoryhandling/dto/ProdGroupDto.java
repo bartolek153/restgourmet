@@ -6,8 +6,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class ProdFamilyDto {
+public class ProdGroupDto {
   @NotNull
   private String description;
-  private UUID categoryId;
+  private UUID familyId;
 }

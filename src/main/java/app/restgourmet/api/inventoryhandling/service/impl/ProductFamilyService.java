@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.inventoryhandling.dto.ListProdFamilyFiltersDto;
 import app.restgourmet.api.inventoryhandling.dto.ProdFamilyDto;
+import app.restgourmet.api.inventoryhandling.dto.ProdFamilyListDto;
 import app.restgourmet.api.inventoryhandling.mappers.IProductFamilyMapper;
 import app.restgourmet.api.inventoryhandling.models.ProductFamily;
 import app.restgourmet.api.inventoryhandling.repository.ProductCategoryRepository;
@@ -34,7 +35,7 @@ public class ProductFamilyService implements IProductFamilyService {
   }
 
   @Override
-  public PagedModel<ProdFamilyDto> list(PageRequest pageReq, ListProdFamilyFiltersDto filters) {
+  public PagedModel<ProdFamilyListDto> list(PageRequest pageReq, ListProdFamilyFiltersDto filters) {
     Page<ProductFamily> families;
 
     if (filters.isEmpty()) {
@@ -44,7 +45,7 @@ public class ProductFamilyService implements IProductFamilyService {
       families = productFamilyRepository.findByIdOrDescriptionContainingIgnoreCase(id, filters.getQ(), pageReq);
     }
 
-    return new PagedModel<>(families.map(productFamilyMapper::toDto));
+    return new PagedModel<>(families.map(productFamilyMapper::toListDto));
   }
 
   @Override

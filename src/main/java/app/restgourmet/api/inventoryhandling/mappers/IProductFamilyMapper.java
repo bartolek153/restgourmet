@@ -6,12 +6,15 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 
 import app.restgourmet.api.inventoryhandling.dto.ProdFamilyDto;
+import app.restgourmet.api.inventoryhandling.dto.ProdFamilyListDto;
 import app.restgourmet.api.inventoryhandling.models.ProductFamily;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface IProductFamilyMapper {
   @Mapping(source = "category.id", target = "categoryId")
   ProdFamilyDto toDto(ProductFamily entity);
+
+  ProdFamilyListDto toListDto(ProductFamily entity);
 
   ProductFamily toEntity(ProdFamilyDto dto);
 

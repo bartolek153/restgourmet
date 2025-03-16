@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.restgourmet.api.inventoryhandling.dto.ListProdFamilyFiltersDto;
 import app.restgourmet.api.inventoryhandling.dto.ProdFamilyDto;
+import app.restgourmet.api.inventoryhandling.dto.ProdFamilyListDto;
 import app.restgourmet.api.inventoryhandling.service.spec.IProductFamilyService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
@@ -37,7 +38,7 @@ public class ProductFamilyController {
   }
 
   @GetMapping
-  public ResponseEntity<PagedModel<ProdFamilyDto>> listFamilies(
+  public ResponseEntity<PagedModel<ProdFamilyListDto>> listFamilies(
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,

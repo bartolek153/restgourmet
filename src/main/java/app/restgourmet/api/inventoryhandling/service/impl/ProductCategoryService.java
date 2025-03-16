@@ -10,8 +10,6 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
 import app.restgourmet.api.exceptions.ResourceNotFoundException;
-import app.restgourmet.api.inventoryhandling.dto.CreateProdCategoryDto;
-import app.restgourmet.api.inventoryhandling.dto.EditProdCategoryDto;
 import app.restgourmet.api.inventoryhandling.dto.ListProdCategoryFiltersDto;
 import app.restgourmet.api.inventoryhandling.dto.ProdCategoryDto;
 import app.restgourmet.api.inventoryhandling.dto.ProdCategoryListDto;
@@ -36,7 +34,7 @@ public class ProductCategoryService implements IProductCategoryService {
   @Override
   public PagedModel<ProdCategoryListDto> list(PageRequest pageReq, ListProdCategoryFiltersDto filters) {
     Specification<ProductCategory> spec = ProdCategorySpec.filterBy(filters);
-    Page<ProdCategoryListDto> res = productCategoryRepository.findAll(spec, pageReq).map(productCategoryMapper::entityToListDto);
+    Page<ProdCategoryListDto> res = productCategoryRepository.findAll(spec, pageReq).map(productCategoryMapper::toListDto);
     return new PagedModel<>(res);
 
   }
@@ -44,18 +42,18 @@ public class ProductCategoryService implements IProductCategoryService {
   @Override
   public ProdCategoryDto getOne(UUID id) {
     ProductCategory cat = productCategoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-    return productCategoryMapper.entityToDto(cat);
+    return productCategoryMapper.toDto(cat);
   }
 
   @Override
-  public UUID create(CreateProdCategoryDto dto) {
-    ProductCategory cat = productCategoryMapper.createDtoToEntity(dto);
+  public UUID create(ProdCategoryDto dto) {
+    ProductCategory cat = productCategoryMapper.toEntity(dto);
     cat = productCategoryRepository.save(cat);
     return cat.getId();
   }
 
   @Override
-  public void edit(UUID id, EditProdCategoryDto dto) {
+  public void edit(UUID id, ProdCategoryDto dto) {
     ProductCategory cat = productCategoryRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Category not found"));
     productCategoryMapper.updateEntity(dto, cat);
     productCategoryRepository.save(cat);
@@ -63,7 +61,7 @@ public class ProductCategoryService implements IProductCategoryService {
 
   @Override
   public void delete(UUID id) {
-    // TODO: validate relationships 
+    // TODO: validate relationships
     
     ProductCategory cat = productCategoryRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Category not found"));

@@ -6,7 +6,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,7 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 import app.restgourmet.api.commondata.dto.UploadedFileDto;
 import app.restgourmet.api.commondata.service.spec.IStorageService;
 import app.restgourmet.api.exceptions.StorageFileNotFoundException;
-import app.restgourmet.api.utils.AppConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;

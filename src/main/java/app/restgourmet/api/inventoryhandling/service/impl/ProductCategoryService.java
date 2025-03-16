@@ -17,8 +17,8 @@ import app.restgourmet.api.inventoryhandling.dto.ProdCategoryDto;
 import app.restgourmet.api.inventoryhandling.dto.ProdCategoryListDto;
 import app.restgourmet.api.inventoryhandling.mappers.IProductCategoryMapper;
 import app.restgourmet.api.inventoryhandling.models.ProductCategory;
-import app.restgourmet.api.inventoryhandling.repository.ProdCategorySpec;
 import app.restgourmet.api.inventoryhandling.repository.ProductCategoryRepository;
+import app.restgourmet.api.inventoryhandling.repository.specifications.ProdCategorySpec;
 import app.restgourmet.api.inventoryhandling.service.spec.IProductCategoryService;
 
 @Service
@@ -63,6 +63,8 @@ public class ProductCategoryService implements IProductCategoryService {
 
   @Override
   public void delete(UUID id) {
+    // TODO: validate relationships 
+    
     ProductCategory cat = productCategoryRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 

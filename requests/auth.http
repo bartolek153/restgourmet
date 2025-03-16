@@ -32,3 +32,14 @@ Accept: */*
 Content-Type: application/json
 Cookie: {{cookie}}
 
+###
+
+POST {{host}}/api/users
+Content-Type: {{contentType}}
+Cookie: {{cookie}}
+
+{
+  "name": "teste",
+  "email": "oi",
+  "role": "ADMIN"
+}

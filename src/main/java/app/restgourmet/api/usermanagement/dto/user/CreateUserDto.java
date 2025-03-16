@@ -30,6 +30,7 @@ public class CreateUserDto {
   // private String password;
 
   @Schema(description = "A list of permissions granted to the user", example = "[\"READ_PRIVILEGES\", \"WRITE_PRIVILEGES\"]")
+  @NotNull
   private List<String> permissions;
 
   @Schema(description = "The profile image of the user")

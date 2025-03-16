@@ -1,4 +1,4 @@
-package app.restgourmet.api.inventoryhandling.repository;
+package app.restgourmet.api.inventoryhandling.repository.specifications;
 
 import java.util.UUID;
 

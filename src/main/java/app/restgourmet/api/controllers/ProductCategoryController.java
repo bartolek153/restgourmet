@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,15 +19,18 @@ import app.restgourmet.api.inventoryhandling.dto.CreateProdCategoryDto;
 import app.restgourmet.api.inventoryhandling.dto.EditProdCategoryDto;
 import app.restgourmet.api.inventoryhandling.dto.ListProdCategoryFiltersDto;
 import app.restgourmet.api.inventoryhandling.dto.ProdCategoryDto;
+import app.restgourmet.api.inventoryhandling.dto.ProdCategoryListDto;
 import app.restgourmet.api.inventoryhandling.service.spec.IProductCategoryService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/products/categories")
+@Tag(name = "Product Category", description = "Product categories endpoints")
 public class ProductCategoryController {
 
   private final IProductCategoryService productCategoryService;
@@ -36,7 +40,7 @@ public class ProductCategoryController {
   }
 
   @GetMapping
-  public ResponseEntity<?> listCategories(
+  public ResponseEntity<PagedModel<ProdCategoryListDto>> listCategories(
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,

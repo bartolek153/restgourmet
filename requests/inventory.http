@@ -29,6 +29,16 @@ Content-Type: {{contentType}}
 Cookie: {{cookie}}
 
 {
+  "description": "Aasdfasdfasdf"
+}
+
+###
+
+PUT {{host}}/api/products/categories/4799057d-e784-456d-9a82-a95c4ebccb4f
+Content-Type: {{contentType}}
+Cookie: {{cookie}}
+
+{
   "description": "A"
 }
 

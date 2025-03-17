@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.inventoryhandling.dto.ListProdCategoryFiltersDto;
-import app.restgourmet.api.inventoryhandling.dto.ProdCategoryDto;
-import app.restgourmet.api.inventoryhandling.dto.ProdCategoryListDto;
-import app.restgourmet.api.inventoryhandling.service.spec.IProductCategoryService;
+import app.restgourmet.api.masterdata.dto.ProdCategoryDto;
+import app.restgourmet.api.masterdata.dto.ProdCategoryListDto;
+import app.restgourmet.api.masterdata.dto.ProdCategoryListFiltersDto;
+import app.restgourmet.api.masterdata.service.spec.IProductCategoryService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -43,7 +43,7 @@ public class ProductCategoryController {
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,
       @RequestParam(defaultValue = "description") final String sort,
-      @ParameterObject final ListProdCategoryFiltersDto filters) {
+      @ParameterObject final ProdCategoryListFiltersDto filters) {
     return ResponseEntity.ok(productCategoryService.list(CustomPageRequest.of(page, size, order, sort), filters));
   }
 

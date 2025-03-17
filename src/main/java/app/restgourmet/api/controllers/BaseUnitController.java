@@ -17,57 +17,57 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.masterdata.dto.ProdFamilyDto;
-import app.restgourmet.api.masterdata.dto.ProdFamilyListDto;
-import app.restgourmet.api.masterdata.dto.ProdFamilyListFiltersDto;
-import app.restgourmet.api.masterdata.service.spec.IProductFamilyService;
+import app.restgourmet.api.commondata.dto.BaseUnitDto;
+import app.restgourmet.api.commondata.dto.BaseUnitListDto;
+import app.restgourmet.api.commondata.dto.BaseUnitListFiltersDto;
+import app.restgourmet.api.commondata.service.spec.IBaseUnitService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/products/families")
-@Tag(name = "Product Family", description = "Product families endpoints")
-public class ProductFamilyController {
+@RequestMapping("/api/units")
+@Tag(name = "Base Unit", description = "Basic units endpoints")
+public class BaseUnitController {
 
-  private final IProductFamilyService productFamilyService;
+  private final IBaseUnitService baseUnitService;
 
-  public ProductFamilyController(IProductFamilyService productFamilyService) {
-    this.productFamilyService = productFamilyService;
+  public BaseUnitController(IBaseUnitService baseUnitService) {
+    this.baseUnitService = baseUnitService;
   }
 
   @GetMapping
-  public ResponseEntity<PagedModel<ProdFamilyListDto>> listFamilies(
+  public ResponseEntity<PagedModel<BaseUnitListDto>> listBaseUnits(
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,
       @RequestParam(defaultValue = "description") final String sort,
-      @ParameterObject final ProdFamilyListFiltersDto filters) {
+      @ParameterObject final BaseUnitListFiltersDto filters) {
     return ResponseEntity.ok(
-        productFamilyService.list(CustomPageRequest.of(page, size, order, sort), filters));
+        baseUnitService.list(CustomPageRequest.of(page, size, order, sort), filters));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ProdFamilyDto> getFamily(@PathVariable UUID id) {
-    return ResponseEntity.ok(productFamilyService.getOne(id));
+  public ResponseEntity<BaseUnitDto> getBaseUnit(@PathVariable UUID id) {
+    return ResponseEntity.ok(baseUnitService.getOne(id));
   }
 
   @PostMapping
-  public ResponseEntity<UUID> createFamily(@RequestBody @Valid ProdFamilyDto dto) {
-    UUID id = productFamilyService.create(dto);
+  public ResponseEntity<UUID> createBaseUnit(@RequestBody @Valid BaseUnitDto dto) {
+    UUID id = baseUnitService.create(dto);
     return ResponseEntity.status(HttpStatus.CREATED).body(id);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateFamily(@PathVariable UUID id, @RequestBody @Valid ProdFamilyDto dto) {
-    productFamilyService.edit(id, dto);
+  public ResponseEntity<?> updateBaseUnit(@PathVariable UUID id, @RequestBody @Valid BaseUnitDto dto) {
+    baseUnitService.edit(id, dto);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteFamily(@PathVariable UUID id) {
-    productFamilyService.delete(id);
+  public ResponseEntity<?> deleteBaseUnit(@PathVariable UUID id) {
+    baseUnitService.delete(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }

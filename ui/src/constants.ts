@@ -9,3 +9,4 @@ export const FINANCIALS_PARENT_MENU = "Financials";
 export const INVENTORY_HANDLING_PARENT_MENU = "Inventory Handling";
 export const EMPLOYEE_MANAGEMENT_PARENT_MENU = "Employee Management";
 export const RESTAURANT_MANAGEMENT_PARENT_MENU = "Restaurant Management";
+export const USER_MANAGEMENT_PARENT_MENU = "User Management";

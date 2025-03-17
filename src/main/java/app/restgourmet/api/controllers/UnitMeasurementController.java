@@ -17,57 +17,57 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.masterdata.dto.ProdFamilyDto;
-import app.restgourmet.api.masterdata.dto.ProdFamilyListDto;
-import app.restgourmet.api.masterdata.dto.ProdFamilyListFiltersDto;
-import app.restgourmet.api.masterdata.service.spec.IProductFamilyService;
+import app.restgourmet.api.masterdata.dto.UnitMeasurementDto;
+import app.restgourmet.api.masterdata.dto.UnitMeasurementListDto;
+import app.restgourmet.api.masterdata.dto.UnitMeasurementListFiltersDto;
+import app.restgourmet.api.masterdata.service.spec.IUnitMeasurementService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/products/families")
-@Tag(name = "Product Family", description = "Product families endpoints")
-public class ProductFamilyController {
+@RequestMapping("/api/units/measurement")
+@Tag(name = "Unit of Measurement", description = "Units of measurement endpoints")
+public class UnitMeasurementController {
 
-  private final IProductFamilyService productFamilyService;
+  private final IUnitMeasurementService unitMeasurementService;
 
-  public ProductFamilyController(IProductFamilyService productFamilyService) {
-    this.productFamilyService = productFamilyService;
+  public UnitMeasurementController(IUnitMeasurementService unitMeasurementService) {
+    this.unitMeasurementService = unitMeasurementService;
   }
 
   @GetMapping
-  public ResponseEntity<PagedModel<ProdFamilyListDto>> listFamilies(
+  public ResponseEntity<PagedModel<UnitMeasurementListDto>> listUnitsMeasurement(
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,
       @RequestParam(defaultValue = "description") final String sort,
-      @ParameterObject final ProdFamilyListFiltersDto filters) {
+      @ParameterObject final UnitMeasurementListFiltersDto filters) {
     return ResponseEntity.ok(
-        productFamilyService.list(CustomPageRequest.of(page, size, order, sort), filters));
+        unitMeasurementService.list(CustomPageRequest.of(page, size, order, sort), filters));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<ProdFamilyDto> getFamily(@PathVariable UUID id) {
-    return ResponseEntity.ok(productFamilyService.getOne(id));
+  public ResponseEntity<UnitMeasurementDto> getUnitMeasurement(@PathVariable UUID id) {
+    return ResponseEntity.ok(unitMeasurementService.getOne(id));
   }
 
   @PostMapping
-  public ResponseEntity<UUID> createFamily(@RequestBody @Valid ProdFamilyDto dto) {
-    UUID id = productFamilyService.create(dto);
+  public ResponseEntity<UUID> createUnitMeasurement(@RequestBody @Valid UnitMeasurementDto dto) {
+    UUID id = unitMeasurementService.create(dto);
     return ResponseEntity.status(HttpStatus.CREATED).body(id);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateFamily(@PathVariable UUID id, @RequestBody @Valid ProdFamilyDto dto) {
-    productFamilyService.edit(id, dto);
+  public ResponseEntity<?> updateUnitMeasurement(@PathVariable UUID id, @RequestBody @Valid UnitMeasurementDto dto) {
+    unitMeasurementService.edit(id, dto);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<?> deleteFamily(@PathVariable UUID id) {
-    productFamilyService.delete(id);
+  public ResponseEntity<?> deleteUnitMeasurement(@PathVariable UUID id) {
+    unitMeasurementService.delete(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }

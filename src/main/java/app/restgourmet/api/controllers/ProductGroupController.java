@@ -17,18 +17,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.inventoryhandling.dto.ListProdGroupFiltersDto;
-import app.restgourmet.api.inventoryhandling.dto.ProdGroupDto;
-import app.restgourmet.api.inventoryhandling.dto.ProdGroupListDto;
-import app.restgourmet.api.inventoryhandling.service.spec.IProductGroupService;
+import app.restgourmet.api.masterdata.dto.ProdGroupDto;
+import app.restgourmet.api.masterdata.dto.ProdGroupListDto;
+import app.restgourmet.api.masterdata.dto.ProdGroupListFiltersDto;
+import app.restgourmet.api.masterdata.service.spec.IProductGroupService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/products/families")
-@Tag(name = "Product Group", description = "Product families endpoints")
+@RequestMapping("/api/products/groups")
+@Tag(name = "Product Group", description = "Product groups endpoints")
 public class ProductGroupController {
 
   private final IProductGroupService productGroupService;
@@ -38,12 +38,12 @@ public class ProductGroupController {
   }
 
   @GetMapping
-  public ResponseEntity<PagedModel<ProdGroupListDto>> listFamilies(
+  public ResponseEntity<PagedModel<ProdGroupListDto>> listGroups(
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,
       @RequestParam(defaultValue = "description") final String sort,
-      @ParameterObject final ListProdGroupFiltersDto filters) {
+      @ParameterObject final ProdGroupListFiltersDto filters) {
     return ResponseEntity.ok(
         productGroupService.list(CustomPageRequest.of(page, size, order, sort), filters));
   }

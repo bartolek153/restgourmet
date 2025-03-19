@@ -15,21 +15,21 @@ import app.restgourmet.api.usermanagement.dto.user.UserListDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 
 public interface IUserService {
-  public PagedModel<UserListDto> listUsers(PageRequest pageRequest, ListUserFiltersDto filters);
+  PagedModel<UserListDto> listUsers(PageRequest pageRequest, ListUserFiltersDto filters);
 
-  public UserDto getUser(UUID id);
+  UserDto getUser(UUID id);
 
-  public CreateUserDto createUser(CreateUserDto data);
+  CreateUserDto createUser(CreateUserDto data);
   
-  public EditUserDto editUser(UUID id, EditUserDto data);
+  EditUserDto editUser(UUID id, EditUserDto data);
   
-  public void deleteUser(UUID id);
+  void deleteUser(UUID id);
 
-  public void disableUser(UUID id);
+  void disableUser(UUID id);
 
-  public void enableUser(UUID id);
+  void enableUser(UUID id);
 
-  public UserEntity getProfile(Authentication auth);
+  UserEntity getProfile(Authentication auth);
 
-  public void editProfile(Authentication auth, EditProfileDto data);
+  void editProfile(Authentication auth, EditProfileDto data);
 }

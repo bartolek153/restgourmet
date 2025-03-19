@@ -1,17 +1,14 @@
 package app.restgourmet.api.usermanagement.models;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import app.restgourmet.api.usermanagement.enums.UserRole;
-import jakarta.persistence.CascadeType;
+import app.restgourmet.api.usermanagement.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -52,14 +49,14 @@ public class UserEntity extends AuditableEntity {
   @Column
   private boolean enabled;
 
-  private UserRole role;
+  private UserType role;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToMany
   @JoinTable(
-      name = "users_permissions",
-      joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-      inverseJoinColumns = @JoinColumn(name = "permission_id", referencedColumnName = "id"))
-  private List<Permission> permissions = new ArrayList<>();
+      name = "user_role",
+      joinColumns = @JoinColumn(name = "user_id"),
+      inverseJoinColumns = @JoinColumn(name = "role_id"))
+  private Set<Role> roles;
 
   @Column
   private String picture;

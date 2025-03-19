@@ -24,11 +24,11 @@ import app.restgourmet.api.usermanagement.models.UserEntity;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface IUserMapper {
 
-  @Mapping(target = "permissions", ignore = true)
+  @Mapping(target = "roles", ignore = true)
   @Mapping(target = "picture", source = "picture", qualifiedByName = "mapPicture")
   UserEntity createDtoToEntity(CreateUserDto dto);
 
-  @Mapping(target = "permissions", ignore = true)
+  @Mapping(target = "roles", ignore = true)
   @Mapping(target = "picture", source = "picture", qualifiedByName = "mapPicture")
   void updateEntity(EditUserDto dto, @MappingTarget UserEntity entity);
 
@@ -38,9 +38,9 @@ public interface IUserMapper {
 
   UserListDto entityToListDto(UserEntity entities);
 
-  @Mapping(target = "permissions", source = "permissions", qualifiedByName = "mapPermissionsToStrings")
+  // @Mapping(target = "permissions", source = "permissions", qualifiedByName = "mapPermissionsToStrings")
   @Mapping(target = "picture", source = "picture", qualifiedByName = "mapPictureToDto")
-  UserDto entityToUserDto(UserEntity entity);
+  UserDto toDto(UserEntity entity);
 
   @Named("mapPermissionsToStrings")
   static List<String> mapPermissionsToStrings(List<Permission> permissions) {

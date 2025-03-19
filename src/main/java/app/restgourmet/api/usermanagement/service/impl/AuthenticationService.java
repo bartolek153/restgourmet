@@ -3,7 +3,7 @@ package app.restgourmet.api.usermanagement.service.impl;
 import app.restgourmet.api.exceptions.BadRequestException;
 import app.restgourmet.api.usermanagement.dto.auth.LoginRequestDto;
 import app.restgourmet.api.usermanagement.dto.auth.RegisterRequestDto;
-import app.restgourmet.api.usermanagement.enums.UserRole;
+import app.restgourmet.api.usermanagement.enums.UserType;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 import app.restgourmet.api.usermanagement.repository.UserRepository;
 import app.restgourmet.api.usermanagement.security.JwtGenerator;
@@ -85,7 +85,7 @@ public class AuthenticationService implements IAuthenticationService {
 
     UserEntity user = request.toUserEntity();
 
-    user.setRole(UserRole.ADMIN);
+    user.setRole(UserType.ADMIN);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
 
     userRepository.save(user);

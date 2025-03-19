@@ -52,7 +52,9 @@ yarn dev
   * Implement cancellation tokens
 * Code Improvement
   * Add unit tests
+  * Remove excessive lombok annotations
 * CI/CD
+  * Create image build pipeline
   * Add image signing
 
 ## Technologies used

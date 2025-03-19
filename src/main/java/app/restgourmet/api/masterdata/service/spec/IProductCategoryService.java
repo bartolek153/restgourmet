@@ -10,13 +10,13 @@ import app.restgourmet.api.masterdata.dto.ProdCategoryListDto;
 import app.restgourmet.api.masterdata.dto.ProdCategoryListFiltersDto;
 
 public interface IProductCategoryService {
-  public PagedModel<ProdCategoryListDto> list(PageRequest pageReq, ProdCategoryListFiltersDto filters);
+  PagedModel<ProdCategoryListDto> list(PageRequest pageReq, ProdCategoryListFiltersDto filters);
 
-  public ProdCategoryDto getOne(UUID id);
+  ProdCategoryDto getOne(UUID id);
 
-  public UUID create(ProdCategoryDto dto);
+  UUID create(ProdCategoryDto dto);
 
-  public void edit(UUID id, ProdCategoryDto dto);
+  void edit(UUID id, ProdCategoryDto dto);
 
-  public void delete(UUID id);
+  void delete(UUID id);
 }

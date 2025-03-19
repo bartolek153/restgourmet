@@ -17,7 +17,7 @@ import lombok.Setter;
 public class Parameter extends AuditableEntity {
   
   @Column(unique = true)
-  private String key;
+  private String optionKey;
   
-  private String value;
+  private String optionValue;
 }

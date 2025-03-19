@@ -25,6 +25,8 @@ public final class AppConstants {
 
   public static class ErrorMessages { 
     public static final String BASE_UNIT_NOT_FOUND = "Base unit not found";
+
+    public static final String PERMISSION_NOT_FOUND = "Permission not found";
     
     public static final String PRODUCT_CATEGORY_NOT_FOUND = "Category not found";
     public static final String PRODUCT_CATEGORY_DELETE_DEPS = "Cannot delete category as it has dependent family";
@@ -34,6 +36,9 @@ public final class AppConstants {
 
     public static final String PRODUCT_GROUP_NOT_FOUND = "Group not found";
     public static final String PRODUCT_GROUP_DELETE_DEPS = "Cannot delete group as it has dependent product";
+
+    public static final String ROLE_NOT_FOUND = "Role not found";
+    public static final String ROLE_DELETE_DEPS = "Cannot delete role as it as has dependent user";
 
     public static final String UNIT_MEASUREMENT_NOT_FOUND = "Unit of measurement not found";
   }

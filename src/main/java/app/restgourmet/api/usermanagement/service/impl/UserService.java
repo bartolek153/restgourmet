@@ -38,7 +38,6 @@ import app.restgourmet.api.usermanagement.service.spec.IUserService;
 import jakarta.transaction.Transactional;
 
 @Service
-// @CacheConfig(cacheNames = "user")
 public class UserService implements IUserService {
 
   private final UserRepository userRepository;
@@ -75,7 +74,7 @@ public class UserService implements IUserService {
   public UserDto getUser(UUID id) {
     UserEntity user = userRepository.findById(id).orElseThrow(
         () -> new BadRequestException("User not found"));
-    return userMapper.entityToUserDto(user);
+    return userMapper.toDto(user);
   }
 
   @Override
@@ -107,8 +106,8 @@ public class UserService implements IUserService {
     }
 
     entity.setEnabled(false);
-    entity.setPermissions(permissions);
-
+    // entity.setPermissions(permissions);
+ 
     userRepository.save(entity);
 
     return data;
@@ -145,7 +144,7 @@ public class UserService implements IUserService {
             .orElseThrow(() -> new BadRequestException("Permission not found"));
         permissions.add(dbperm);
       }
-      entity.setPermissions(permissions);
+      // entity.setPermissions(permissions);
     }
 
     userRepository.save(entity);
@@ -166,7 +165,7 @@ public class UserService implements IUserService {
     UserEntity user = userRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(UserEntity.class, id));
 
-    user.getPermissions().clear();
+    // user.getPermissions().clear();
     userRepository.save(user);
     userRepository.deleteById(id);
   }

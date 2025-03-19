@@ -1,7 +1,7 @@
 package app.restgourmet.api.usermanagement.security;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -9,8 +9,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import app.restgourmet.api.usermanagement.enums.UserRole;
-import app.restgourmet.api.usermanagement.models.Permission;
+import app.restgourmet.api.usermanagement.enums.UserType;
+import app.restgourmet.api.usermanagement.models.Role;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 import lombok.Getter;
 
@@ -50,18 +50,19 @@ public class UserDetailsImpl implements UserDetails {
     this.username = user.getNickname();
     this.password = user.getPassword();
     this.enabled = user.isEnabled();
-    this.authorities = mapPermissionsToAuthorities(user.getRole(), user.getPermissions());
+    this.authorities = mapPermissionsToAuthorities(user.getRole(), user.getRoles());
     this.accountNonExpired = true;
     this.accountNonLocked = true;
     this.credentialsNonExpired = true;
   }
 
-  private Collection<GrantedAuthority> mapPermissionsToAuthorities(UserRole role, List<Permission> permissions) {
-    Collection<GrantedAuthority> authorities = permissions.stream()
-        .map(perm -> new SimpleGrantedAuthority(perm.getName()))
-        .collect(Collectors.toList());
+  private Set<SimpleGrantedAuthority> mapPermissionsToAuthorities(UserType type, Set<Role> roles) {
+    Set<SimpleGrantedAuthority> authorities = roles.stream()
+        .flatMap(role -> role.getPermissions().stream()
+            .map(permission -> new SimpleGrantedAuthority(permission.getName())))
+        .collect(Collectors.toSet());
 
-    authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
+    authorities.add(new SimpleGrantedAuthority("ROLE_" + type.name()));
 
     return authorities;
   }

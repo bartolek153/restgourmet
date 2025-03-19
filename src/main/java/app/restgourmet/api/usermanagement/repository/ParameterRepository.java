@@ -10,5 +10,5 @@ import app.restgourmet.api.usermanagement.models.Parameter;
 
 @Repository
 public interface ParameterRepository extends JpaRepository<Parameter, UUID> {
-  Optional<Parameter> findByKey(String key);
+  Optional<Parameter> findByOptionKey(String optionKey);
 }

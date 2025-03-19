@@ -1,6 +1,6 @@
 package app.restgourmet.api.usermanagement.enums;
 
-public enum UserRole {
+public enum UserType {
   ADMIN,
   EDITOR,
   MODERATOR,

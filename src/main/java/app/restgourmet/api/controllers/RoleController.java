@@ -1,5 +1,6 @@
 package app.restgourmet.api.controllers;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springdoc.core.annotations.ParameterObject;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.restgourmet.api.usermanagement.dto.role.RoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListFiltersDto;
+import app.restgourmet.api.usermanagement.dto.role.RolePermissionDto;
 import app.restgourmet.api.usermanagement.service.spec.IRoleService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
@@ -51,6 +53,11 @@ public class RoleController {
   @GetMapping("/{id}")
   public ResponseEntity<RoleDto> getRole(@PathVariable UUID id) {
     return ResponseEntity.ok(roleService.getOne(id));
+  }
+
+  @GetMapping("/permissions")
+  public ResponseEntity<List<RolePermissionDto>> getRolePermissions(@RequestParam UUID id) {
+    return ResponseEntity.ok(roleService.getPermissions(id));
   }
 
   @PostMapping

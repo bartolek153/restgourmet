@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import app.restgourmet.api.usermanagement.enums.PermissionCategory;
 import app.restgourmet.api.usermanagement.enums.UserType;
 import app.restgourmet.api.usermanagement.models.Parameter;
 import app.restgourmet.api.usermanagement.models.Permission;
@@ -41,26 +42,30 @@ public class DataLoader implements CommandLineRunner {
 
   @Override
   public void run(String... args) throws Exception {
-    // parameterRepository.findByKey(AppConstants.Parameters.DB_INITIALIZED_KEY).ifPresentOrElse((p) -> {
-    //   logger.info("Database already initialized.");
-    // }, () -> {
-    //   try {
-    //     logger.info("Initializing database...");
-    //     // initializeDatabase();
-    //     logger.info("Database successfuly initialized.");
-    //   } catch (Exception e) {
-    //     logger.error("Error initializing database: " + e.getMessage());
-    //   }
-    // });
+    parameterRepository.findByOptionKey(AppConstants.Parameters.DB_INITIALIZED_KEY).ifPresentOrElse((p) -> {
+      logger.info("Database already initialized.");
+    }, () -> {
+      try {
+        logger.info("Initializing database...");
+        initializeDatabase();
+        logger.info("Database successfuly initialized.");
+      } catch (Exception e) {
+        logger.error("Error initializing database: " + e.getMessage());
+      }
+    });
   }
 
   @Transactional
   private void initializeDatabase() {
     // initialize permissions
-    // permissionRepository.saveAll(
-    //     List.of(
-    //         new Permission(Permissions.READ_USERS),
-    //         new Permission(Permissions.WRITE_USERS)));
+    permissionRepository.saveAll(
+        List.of(
+            new Permission(Permissions.READ_USERS, null, PermissionCategory.USER),
+            new Permission(Permissions.WRITE_USERS, null, PermissionCategory.USER),
+            new Permission(Permissions.READ_PRODUCT, null, PermissionCategory.PRODUCT),
+            new Permission(Permissions.WRITE_PRODUCT, null, PermissionCategory.PRODUCT),
+            new Permission(Permissions.READ_INVENTORY, null, PermissionCategory.INVENTORY),
+            new Permission(Permissions.WRITE_INVENTORY, null, PermissionCategory.INVENTORY)));
 
     // initialize users
     UserEntity admin = new UserEntity(
@@ -70,6 +75,7 @@ public class DataLoader implements CommandLineRunner {
         passwordEncoder.encode("admin"),
         true,
         UserType.ADMIN,
+        null,
         null,
         null);
 

@@ -1,6 +1,7 @@
 package app.restgourmet.api.usermanagement.dto.user;
 
 import java.util.List;
+import java.util.UUID;
 
 import app.restgourmet.api.commondata.dto.ImageDto;
 import jakarta.validation.constraints.NotEmpty;
@@ -10,11 +11,13 @@ import lombok.Data;
 @Data
 public class EditUserDto {
   @NotNull private String name;
-  @NotNull private String role;
+  @NotNull private String type;
   @NotNull private String email;
   @NotEmpty private String nickname;
   private List<ImageDto> picture;
   private List<String> permissions;
+  private List<UUID> roleIds;
+  private List<UUID> groupIds;
 
   public String getNickname() {
     return nickname.toLowerCase();

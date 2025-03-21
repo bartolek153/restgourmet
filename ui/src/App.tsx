@@ -29,7 +29,9 @@ import { UserList } from "./pages/usersmanagement/users/list";
 import { dataProvider } from "./rest-data-provider";
 import { UserCreate, UserEdit } from "./pages/usersmanagement/users";
 import { ProductCategoryList } from "./pages/masterData/productCategories/list";
-import { ProductCategoryForm } from "./pages/masterData/productCategories";
+import { IoMdBriefcase } from "react-icons/io";
+import { LuBriefcaseBusiness } from "react-icons/lu";
+import { RoleCreate, RoleEdit, RoleList } from "./pages/usersmanagement/roles";
 
 function App() {
   return (
@@ -60,6 +62,18 @@ function App() {
                     parent: USER_MANAGEMENT_PARENT_MENU,
                     canDelete: true,
                     icon: <AiOutlineUser />
+                  }
+                },
+                {
+                  name: "users/roles",
+                  list: "/users/roles",
+                  create: "/users/roles/create",
+                  edit: "/users/roles/edit/:id",
+                  meta: {
+                    label: "Roles",
+                    parent: USER_MANAGEMENT_PARENT_MENU,
+                    canDelete: true,
+                    icon: <LuBriefcaseBusiness />
                   }
                 },
                 {
@@ -162,6 +176,11 @@ function App() {
                     <Route index element={<UserList />} />
                     <Route path="create" element={<UserCreate />} />
                     <Route path="edit/:id" element={<UserEdit />} />
+                    <Route path="roles">
+                      <Route index element={<RoleList/>} />
+                      <Route path="create" element={<RoleCreate />} />
+                      <Route path="edit/:id" element={<RoleEdit />} />
+                    </Route>
                   </Route>
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>

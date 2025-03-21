@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Set;
 
+import app.restgourmet.api.usermanagement.dto.role.RolePermissionDto;
+import app.restgourmet.api.usermanagement.enums.PermissionCategory;
+
 @Getter
 @Setter
 @Entity
@@ -23,4 +26,10 @@ public class Permission extends BaseEntity {
 
   @ManyToMany(mappedBy = "permissions")
   private Set<Role> roles;
+
+  private PermissionCategory category;
+
+  public RolePermissionDto toRolePermissionDto() {
+    return new RolePermissionDto(this.name);
+  }
 }

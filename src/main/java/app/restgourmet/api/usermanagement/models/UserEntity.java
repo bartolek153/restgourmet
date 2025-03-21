@@ -46,17 +46,17 @@ public class UserEntity extends AuditableEntity {
   @JsonIgnore
   private String password;
 
-  @Column
   private boolean enabled;
 
-  private UserType role;
+  private UserType type;
 
   @ManyToMany
-  @JoinTable(
-      name = "user_role",
-      joinColumns = @JoinColumn(name = "user_id"),
-      inverseJoinColumns = @JoinColumn(name = "role_id"))
+  @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles;
+
+  @ManyToMany
+  @JoinTable(name = "user_group", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+  private Set<UserGroup> groups;
 
   @Column
   private String picture;

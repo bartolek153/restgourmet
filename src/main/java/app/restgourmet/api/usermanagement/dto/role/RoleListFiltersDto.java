@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class RoleListFiltersDto {
-    private String q;
     private String permissionName;
     private UUID userId;
+    private UUID roleId;
 }

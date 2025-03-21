@@ -85,7 +85,7 @@ public class AuthenticationService implements IAuthenticationService {
 
     UserEntity user = request.toUserEntity();
 
-    user.setRole(UserType.ADMIN);
+    user.setType(UserType.ADMIN);
     user.setPassword(passwordEncoder.encode(user.getPassword()));
 
     userRepository.save(user);

@@ -52,12 +52,12 @@ export const dataProvider = (
       headers: headersFromMeta,
     });
 
-    const total = data.page.totalElements;
-    data = data.content
+    const total = data.page?.totalElements;
+    data = data.content ?? data;
 
     return {
       data,
-      total: total || data.length,
+      total: total || data?.length,
     };
   },
 

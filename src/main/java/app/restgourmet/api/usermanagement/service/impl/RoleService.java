@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +16,13 @@ import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.usermanagement.dto.role.RoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListFiltersDto;
+import app.restgourmet.api.usermanagement.dto.role.RolePermissionDto;
 import app.restgourmet.api.usermanagement.mappers.IRoleMapper;
 import app.restgourmet.api.usermanagement.models.Permission;
 import app.restgourmet.api.usermanagement.models.Role;
 import app.restgourmet.api.usermanagement.repository.PermissionRepository;
 import app.restgourmet.api.usermanagement.repository.RoleRepository;
+import app.restgourmet.api.usermanagement.repository.specifications.RoleSpec;
 import app.restgourmet.api.usermanagement.service.spec.IRoleService;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -38,12 +41,17 @@ public class RoleService implements IRoleService {
   }
 
   public PagedModel<RoleListDto> list(PageRequest pagReq, RoleListFiltersDto dto) {
-    Page<Role> roles = roleRepository.findAll(pagReq);
+    Specification<Role> spec = RoleSpec.filterBy(dto);
+    Page<Role> roles = roleRepository.findAll(spec, pagReq);
     return new PagedModel<>(roles.map(roleMapper::toListDto));
   }
 
   public RoleDto getOne(UUID id) {
     return roleMapper.toDto(getById(id));
+  }
+
+  public List<RolePermissionDto> getPermissions(UUID id) {
+    return getById(id).getPermissions().stream().map(Permission::toRolePermissionDto).toList();
   }
 
   public UUID create(RoleDto dto) {

@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
+import app.restgourmet.api.exceptions.BadRequestException;
 import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.usermanagement.dto.role.RoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListDto;
@@ -20,6 +21,7 @@ import app.restgourmet.api.usermanagement.dto.role.RolePermissionDto;
 import app.restgourmet.api.usermanagement.mappers.IRoleMapper;
 import app.restgourmet.api.usermanagement.models.Permission;
 import app.restgourmet.api.usermanagement.models.Role;
+import app.restgourmet.api.usermanagement.models.UserEntity;
 import app.restgourmet.api.usermanagement.repository.PermissionRepository;
 import app.restgourmet.api.usermanagement.repository.RoleRepository;
 import app.restgourmet.api.usermanagement.repository.specifications.RoleSpec;
@@ -54,20 +56,27 @@ public class RoleService implements IRoleService {
     return getById(id).getPermissions().stream().map(Permission::toRolePermissionDto).toList();
   }
 
-  public UUID create(RoleDto dto) {
+  public UUID create(RoleDto dto, UserEntity user) {
     Role role = roleMapper.toEntity(dto);
+    
     Set<Permission> permissions = extractPermissionObjs(dto.getPermissions());
     role.setPermissions(permissions);
+
+    role.setCreatedBy(user);
+    role.setLastUpdatedBy(user);
 
     return roleRepository.save(role).getId();
   }
 
-  public void edit(UUID id, RoleDto dto) {
+  public void edit(UUID id, RoleDto dto, UserEntity user) {
     Role role = getById(id);
     roleMapper.updateEntity(dto, role);
     
     Set<Permission> permissions = extractPermissionObjs(dto.getPermissions());
     role.setPermissions(permissions);
+
+    role.setCreatedBy(user);
+    role.setLastUpdatedBy(user);
     
     roleRepository.save(role);
   }
@@ -75,6 +84,10 @@ public class RoleService implements IRoleService {
   public void delete(UUID id) {
     if (!roleRepository.existsById(id)) {
       throw new ResourceNotFoundException(AppConstants.ErrorMessages.ROLE_NOT_FOUND);
+    }
+
+    if (roleRepository.existsByUsersNotEmpty()) {
+      throw new BadRequestException(AppConstants.ErrorMessages.ROLE_DELETE_DEPS);
     }
 
     roleRepository.deleteById(id);

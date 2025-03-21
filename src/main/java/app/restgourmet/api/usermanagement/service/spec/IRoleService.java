@@ -10,6 +10,7 @@ import app.restgourmet.api.usermanagement.dto.role.RoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListFiltersDto;
 import app.restgourmet.api.usermanagement.dto.role.RolePermissionDto;
+import app.restgourmet.api.usermanagement.models.UserEntity;
 
 public interface IRoleService {
   PagedModel<RoleListDto> list(PageRequest pagReq, RoleListFiltersDto dto);
@@ -18,9 +19,9 @@ public interface IRoleService {
 
   List<RolePermissionDto> getPermissions(UUID id);
 
-  UUID create(RoleDto dto);
+  UUID create(RoleDto dto, UserEntity auditUser);
 
-  void edit(UUID id, RoleDto dto);
+  void edit(UUID id, RoleDto dto, UserEntity auditUser);
 
   void delete(UUID id);
 }

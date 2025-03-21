@@ -11,20 +11,29 @@ export const RoleCreate = () => {
     }));
   };
 
-  const { formProps, saveButtonProps } = useForm({});
+  const { formProps, saveButtonProps, onFinish } = useForm({});
+
+  const handleOnFinish = (values: any) => {
+    onFinish({
+      ...values,
+      permissions: Object.values(selectedRows).flat(),
+    });
+  };
+
   const { tableProps } = useTable({
     resource: "authorization/categories",
     pagination: { mode: "off" },
   });
 
-  useEffect(() => {
-    console.log(selectedRows);
-
-  }, [selectedRows]);
-
   return (
     <Create saveButtonProps={saveButtonProps}>
-      <Form {...formProps} layout="vertical" wrapperCol={{ span: 6 }} autoComplete="off">
+      <Form
+        {...formProps}
+        onFinish={handleOnFinish}
+        layout="vertical"
+        wrapperCol={{ span: 6 }}
+        autoComplete="off"
+      >
         <Form.Item
           label={"Name"}
           name={["name"]}
@@ -41,11 +50,13 @@ export const RoleCreate = () => {
           rowKey={"category"}
           expandable={{
             expandedRowRender: (record: any) => {
-              return <PermissionsTable 
-                record={record}
-                permissions={selectedRows}
-                setParentPermissions={handleSelectionChange}
-              />;
+              return (
+                <PermissionsTable
+                  record={record}
+                  permissions={selectedRows}
+                  setParentPermissions={handleSelectionChange}
+                />
+              );
             },
           }}
         >
@@ -80,7 +91,7 @@ const PermissionsTable = ({
   });
 
   const onPermissionsSelectChange = (selectedRowKeys: React.Key[]) => {
-    console.log(selectedRowKeys)
+    console.log(selectedRowKeys);
     setParentPermissions(record.category, selectedRowKeys);
   };
 

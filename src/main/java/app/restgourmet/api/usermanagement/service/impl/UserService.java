@@ -186,7 +186,7 @@ public class UserService implements IUserService {
   }
 
   @Override
-  public UserEntity getProfile(Authentication auth) {
+  public UserEntity getAuthenticatedUser(Authentication auth) {
     UserDetailsImpl ud = (UserDetailsImpl) auth.getPrincipal();
     return userRepository.findById(ud.getId()).orElse(null);
   }

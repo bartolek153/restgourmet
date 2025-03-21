@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +23,9 @@ import app.restgourmet.api.usermanagement.dto.role.RoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListFiltersDto;
 import app.restgourmet.api.usermanagement.dto.role.RolePermissionDto;
+import app.restgourmet.api.usermanagement.models.UserEntity;
 import app.restgourmet.api.usermanagement.service.spec.IRoleService;
+import app.restgourmet.api.usermanagement.service.spec.IUserService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,9 +37,13 @@ import jakarta.validation.Valid;
 public class RoleController {
 
   private final IRoleService roleService;
+  private final IUserService userService;
 
-  public RoleController(IRoleService roleService) {
+  public RoleController(
+      IRoleService roleService,
+      IUserService userService) {
     this.roleService = roleService;
+    this.userService = userService;
   }
 
   @GetMapping
@@ -62,13 +69,15 @@ public class RoleController {
 
   @PostMapping
   public ResponseEntity<UUID> createRole(@RequestBody @Valid RoleDto dto) {
-    UUID id = roleService.create(dto);
+    UserEntity user = userService.getAuthenticatedUser(SecurityContextHolder.getContext().getAuthentication());
+    UUID id = roleService.create(dto, user);
     return ResponseEntity.status(HttpStatus.CREATED).body(id);
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<?> updateRole(@PathVariable UUID id, @RequestBody @Valid RoleDto dto) {
-    roleService.edit(id, dto);
+    UserEntity user = userService.getAuthenticatedUser(SecurityContextHolder.getContext().getAuthentication());
+    roleService.edit(id, dto, user);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 

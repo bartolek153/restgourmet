@@ -29,7 +29,7 @@ public interface IUserService {
 
   void enableUser(UUID id);
 
-  UserEntity getProfile(Authentication auth);
+  UserEntity getAuthenticatedUser(Authentication auth);
 
   void editProfile(Authentication auth, EditProfileDto data);
 }

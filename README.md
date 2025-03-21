@@ -22,6 +22,12 @@
 * Inventory Tracking
 * Brazillian NFe Receipts Management
 
+## Security
+
+* IAM
+* Auditing
+* JWT
+
 ## Installation
 
 ```bash

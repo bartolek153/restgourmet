@@ -25,14 +25,14 @@ import app.restgourmet.api.utils.AppConstants;
 @Service
 public class ProductCategoryService implements IProductCategoryService {
 
-    private final ProductFamilyRepository productFamilyRepository;
-
+  private final ProductFamilyRepository productFamilyRepository;
   private final ProductCategoryRepository productCategoryRepository;
-  
+
   @Autowired
   private IProductCategoryMapper productCategoryMapper;
 
-  public ProductCategoryService(ProductCategoryRepository prodCategoryRepository, ProductFamilyRepository productFamilyRepository) {
+  public ProductCategoryService(ProductCategoryRepository prodCategoryRepository,
+      ProductFamilyRepository productFamilyRepository) {
     this.productCategoryRepository = prodCategoryRepository;
     this.productFamilyRepository = productFamilyRepository;
   }
@@ -40,7 +40,8 @@ public class ProductCategoryService implements IProductCategoryService {
   @Override
   public PagedModel<ProdCategoryListDto> list(PageRequest pageReq, ProdCategoryListFiltersDto filters) {
     Specification<ProductCategory> spec = ProdCategorySpec.filterBy(filters);
-    Page<ProdCategoryListDto> res = productCategoryRepository.findAll(spec, pageReq).map(productCategoryMapper::toListDto);
+    Page<ProdCategoryListDto> res = productCategoryRepository.findAll(spec, pageReq)
+        .map(productCategoryMapper::toListDto);
 
     return new PagedModel<>(res);
   }
@@ -69,11 +70,11 @@ public class ProductCategoryService implements IProductCategoryService {
     if (!productCategoryRepository.existsById(id)) {
       throw new ResourceNotFoundException(AppConstants.ErrorMessages.PRODUCT_CATEGORY_NOT_FOUND);
     }
-    
+
     if (productFamilyRepository.existsByCategoryId(id)) {
       throw new BadRequestException(AppConstants.ErrorMessages.PRODUCT_CATEGORY_DELETE_DEPS);
     }
-    
+
     productCategoryRepository.deleteById(id);
   }
 

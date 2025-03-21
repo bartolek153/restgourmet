@@ -1,7 +1,6 @@
 package app.restgourmet.api.usermanagement.dto.role;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 import lombok.Data;
@@ -11,5 +10,5 @@ public class RoleListDto {
     private UUID id;
     private String name;
     private String createdBy;
-    private LocalDateTime lastUpdatedAt;
+    private LocalDateTime updatedAt;
 }

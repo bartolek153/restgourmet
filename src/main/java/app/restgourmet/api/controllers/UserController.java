@@ -1,10 +1,7 @@
 package app.restgourmet.api.controllers;
 
-import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PagedModel;
@@ -23,17 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.usermanagement.dto.permission.PermissionCategoryDto;
-import app.restgourmet.api.usermanagement.dto.permission.PermissionListDto;
 import app.restgourmet.api.usermanagement.dto.user.CreateUserDto;
 import app.restgourmet.api.usermanagement.dto.user.EditProfileDto;
 import app.restgourmet.api.usermanagement.dto.user.EditUserDto;
 import app.restgourmet.api.usermanagement.dto.user.ListUserFiltersDto;
 import app.restgourmet.api.usermanagement.dto.user.UserDto;
 import app.restgourmet.api.usermanagement.dto.user.UserListDto;
-import app.restgourmet.api.usermanagement.enums.PermissionCategory;
 import app.restgourmet.api.usermanagement.models.UserEntity;
-import app.restgourmet.api.usermanagement.service.spec.IPermissionService;
 import app.restgourmet.api.usermanagement.service.spec.IUserService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
@@ -47,14 +40,11 @@ import jakarta.validation.constraints.NotNull;
 @Tag(name = "Users", description = "User endpoints")
 public class UserController {
   private final IUserService userService;
-  private final IPermissionService permissionService;
-  private static final Logger log = LoggerFactory.getLogger(UserController.class);
+  // private static final Logger log = LoggerFactory.getLogger(UserController.class);
 
   public UserController(
-      IUserService userService,
-      IPermissionService permissionService) {
+      IUserService userService) {
     this.userService = userService;
-    this.permissionService = permissionService;
   }
 
   @GetMapping
@@ -121,7 +111,7 @@ public class UserController {
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<UserEntity> getProfile() {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    return ResponseEntity.ok(userService.getProfile(auth));
+    return ResponseEntity.ok(userService.getAuthenticatedUser(auth));
   }
 
   @PutMapping("/profile")

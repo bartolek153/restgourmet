@@ -1,7 +1,7 @@
-// resources.ts
 import { AiOutlineTable, AiOutlineUser, AiTwotoneDatabase } from "react-icons/ai";
 import { LuBriefcaseBusiness } from "react-icons/lu";
 import { FaUsers } from "react-icons/fa";
+import { MdOutlineShoppingCart } from "react-icons/md";
 import {
   COMMON_DATA_PARENT_MENU,
   EMPLOYEE_MANAGEMENT_PARENT_MENU,
@@ -9,6 +9,7 @@ import {
   INVENTORY_HANDLING_PARENT_MENU,
   MASTER_DATA_PARENT_MENU,
   RESTAURANT_MANAGEMENT_PARENT_MENU,
+  SALES_PARENT_MENU,
   USER_MANAGEMENT_PARENT_MENU,
 } from "./constants";
 
@@ -18,6 +19,7 @@ export const resources = [
     meta: { icon: <AiTwotoneDatabase /> },
   },
   { name: MASTER_DATA_PARENT_MENU, meta: { icon: <AiOutlineTable /> } },
+  { name: SALES_PARENT_MENU, meta: { icon: <MdOutlineShoppingCart /> } },
   { name: FINANCIALS_PARENT_MENU, meta: { icon: "" } },
   { name: INVENTORY_HANDLING_PARENT_MENU, meta: { icon: "" } },
   { name: EMPLOYEE_MANAGEMENT_PARENT_MENU, meta: { icon: "" } },
@@ -141,6 +143,18 @@ export const resources = [
       label: "Measurement Units",
       parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
+    },
+  },
+  {
+    name: "sales/orders",
+    list: "/sales/orders",
+    create: "/sales/orders/create",
+    edit: "/sales/orders/edit/:id",
+    meta: {
+      label: "Orders",
+      parent: SALES_PARENT_MENU,
+      canDelete: true,
+      icon: "",
     },
   },
 ];

@@ -23,9 +23,7 @@ import { ColorModeContextProvider } from "./contexts/color-mode";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
-import {
-  API_URL,
-} from "./constants";
+import { API_URL } from "./constants";
 import { UserList } from "./pages/usersmanagement/users/list";
 import { dataProvider } from "./rest-data-provider";
 import { UserCreate, UserEdit } from "./pages/usersmanagement/users";
@@ -35,7 +33,12 @@ import { UserGroupCreate, UserGroupEdit, UserGroupList } from "./pages/usersmana
 import { AddressList } from "./pages/masterData/addresses/list";
 import { AddressForm } from "./pages/masterData/addresses";
 import { resources } from "./resources";
-import { BusinessPartnerCreateForm, BusinessPartnerEdit, BusinessPartnerList } from "./pages/masterData/businessPartners";
+import {
+  BusinessPartnerCreateForm,
+  BusinessPartnerEdit,
+  BusinessPartnerList,
+} from "./pages/masterData/businessPartners";
+import { SalesOrderList, SalesOrderEdit } from "./pages/sales/orders";
 
 function App() {
   return (
@@ -79,15 +82,26 @@ function App() {
                     </Route>
                   </Route>
 
+                  <Route path="/sales/orders">
+                    <Route index element={<SalesOrderList />} />
+                    <Route path="edit/:id" element={<SalesOrderEdit />} />
+                  </Route>
+
                   <Route path="/addresses">
                     <Route index element={<AddressList />} />
                     <Route path="create" element={<AddressForm modalProps={{}} formProps={{}} />} />
-                    <Route path="edit/:id" element={<AddressForm modalProps={{}} formProps={{}} />} />
+                    <Route
+                      path="edit/:id"
+                      element={<AddressForm modalProps={{}} formProps={{}} />}
+                    />
                   </Route>
 
                   <Route path="/partners">
-                    <Route index element={<BusinessPartnerList/>} />
-                    <Route path="create" element={<BusinessPartnerCreateForm modalProps={{}} formProps={{}}/>} />
+                    <Route index element={<BusinessPartnerList />} />
+                    <Route
+                      path="create"
+                      element={<BusinessPartnerCreateForm modalProps={{}} formProps={{}} />}
+                    />
                     <Route path="edit/:id" element={<BusinessPartnerEdit />} />
                     <Route path="customers">
                       <Route index />

@@ -2,7 +2,7 @@ package app.restgourmet.api.controllers;
 
 import app.restgourmet.api.usermanagement.dto.auth.LoginRequestDto;
 import app.restgourmet.api.usermanagement.dto.auth.RegisterRequestDto;
-import app.restgourmet.api.usermanagement.service.spec.IAuthenticationService;
+import app.restgourmet.api.usermanagement.service.spec.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -11,15 +11,14 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 @RestController
 @RequestMapping("/api/auth")
 @Tag(name = "Authentication", description = "User authentication management")
 public class AuthenticationController {
 
-  private final IAuthenticationService authenticationService;
+  private final AuthenticationService authenticationService;
 
-  public AuthenticationController(IAuthenticationService authenticationService) {
+  public AuthenticationController(AuthenticationService authenticationService) {
     this.authenticationService = authenticationService;
   }
 

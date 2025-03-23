@@ -5,11 +5,10 @@ public enum PermissionCategory {
     ROLE,
     USER_GROUP,
     PRODUCT,
-    INVENTORY
-    ;
+    INVENTORY;
 
     // @Override
     // public String toString() {
-    //     return CommonUtils.snakeCaseToHumanReadable(this.name());
+    // return CommonUtils.snakeCaseToHumanReadable(this.name());
     // }
 }

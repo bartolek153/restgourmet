@@ -72,7 +72,6 @@ export const authProvider: AuthProvider = {
       try {
         // refresh token
         // const response = await axiosInstance.post(`${API_URL}/auth/refresh`);
-
         // if (response.status === 200) {
         // } else {
         //   return { logout: true, redirectTo: "/login", error };

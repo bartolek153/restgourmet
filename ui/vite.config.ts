@@ -8,7 +8,7 @@ export default defineConfig({
         target: "http://localhost:8080", // Backend
         changeOrigin: true,
         secure: false,
-        cookieDomainRewrite: "localhost"
+        cookieDomainRewrite: "localhost",
       },
     },
   },

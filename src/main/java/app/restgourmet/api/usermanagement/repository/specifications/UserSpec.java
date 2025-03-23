@@ -25,7 +25,7 @@ public class UserSpec {
       if (StringUtils.hasText(enabled) && ("true".equalsIgnoreCase(enabled) || "false".equalsIgnoreCase(enabled))) {
         return cb.equal(root.get(ENABLED), Boolean.parseBoolean(enabled));
       }
-      
+
       return cb.conjunction();
     };
   }

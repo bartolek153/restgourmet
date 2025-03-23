@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.masterdata.dto.UnitMeasurementDto;
-import app.restgourmet.api.masterdata.dto.UnitMeasurementListDto;
-import app.restgourmet.api.masterdata.dto.UnitMeasurementListFiltersDto;
-import app.restgourmet.api.masterdata.service.spec.IUnitMeasurementService;
+import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementDto;
+import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementListDto;
+import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementListFiltersDto;
+import app.restgourmet.api.masterdata.service.spec.UnitMeasurementService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,9 +31,9 @@ import jakarta.validation.Valid;
 @Tag(name = "Unit of Measurement", description = "Units of measurement endpoints")
 public class UnitMeasurementController {
 
-  private final IUnitMeasurementService unitMeasurementService;
+  private final UnitMeasurementService unitMeasurementService;
 
-  public UnitMeasurementController(IUnitMeasurementService unitMeasurementService) {
+  public UnitMeasurementController(UnitMeasurementService unitMeasurementService) {
     this.unitMeasurementService = unitMeasurementService;
   }
 

@@ -15,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.masterdata.dto.ProdCategoryDto;
-import app.restgourmet.api.masterdata.dto.ProdCategoryListDto;
-import app.restgourmet.api.masterdata.dto.ProdCategoryListFiltersDto;
-import app.restgourmet.api.masterdata.service.spec.IProductCategoryService;
+import app.restgourmet.api.masterdata.dto.category.ProdCategoryDto;
+import app.restgourmet.api.masterdata.dto.category.ProdCategoryListDto;
+import app.restgourmet.api.masterdata.dto.category.ProdCategoryListFiltersDto;
+import app.restgourmet.api.masterdata.service.spec.ProductCategoryService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,9 +31,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 @Tag(name = "Product Category", description = "Product categories endpoints")
 public class ProductCategoryController {
 
-  private final IProductCategoryService productCategoryService;
+  private final ProductCategoryService productCategoryService;
 
-  public ProductCategoryController(IProductCategoryService prodCategoryService) {
+  public ProductCategoryController(ProductCategoryService prodCategoryService) {
     productCategoryService = prodCategoryService;
   }
 

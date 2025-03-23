@@ -27,7 +27,7 @@ import app.restgourmet.api.usermanagement.dto.user.UserListFiltersDto;
 import app.restgourmet.api.usermanagement.dto.user.UserDto;
 import app.restgourmet.api.usermanagement.dto.user.UserListDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
-import app.restgourmet.api.usermanagement.service.spec.IUserService;
+import app.restgourmet.api.usermanagement.service.spec.UserService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,11 +39,12 @@ import jakarta.validation.constraints.NotNull;
 @RequestMapping("/api/users")
 @Tag(name = "Users", description = "User endpoints")
 public class UserController {
-  private final IUserService userService;
-  // private static final Logger log = LoggerFactory.getLogger(UserController.class);
+  private final UserService userService;
+  // private static final Logger log =
+  // LoggerFactory.getLogger(UserController.class);
 
   public UserController(
-      IUserService userService) {
+      UserService userService) {
     this.userService = userService;
   }
 

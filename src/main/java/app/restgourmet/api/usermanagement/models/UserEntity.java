@@ -52,17 +52,11 @@ public class UserEntity extends AuditableEntity {
   private UserType type;
 
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(
-      name = "user_role", 
-      joinColumns = @JoinColumn(name = "user_id"), 
-      inverseJoinColumns = @JoinColumn(name = "role_id"))
+  @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles;
 
   @ManyToMany(fetch = FetchType.LAZY)
-  @JoinTable(
-      name = "user_group",
-      joinColumns = @JoinColumn(name = "user_id"), 
-      inverseJoinColumns = @JoinColumn(name = "group_id"))
+  @JoinTable(name = "user_group", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
   private Set<UserGroup> groups;
 
   @Column

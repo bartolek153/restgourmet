@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class AppValidationException extends RuntimeException {
   Map<String, List<String>> errors;
-  
+
   public AppValidationException() {
     super();
     errors = new HashMap<>();
@@ -16,7 +16,7 @@ public class AppValidationException extends RuntimeException {
     super(message);
     errors = new HashMap<>();
   }
-  
+
   public AppValidationException(String field, String message) {
     super();
     errors = new HashMap<>();

@@ -26,10 +26,10 @@ public class RoleSpec {
   private static Specification<Role> hasPermissionName(String name) {
     return (root, query, cb) -> {
       if (StringUtils.hasText(name)) {
-        Join<Role, Permission> rolePermissions = root.join(PERMISSIONS); 
+        Join<Role, Permission> rolePermissions = root.join(PERMISSIONS);
         return cb.equal(rolePermissions.get(NAME), name);
       }
-      
+
       return cb.conjunction();
     };
   }
@@ -40,7 +40,7 @@ public class RoleSpec {
         Join<Role, UserEntity> roleUsers = root.join(USERS);
         return cb.equal(roleUsers.get(ID), userId);
       }
-      
+
       return cb.conjunction();
     };
   }

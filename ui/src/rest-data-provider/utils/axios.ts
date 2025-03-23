@@ -2,7 +2,7 @@ import { HttpError } from "@refinedev/core";
 import axios from "axios";
 
 const axiosInstance = axios.create({
-  withCredentials: true
+  withCredentials: true,
 });
 
 axiosInstance.interceptors.response.use(
@@ -28,6 +28,5 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(customError);
   }
 );
-
 
 export { axiosInstance };

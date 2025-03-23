@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.commondata.dto.BaseUnitDto;
-import app.restgourmet.api.commondata.dto.BaseUnitListDto;
-import app.restgourmet.api.commondata.dto.BaseUnitListFiltersDto;
-import app.restgourmet.api.commondata.service.spec.IBaseUnitService;
+import app.restgourmet.api.commondata.dto.unit.BaseUnitDto;
+import app.restgourmet.api.commondata.dto.unit.BaseUnitListDto;
+import app.restgourmet.api.commondata.dto.unit.BaseUnitListFiltersDto;
+import app.restgourmet.api.commondata.service.spec.BaseUnitService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,9 +31,9 @@ import jakarta.validation.Valid;
 @Tag(name = "Base Unit", description = "Basic units endpoints")
 public class BaseUnitController {
 
-  private final IBaseUnitService baseUnitService;
+  private final BaseUnitService baseUnitService;
 
-  public BaseUnitController(IBaseUnitService baseUnitService) {
+  public BaseUnitController(BaseUnitService baseUnitService) {
     this.baseUnitService = baseUnitService;
   }
 

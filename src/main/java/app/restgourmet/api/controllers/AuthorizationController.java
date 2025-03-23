@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.restgourmet.api.usermanagement.dto.permission.PermissionListDto;
 import app.restgourmet.api.usermanagement.enums.PermissionCategory;
-import app.restgourmet.api.usermanagement.service.spec.IPermissionService;
+import app.restgourmet.api.usermanagement.service.spec.PermissionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -19,9 +19,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/authorization")
 @Tag(name = "Authorization", description = "Authorization endpoints")
 public class AuthorizationController {
-  private final IPermissionService permissionService;
+  private final PermissionService permissionService;
 
-  public AuthorizationController(IPermissionService permissionService) {
+  public AuthorizationController(PermissionService permissionService) {
     this.permissionService = permissionService;
   }
 

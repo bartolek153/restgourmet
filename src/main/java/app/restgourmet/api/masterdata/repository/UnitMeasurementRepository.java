@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 
 @Repository
-public interface UnitMeasurementRepository extends JpaRepository<UnitMeasurement, UUID>, JpaSpecificationExecutor<UnitMeasurement> {
+public interface UnitMeasurementRepository
+        extends JpaRepository<UnitMeasurement, UUID>, JpaSpecificationExecutor<UnitMeasurement> {
 }

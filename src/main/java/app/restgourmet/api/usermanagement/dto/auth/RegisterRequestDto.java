@@ -10,11 +10,11 @@ import lombok.Data;
 
 @Data
 public class RegisterRequestDto {
-  
+
   @NotBlank
   @Schema(example = "John Doe")
   private String name;
-  
+
   @NotBlank
   @Schema(example = "johndoe@test.com")
   private String email;

@@ -15,5 +15,6 @@ public interface ProductFamilyRepository extends JpaRepository<ProductFamily, UU
 
   boolean existsByCategoryId(UUID id);
 
-  // Page<ProductFamily> findByIdOrDescriptionContainingIgnoreCase(List<UUID> ids, String description, Pageable pageable);
+  // Page<ProductFamily> findByIdOrDescriptionContainingIgnoreCase(List<UUID> ids,
+  // String description, Pageable pageable);
 }

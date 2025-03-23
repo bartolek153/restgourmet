@@ -4,8 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-
-import app.restgourmet.api.commondata.dto.ImageDto;
+import app.restgourmet.api.commondata.dto.storage.ImageDto;
 import app.restgourmet.api.usermanagement.enums.UserType;
 import lombok.Data;
 

@@ -1,4 +1,11 @@
-import { DeleteButton, EditButton, FilterDropdown, List, useModalForm, useTable } from "@refinedev/antd"
+import {
+  DeleteButton,
+  EditButton,
+  FilterDropdown,
+  List,
+  useModalForm,
+  useTable,
+} from "@refinedev/antd";
 import { BaseRecord } from "@refinedev/core";
 import { Checkbox, Form, Input, Radio, Space, Table } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -8,17 +15,15 @@ export const ProductCategoryList = () => {
   const { tableProps, searchFormProps } = useTable({
     syncWithLocation: true,
     onSearch: (params: any) => {
-      return [
-        { field: 'q', operator: "eq", value: params.q },
-      ]
-    }
+      return [{ field: "q", operator: "eq", value: params.q }];
+    },
   });
 
   const filterPageDelayed = () => {
     setTimeout(() => {
       searchFormProps.form?.submit();
     }, 1000);
-  }
+  };
 
   const {
     modalProps: createModalProps,
@@ -39,35 +44,30 @@ export const ProductCategoryList = () => {
 
   return (
     <>
-      <List 
+      <List
         createButtonProps={{
           onClick: () => {
             createModalShow();
           },
         }}
       >
-        <Form
-          {...searchFormProps}
-          layout="horizontal"
-          onValuesChange={filterPageDelayed}
-        >
+        <Form {...searchFormProps} layout="horizontal" onValuesChange={filterPageDelayed}>
           <Space wrap>
             <Form.Item label="Search" name="q">
-              <Input
-                placeholder="Description"
-                prefix={<AiOutlineSearch />}
-                allowClear
-              />
+              <Input placeholder="Description" prefix={<AiOutlineSearch />} allowClear />
             </Form.Item>
           </Space>
         </Form>
 
-        <Table {...tableProps} rowKey="id" pagination={{
-          ...tableProps.pagination,
-          showTotal: (total) => `Total ${total} items`,
-          showQuickJumper: true,
-          showSizeChanger: true,
-        }}
+        <Table
+          {...tableProps}
+          rowKey="id"
+          pagination={{
+            ...tableProps.pagination,
+            showTotal: (total) => `Total ${total} items`,
+            showQuickJumper: true,
+            showSizeChanger: true,
+          }}
           showSorterTooltip={true}
         >
           <Table.Column dataIndex="description" title={"Description"} sorter={true} />
@@ -76,7 +76,12 @@ export const ProductCategoryList = () => {
             dataIndex="actions"
             render={(_, record: BaseRecord) => (
               <Space>
-                <EditButton hideText size="small" recordItemId={record.id} onClick={() => editModalShow(record.id)} />
+                <EditButton
+                  hideText
+                  size="small"
+                  recordItemId={record.id}
+                  onClick={() => editModalShow(record.id)}
+                />
                 <DeleteButton hideText size="small" recordItemId={record.id} />
               </Space>
             )}
@@ -87,5 +92,4 @@ export const ProductCategoryList = () => {
       <ProductCategoryForm modalProps={editModalProps} formProps={editFormProps} />
     </>
   );
-
-}
+};

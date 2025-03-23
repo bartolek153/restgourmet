@@ -26,8 +26,8 @@ import app.restgourmet.api.usermanagement.dto.role.RoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListFiltersDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
-import app.restgourmet.api.usermanagement.service.spec.IRoleService;
-import app.restgourmet.api.usermanagement.service.spec.IUserService;
+import app.restgourmet.api.usermanagement.service.spec.RoleService;
+import app.restgourmet.api.usermanagement.service.spec.UserService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,12 +38,12 @@ import jakarta.validation.Valid;
 @Tag(name = "Role", description = "User roles endpoints")
 public class RoleController {
 
-  private final IRoleService roleService;
-  private final IUserService userService;
+  private final RoleService roleService;
+  private final UserService userService;
 
   public RoleController(
-      IRoleService roleService,
-      IUserService userService) {
+      RoleService roleService,
+      UserService userService) {
     this.roleService = roleService;
     this.userService = userService;
   }

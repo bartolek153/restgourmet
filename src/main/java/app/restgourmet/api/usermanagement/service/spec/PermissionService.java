@@ -1,0 +1,10 @@
+package app.restgourmet.api.usermanagement.service.spec;
+
+import java.util.List;
+
+import app.restgourmet.api.usermanagement.dto.permission.PermissionListDto;
+import app.restgourmet.api.usermanagement.enums.PermissionCategory;
+
+public interface PermissionService {
+  List<PermissionListDto> getPermissions(PermissionCategory category);
+}

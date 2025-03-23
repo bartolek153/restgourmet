@@ -213,7 +213,7 @@ function App() {
                   </Route>
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>
-                
+
                 <Route
                   element={
                     <Authenticated key="authenticated-outer" fallback={<Outlet />}>

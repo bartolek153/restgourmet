@@ -5,7 +5,10 @@ interface ProductCategoryFormProps {
   formProps: FormProps;
 }
 
-export const ProductCategoryForm: React.FC<ProductCategoryFormProps> = ({modalProps: createModalProps, formProps: createFormProps }) => {
+export const ProductCategoryForm: React.FC<ProductCategoryFormProps> = ({
+  modalProps: createModalProps,
+  formProps: createFormProps,
+}) => {
   return (
     <Modal {...createModalProps}>
       <Form {...createFormProps} layout="vertical">
@@ -23,4 +26,4 @@ export const ProductCategoryForm: React.FC<ProductCategoryFormProps> = ({modalPr
       </Form>
     </Modal>
   );
-}
+};

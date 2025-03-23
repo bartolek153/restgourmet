@@ -20,7 +20,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "product_inventory", uniqueConstraints = @UniqueConstraint(columnNames = {"product_id", "warehouse_id"}))
+@Table(name = "product_inventory", uniqueConstraints = @UniqueConstraint(columnNames = { "product_id",
+    "warehouse_id" }))
 public class ProductInventory extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "product_id", nullable = false)
@@ -35,7 +36,7 @@ public class ProductInventory extends BaseEntity {
 
   @Column
   private Double minQuantity;
-  
+
   @ManyToOne
   @JoinColumn(name = "min_quantity_unit_id")
   private UnitMeasurement minQuantityUnit;

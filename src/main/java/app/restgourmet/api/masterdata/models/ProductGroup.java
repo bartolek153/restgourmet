@@ -22,7 +22,7 @@ public class ProductGroup extends BaseEntity {
   @NotNull
   @Column(nullable = false)
   private String description;
-  
+
   @ManyToOne
   @JoinColumn(name = "family_id")
   private ProductFamily family;

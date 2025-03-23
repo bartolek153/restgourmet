@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 
-import app.restgourmet.api.commondata.service.spec.IStorageService;
+import app.restgourmet.api.commondata.service.spec.StorageService;
 import app.restgourmet.api.config.StorageProperties;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -44,9 +44,9 @@ public class RestGourmetApplication {
   }
 
   @Bean
-	CommandLineRunner init(IStorageService storageService) {
-		return (args) -> {
-			storageService.init();
-		};
-	}
+  CommandLineRunner init(StorageService storageService) {
+    return (args) -> {
+      storageService.init();
+    };
+  }
 }

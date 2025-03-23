@@ -91,7 +91,7 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity.badRequest().body(err);
   }
-  
+
   /**
    * Handles bad payloads in requests.
    * Required to display error messages
@@ -129,22 +129,24 @@ public class GlobalExceptionHandler {
   /**
    * Handles any other exception (not listed above) as an internal server error
    *
-   * BUG: this handler catches every exception, even Spring-related Exceptions, which is not expected
+   * BUG: this handler catches every exception, even Spring-related Exceptions,
+   * which is not expected
    *
    */
   // @ExceptionHandler(Exception.class)
   // public ResponseEntity<ErrorObject> handleGenericError(Exception e) {
-  //   String det = null;
+  // String det = null;
 
-  //   if ("dev".equals(activeProfile)) {
-  //     det = e.getMessage();
-  //   }
+  // if ("dev".equals(activeProfile)) {
+  // det = e.getMessage();
+  // }
 
-  //   ErrorObject err = ErrorObject.builder()
-  //       .message("An error occurred while processing the request. Please, try again later.")
-  //       .details(det)
-  //       .build();
+  // ErrorObject err = ErrorObject.builder()
+  // .message("An error occurred while processing the request. Please, try again
+  // later.")
+  // .details(det)
+  // .build();
 
-  //   return ResponseEntity.internalServerError().body(err);
+  // return ResponseEntity.internalServerError().body(err);
   // }
 }

@@ -1,42 +1,32 @@
 package app.restgourmet.api.utils;
 
-
 public final class AppConstants {
-  public static class Security {
-    public static final long ACCESS_TOKEN_EXPIRATION_TIME = (60 * 60) * 10; // 10 hours
-    public static final long REFRESH_TOKEN_EXPIRATION_TIME = 60 * 60 * 24 * 1; // (60 * 60 * 24) * 7; // 7 days
-    public static final String ACCESS_JWT_SECRET = "WDo3aLJeuou7EEFIUQqcK8TpK9qG3TvePQ+dvqSUcua3urAIRG+nleU2c+UgmgTQ";
-    public static final String REFRESH_JWT_SECRET = "rqWoQkseVZNPH+J1BZ2utQahvPzYitTkh/Ysu7pLjK9u/Kmq6ZKknXmNj82I/h03";
-  }
-
-  public static class Pagination {
-    public static final String DEFAULT_PAGE = "0";
-    public static final String DEFAULT_SIZE = "5";
-    public static final Integer MAX_PAGE_SIZE = 100;
-  }
-
-  public static class Storage {
-    public static final String USER_PIC_DIR = "uploads";
-  }
-
-  public static class Parameters {
-    public static final String DB_INITIALIZED_KEY = "db_initialized";
-  }
 
   public static class CacheKeys {
     public static final String USER_AUTHENTICATION = "users_auth";
   }
 
-  public static class ErrorMessages { 
+  public static class Codes {
+    public static final String BRAZIL_COUNTRY_CODE = "BR";
+  }
+
+  public static class ErrorMessages {
     public static final String BASE_UNIT_NOT_FOUND = "Base unit not found";
 
-    public static final String PERMISSION_NOT_FOUND = "Permission not found";
+    public static final String ADDRESS_NOT_FOUND = "Address not found";
+    public static final String ADDRESS_DELETE_DEPS = "Cannot delete address as it has dependent entities";
+
+    public static final String EXTERNAL_SERVICE_ERROR = "External service error";
+    
+    public static final String CEP_INVALID_FORMAT = "Invalid CEP format";
     
     public static final String PRODUCT_CATEGORY_NOT_FOUND = "Category not found";
     public static final String PRODUCT_CATEGORY_DELETE_DEPS = "Cannot delete category as it has dependent family";
 
     public static final String PRODUCT_FAMILY_NOT_FOUND = "Family not found";
     public static final String PRODUCT_FAMILY_DELETE_DEPS = "Cannot delete family as it has dependent group";
+
+    public static final String PERMISSION_NOT_FOUND = "Permission not found";
 
     public static final String PRODUCT_GROUP_NOT_FOUND = "Group not found";
     public static final String PRODUCT_GROUP_DELETE_DEPS = "Cannot delete group as it has dependent product";
@@ -52,5 +42,32 @@ public final class AppConstants {
     public static final String USER_LOGIN_BAD_CREDENTIALS = "User not found or invalid credentials";
     public static final String USER_NICKNAME_IN_USE = "Nickname already in use";
     public static final String USER_NOT_FOUND = "User not found";
+  }
+
+  public static class ExternalServices {
+    public static class Urls {
+      public static final String VIACEP = "https://viacep.com.br/ws/{cep}/json/";
+    }
+  }
+
+  public static class Pagination {
+    public static final String DEFAULT_PAGE = "0";
+    public static final String DEFAULT_SIZE = "5";
+    public static final Integer MAX_PAGE_SIZE = 100;
+  }
+
+  public static class Parameters {
+    public static final String DB_INITIALIZED_KEY = "db_initialized";
+  }
+
+  public static class Security {
+    public static final long ACCESS_TOKEN_EXPIRATION_TIME = (60 * 60) * 10; // 10 hours
+    public static final long REFRESH_TOKEN_EXPIRATION_TIME = 60 * 60 * 24 * 1; // (60 * 60 * 24) * 7; // 7 days
+    public static final String ACCESS_JWT_SECRET = "WDo3aLJeuou7EEFIUQqcK8TpK9qG3TvePQ+dvqSUcua3urAIRG+nleU2c+UgmgTQ";
+    public static final String REFRESH_JWT_SECRET = "rqWoQkseVZNPH+J1BZ2utQahvPzYitTkh/Ysu7pLjK9u/Kmq6ZKknXmNj82I/h03";
+  }
+
+  public static class Storage {
+    public static final String USER_PIC_DIR = "uploads";
   }
 }

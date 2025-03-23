@@ -26,8 +26,8 @@ import app.restgourmet.api.usermanagement.dto.group.UserGroupListDto;
 import app.restgourmet.api.usermanagement.dto.group.UserGroupListFiltersDto;
 import app.restgourmet.api.usermanagement.dto.permission.PermissionDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
-import app.restgourmet.api.usermanagement.service.spec.IUserGroupService;
-import app.restgourmet.api.usermanagement.service.spec.IUserService;
+import app.restgourmet.api.usermanagement.service.spec.UserGroupService;
+import app.restgourmet.api.usermanagement.service.spec.UserService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,12 +37,12 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/users/groups")
 @Tag(name = "User Group", description = "User group endpoints")
 public class UserGroupController {
-  private final IUserGroupService userGroupService;
-  private final IUserService userService;
+  private final UserGroupService userGroupService;
+  private final UserService userService;
 
   public UserGroupController(
-      IUserGroupService userGroupService,
-      IUserService userService) {
+      UserGroupService userGroupService,
+      UserService userService) {
     this.userGroupService = userGroupService;
     this.userService = userService;
   }

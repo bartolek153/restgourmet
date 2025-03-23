@@ -51,12 +51,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         jwt = getJwtFromBearerToken(request);
       }
 
-      // TODO: analyze why logging in after accessing 
-      // http://localhost:5173/api/users 
+      // TODO: analyze why logging in after accessing
+      // http://localhost:5173/api/users
       // is hitting db 9 times
 
       if (jwt != null) {
-        UUID id = CommonUtils.parseUUID(jwt.getSubject()); // TODO: check if refresh token can be used to access resources
+        UUID id = CommonUtils.parseUUID(jwt.getSubject()); // TODO: check if refresh token can be used to access
+                                                           // resources
         UserDetailsImpl userDetails = userDetailsService.loadUserById(id);
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

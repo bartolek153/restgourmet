@@ -29,7 +29,6 @@ import com.nimbusds.jose.proc.SecurityContext;
 
 import app.restgourmet.api.utils.AppConstants;
 
-
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity

@@ -18,7 +18,9 @@ export const UserGroupList = () => {
       >
         <Table.Column title={"Name"} dataIndex={"name"} />
         <Table.Column title={"Created by"} dataIndex={"createdBy"} />
-        <Table.Column title={"Last updated at"} dataIndex={"updatedAt"} 
+        <Table.Column
+          title={"Last updated at"}
+          dataIndex={"updatedAt"}
           render={(text) => new Date(text).toLocaleString()}
         />
         <Table.Column

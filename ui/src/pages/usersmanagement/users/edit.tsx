@@ -1,23 +1,37 @@
 import { Edit, getValueFromEvent, List, useForm } from "@refinedev/antd";
-import { Button, Checkbox, Col, Descriptions, Form, GetProp, Input, message, Row, Select, Table, Tabs, Upload, UploadProps } from "antd";
+import {
+  Button,
+  Checkbox,
+  Col,
+  Descriptions,
+  Form,
+  GetProp,
+  Input,
+  message,
+  Row,
+  Select,
+  Table,
+  Tabs,
+  Upload,
+  UploadProps,
+} from "antd";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../../../constants";
 import { LoadingOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { useTable } from "@refinedev/antd";
 
-type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
-
+type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 export const UserEdit = () => {
   const [items, setItems] = useState<any[]>([]);
   const [roles, setRoles] = useState<React.Key[]>([]);
   const [groups, setGroups] = useState<React.Key[]>([]);
 
-  const { 
-    formProps, 
-    saveButtonProps, 
-    query: { data, isLoading }, 
-    onFinish 
+  const {
+    formProps,
+    saveButtonProps,
+    query: { data, isLoading },
+    onFinish,
   } = useForm({});
 
   const handleOnFinish = (values: any) => {
@@ -26,15 +40,15 @@ export const UserEdit = () => {
       roleIds: roles,
       groupIds: groups,
     });
-  }
+  };
 
   const { tableProps: rlTableProps } = useTable({
     resource: "users/roles",
-  })
+  });
 
   const { tableProps: grTableProps } = useTable({
     resource: "users/groups",
-  })
+  });
 
   useEffect(() => {
     if (!isLoading && data?.data) {
@@ -66,13 +80,13 @@ export const UserEdit = () => {
   };
 
   const beforeUpload = (file: FileType) => {
-    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      message.error('You can only upload JPG/PNG file!');
+      message.error("You can only upload JPG/PNG file!");
     }
     const isLt3M = file.size / 1024 / 1024 < 3;
     if (!isLt3M) {
-      message.error('Image must smaller than 3MB!');
+      message.error("Image must smaller than 3MB!");
     }
 
     return isJpgOrPng && isLt3M;
@@ -80,12 +94,13 @@ export const UserEdit = () => {
 
   return (
     <Edit saveButtonProps={saveButtonProps} isLoading={isLoading}>
-      <Form {...formProps}
+      <Form
+        {...formProps}
         layout="vertical"
         wrapperCol={{ span: 6 }}
         autoComplete="off"
         onFinish={handleOnFinish}
-        >
+      >
         <Tabs>
           <Tabs.TabPane key="1" tab="General">
             <Form.Item
@@ -117,7 +132,7 @@ export const UserEdit = () => {
               rules={[
                 {
                   required: true,
-                }
+                },
               ]}
             >
               <Input placeholder="" />
@@ -158,10 +173,12 @@ export const UserEdit = () => {
                 <Button icon={<UploadOutlined />}>Profile picture</Button>
               </Upload>
             </Form.Item>
-          <Descriptions column={4} items={items} layout="vertical" />
+            <Descriptions column={4} items={items} layout="vertical" />
           </Tabs.TabPane>
           <Tabs.TabPane key="2" tab="Roles">
-            <Table {...rlTableProps} rowKey="id"
+            <Table
+              {...rlTableProps}
+              rowKey="id"
               pagination={{
                 ...rlTableProps.pagination,
                 showSizeChanger: true,
@@ -177,7 +194,9 @@ export const UserEdit = () => {
             </Table>
           </Tabs.TabPane>
           <Tabs.TabPane key="3" tab="Groups">
-            <Table {...grTableProps} rowKey="id"
+            <Table
+              {...grTableProps}
+              rowKey="id"
               pagination={{
                 ...grTableProps.pagination,
                 showSizeChanger: true,

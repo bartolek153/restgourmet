@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.masterdata.dto.ProdFamilyDto;
-import app.restgourmet.api.masterdata.dto.ProdFamilyListDto;
-import app.restgourmet.api.masterdata.dto.ProdFamilyListFiltersDto;
-import app.restgourmet.api.masterdata.service.spec.IProductFamilyService;
+import app.restgourmet.api.masterdata.dto.family.ProdFamilyDto;
+import app.restgourmet.api.masterdata.dto.family.ProdFamilyListDto;
+import app.restgourmet.api.masterdata.dto.family.ProdFamilyListFiltersDto;
+import app.restgourmet.api.masterdata.service.spec.ProductFamilyService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,9 +31,9 @@ import jakarta.validation.Valid;
 @Tag(name = "Product Family", description = "Product families endpoints")
 public class ProductFamilyController {
 
-  private final IProductFamilyService productFamilyService;
+  private final ProductFamilyService productFamilyService;
 
-  public ProductFamilyController(IProductFamilyService productFamilyService) {
+  public ProductFamilyController(ProductFamilyService productFamilyService) {
     this.productFamilyService = productFamilyService;
   }
 

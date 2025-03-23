@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.masterdata.dto.ProdGroupDto;
-import app.restgourmet.api.masterdata.dto.ProdGroupListDto;
-import app.restgourmet.api.masterdata.dto.ProdGroupListFiltersDto;
-import app.restgourmet.api.masterdata.service.spec.IProductGroupService;
+import app.restgourmet.api.masterdata.dto.group.ProdGroupDto;
+import app.restgourmet.api.masterdata.dto.group.ProdGroupListDto;
+import app.restgourmet.api.masterdata.dto.group.ProdGroupListFiltersDto;
+import app.restgourmet.api.masterdata.service.spec.ProductGroupService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,9 +31,9 @@ import jakarta.validation.Valid;
 @Tag(name = "Product Group", description = "Product groups endpoints")
 public class ProductGroupController {
 
-  private final IProductGroupService productGroupService;
+  private final ProductGroupService productGroupService;
 
-  public ProductGroupController(IProductGroupService productGroupService) {
+  public ProductGroupController(ProductGroupService productGroupService) {
     this.productGroupService = productGroupService;
   }
 

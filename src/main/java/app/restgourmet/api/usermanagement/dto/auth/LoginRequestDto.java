@@ -6,13 +6,13 @@ import lombok.Data;
 @Data
 public class LoginRequestDto {
 
-    @Schema(example = "johndoe@test.com")
-    private String identifier;
+  @Schema(example = "johndoe@test.com")
+  private String identifier;
 
-    @Schema(example = "password")
-    private String password;
+  @Schema(example = "password")
+  private String password;
 
-    public String getIdentifier() {
-      return this.identifier.toLowerCase();
-    }
+  public String getIdentifier() {
+    return this.identifier.toLowerCase();
+  }
 }

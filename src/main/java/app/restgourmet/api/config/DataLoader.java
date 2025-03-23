@@ -63,9 +63,9 @@ public class DataLoader implements CommandLineRunner {
             new Permission(Permissions.READ_USERS, null, null, PermissionCategory.USER),
             new Permission(Permissions.WRITE_USERS, null, null, PermissionCategory.USER),
             new Permission(Permissions.READ_PRODUCT, null, null, PermissionCategory.PRODUCT),
-            new Permission(Permissions.WRITE_PRODUCT, null, null,  PermissionCategory.PRODUCT),
-            new Permission(Permissions.READ_INVENTORY, null, null,  PermissionCategory.INVENTORY),
-            new Permission(Permissions.WRITE_INVENTORY, null, null,  PermissionCategory.INVENTORY)));
+            new Permission(Permissions.WRITE_PRODUCT, null, null, PermissionCategory.PRODUCT),
+            new Permission(Permissions.READ_INVENTORY, null, null, PermissionCategory.INVENTORY),
+            new Permission(Permissions.WRITE_INVENTORY, null, null, PermissionCategory.INVENTORY)));
 
     // initialize users
     UserEntity admin = new UserEntity(

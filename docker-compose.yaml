@@ -1,8 +1,7 @@
 services:
-
   cache:
     image: redis:7.4.2
-    ports: 
+    ports:
       - "6379:6379"
 
   db:

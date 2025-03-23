@@ -26,7 +26,7 @@ public class UnitMeasurement extends BaseEntity {
 
   @Column
   private String shortDescription;
-  
+
   @NotNull
   @ManyToOne
   @JoinColumn(name = "base_unit_id", nullable = false)

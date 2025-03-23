@@ -3,7 +3,7 @@ package app.restgourmet.api.masterdata.repository.specifications;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import app.restgourmet.api.masterdata.dto.UnitMeasurementListFiltersDto;
+import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementListFiltersDto;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 
 public class UnitMeasSpec {

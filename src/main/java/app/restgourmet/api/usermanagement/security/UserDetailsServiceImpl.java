@@ -2,7 +2,7 @@ package app.restgourmet.api.usermanagement.security;
 
 import app.restgourmet.api.usermanagement.models.UserEntity;
 import app.restgourmet.api.usermanagement.repository.UserRepository;
-import app.restgourmet.api.usermanagement.service.spec.IUserService;
+import app.restgourmet.api.usermanagement.service.spec.UserService;
 import app.restgourmet.api.utils.AppConstants;
 
 import java.util.UUID;
@@ -17,13 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
   private final UserRepository userRepository;
-  private final IUserService userService;
+  private final UserService userService;
   // private final CacheManager cacheManager;
 
   public UserDetailsServiceImpl(
-      UserRepository userRepository, 
-      // CacheManager cacheManager, 
-      IUserService userService) {
+      UserRepository userRepository,
+      // CacheManager cacheManager,
+      UserService userService) {
     this.userRepository = userRepository;
     this.userService = userService;
     // this.cacheManager = cacheManager;
@@ -37,9 +37,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
     // cache to use it later
-    // Cache cache = cacheManager.getCache(AppConstants.CacheKeys.USER_AUTHENTICATION);
+    // Cache cache =
+    // cacheManager.getCache(AppConstants.CacheKeys.USER_AUTHENTICATION);
     // if (cache != null) {
-    //   cache.put(user.getId(), user);
+    // cache.put(user.getId(), user);
     // }
 
     return userDetails;

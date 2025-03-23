@@ -15,22 +15,23 @@
 
 ## Features
 
-* CRUD Operations
-* User Management (with authentication)
-* Employees Attendance and Activities Control
-* User Management
-* Inventory Tracking
-* Brazillian NFe Receipts Management
+- CRUD Operations
+- User Management (with authentication)
+- Employees Attendance and Activities Control
+- User Management
+- Inventory Tracking
+- Brazillian NFe Receipts Management
 
 ## Security
 
-* IAM
-* Auditing
-* JWT
+- IAM
+- Auditing
+- JWT
 
 ## Installation
 
 ```bash
+
 ```
 
 ## Running in development
@@ -53,24 +54,24 @@ yarn dev
 
 ## TODO
 
-* Features
-  * Add multitenancy
-  * Implement cancellation tokens
-* Code Improvement
-  * Add unit tests
-  * Remove excessive model lombok annotations
-  * Test if redis cache is working
-  * Use migrations
-* CI/CD
-  * Create image build pipeline
-  * Add image signing
-* Docs
-  * Add screenshots
+- Features
+  - Add multitenancy
+  - Implement cancellation tokens
+- Code Improvement
+  - Add unit tests
+  - Remove excessive model lombok annotations
+  - Test if redis cache is working
+  - Use migrations
+- CI/CD
+  - Create image build pipeline
+  - Add image signing
+- Docs
+  - Add screenshots
     - Dark x Light Theme
-  * Work on openapi docs
-* Bugs
-  * authProvider won't retry request after refreshing token
-  * Default Spring Redis serializer won't recognize LocalDateTime values 
+  - Work on openapi docs
+- Bugs
+  - authProvider won't retry request after refreshing token
+  - Default Spring Redis serializer won't recognize LocalDateTime values
 
 ## Technologies used
 
@@ -83,34 +84,29 @@ yarn dev
 ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
 ![Swagger](https://img.shields.io/badge/Swagger-85EA2D?style=for-the-badge&logo=Swagger&logoColor=white)
 
-
-
-
-
-
 ## Modules
 
-* Common Data
-* Master Data
-* Inventory Handling
-* Restaurant Management
-* User Management
-* Employee Management
-* Financials
+- Common Data
+- Master Data
+- Inventory Handling
+- Restaurant Management
+- User Management
+- Employee Management
+- Financials
 
 ## Usecases of Kafka
 
-* Order Processing Pipeline
-* Real-time Order Status Updates
-* Payment Processing
-* low-stock-alerts
-* NFe processing
-* Menu generation
+- Order Processing Pipeline
+- Real-time Order Status Updates
+- Payment Processing
+- low-stock-alerts
+- NFe processing
+- Menu generation
 
 ## Tools
 
-* Kafka
-* Redis (auth, session)
-* Postgres
-* AWS
-* Docker
+- Kafka
+- Redis (auth, session)
+- Postgres
+- AWS
+- Docker

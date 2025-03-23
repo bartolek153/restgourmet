@@ -39,7 +39,7 @@ public class Product extends AuditableEntity {
   @ManyToOne
   @JoinColumn(name = "inventory_unit_id", nullable = false)
   private UnitMeasurement inventoryUnit;
-  
+
   @ManyToOne
   @JoinColumn(name = "purchase_unit_id", nullable = false)
   private UnitMeasurement purchaseUnit;

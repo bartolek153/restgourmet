@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import app.restgourmet.api.masterdata.dto.ProdCategoryListFiltersDto;
+import app.restgourmet.api.masterdata.dto.category.ProdCategoryListFiltersDto;
 import app.restgourmet.api.masterdata.models.ProductCategory;
 
 public class ProdCategorySpec {

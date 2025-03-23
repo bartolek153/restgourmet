@@ -6,8 +6,7 @@ export const generateFilter = (filters?: CrudFilters) => {
 
   if (filters) {
     filters.map((filter) => {
-      
-      // WARN: This default code was commented out 
+      // WARN: This default code was commented out
       // because it is not used in the current app..
       //
       // if (filter.operator === "or" || filter.operator === "and") {

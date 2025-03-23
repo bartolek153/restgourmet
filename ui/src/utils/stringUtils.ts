@@ -1,4 +1,3 @@
-
 export function snakeCaseToHumanReadable(snakeCase: string | null | undefined): string {
   if (!snakeCase) {
     return "";

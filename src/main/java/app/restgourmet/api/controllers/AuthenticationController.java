@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +38,13 @@ public class AuthenticationController {
   @PostMapping("/refresh")
   @Operation(summary = "Generates a new access token using the refresh token from cookies")
   public ResponseEntity<String> newToken(@CookieValue("${restgourmet.api.jwt-refresh-cookie-name}") String refToken) {
-    return authenticationService.token(refToken);
+    return authenticationService.newToken(refToken);
+  }
+
+  @PostMapping("/logout")
+  @Operation(summary = "Cleans authentication cookies and logs user out")
+  public ResponseEntity<?> logout() {
+    // TODO
+    throw new NotImplementedException();
   }
 }

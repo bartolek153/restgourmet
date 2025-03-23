@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.usermanagement.dto.permission.PermissionCategoryDto;
 import app.restgourmet.api.usermanagement.dto.permission.PermissionListDto;
 import app.restgourmet.api.usermanagement.enums.PermissionCategory;
 import app.restgourmet.api.usermanagement.service.spec.IPermissionService;
@@ -26,18 +25,11 @@ public class AuthorizationController {
     this.permissionService = permissionService;
   }
 
-  @GetMapping("/categories")
-  @Operation(summary = "Get all permission categories")
-  @PreAuthorize("hasAnyAuthority(@permissions.ADMIN)")
-  public ResponseEntity<List<PermissionCategoryDto>> getPermissionCategories() {
-    return ResponseEntity.ok(permissionService.getPermissionCategories());
-  }
-
   @GetMapping("/permissions")
   @Operation(summary = "Get all permissions for a category")
   @PreAuthorize("hasAnyAuthority(@permissions.ADMIN)")
   public ResponseEntity<List<PermissionListDto>> getPermissions(
-      @RequestParam(required = true) PermissionCategory category) {
+      @RequestParam(required = false) PermissionCategory category) {
     return ResponseEntity.ok(permissionService.getPermissions(category));
   }
 }

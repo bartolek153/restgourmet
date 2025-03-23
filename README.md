@@ -58,10 +58,19 @@ yarn dev
   * Implement cancellation tokens
 * Code Improvement
   * Add unit tests
-  * Remove excessive lombok annotations
+  * Remove excessive model lombok annotations
+  * Test if redis cache is working
+  * Use migrations
 * CI/CD
   * Create image build pipeline
   * Add image signing
+* Docs
+  * Add screenshots
+    - Dark x Light Theme
+  * Work on openapi docs
+* Bugs
+  * authProvider won't retry request after refreshing token
+  * Default Spring Redis serializer won't recognize LocalDateTime values 
 
 ## Technologies used
 

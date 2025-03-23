@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.restgourmet.api.usermanagement.dto.user.CreateUserDto;
 import app.restgourmet.api.usermanagement.dto.user.EditProfileDto;
 import app.restgourmet.api.usermanagement.dto.user.EditUserDto;
-import app.restgourmet.api.usermanagement.dto.user.ListUserFiltersDto;
+import app.restgourmet.api.usermanagement.dto.user.UserListFiltersDto;
 import app.restgourmet.api.usermanagement.dto.user.UserDto;
 import app.restgourmet.api.usermanagement.dto.user.UserListDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
@@ -55,7 +55,7 @@ public class UserController {
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,
       @RequestParam(defaultValue = "name") final String sort,
-      @ParameterObject final ListUserFiltersDto filters) {
+      @ParameterObject final UserListFiltersDto filters) {
     return ResponseEntity.ok(userService.listUsers(
         CustomPageRequest.of(page, size, order, sort), filters));
   }
@@ -64,28 +64,28 @@ public class UserController {
   @Operation(summary = "Get a user by id")
   @PreAuthorize("hasAnyAuthority(@permissions.ADMIN, @permissions.READ_USERS)")
   public ResponseEntity<UserDto> getUser(@PathVariable UUID id) {
-    return ResponseEntity.ok(userService.getUser(id));
+    return ResponseEntity.ok(userService.getOne(id));
   }
 
   @PostMapping
   @Operation(summary = "Create a new user")
   @PreAuthorize("hasAnyAuthority(@permissions.ADMIN, @permissions.WRITE_USERS)")
   public ResponseEntity<CreateUserDto> createUser(@Valid @RequestBody CreateUserDto user) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user));
+    return ResponseEntity.status(HttpStatus.CREATED).body(userService.create(user));
   }
 
   @PutMapping("/{id}")
   @Operation(summary = "Edit an existing user")
   @PreAuthorize("hasAnyAuthority(@permissions.ADMIN, @permissions.WRITE_USERS)")
   public ResponseEntity<?> editUser(@RequestBody @Valid EditUserDto user, @PathVariable UUID id) {
-    return ResponseEntity.ok(userService.editUser(id, user));
+    return ResponseEntity.ok(userService.edit(id, user));
   }
 
   @DeleteMapping("/{id}")
   @Operation(summary = "Delete a user by id")
   @PreAuthorize("hasAnyAuthority(@permissions.ADMIN, @permissions.WRITE_USERS)")
   public ResponseEntity<Void> deleteUser(@PathVariable @NotNull UUID id) {
-    userService.deleteUser(id);
+    userService.delete(id);
     return ResponseEntity.noContent().build();
   }
 

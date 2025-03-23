@@ -10,8 +10,8 @@ import java.util.UUID;
 import app.restgourmet.api.usermanagement.models.Role;
 
 @Repository
-public interface RoleRepository extends JpaRepository<Role, UUID>, JpaSpecificationExecutor<Role> {  
-    Optional<Role> findByName(String name);
+public interface RoleRepository extends JpaRepository<Role, UUID>, JpaSpecificationExecutor<Role> {
+  Optional<Role> findByName(String name);
 
-    boolean existsByUsersNotEmpty();
+  boolean existsByUsersNotEmpty();
 }

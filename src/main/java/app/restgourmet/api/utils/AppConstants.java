@@ -5,7 +5,7 @@ public final class AppConstants {
   public static class Security {
     public static final long ACCESS_TOKEN_EXPIRATION_TIME = (60 * 60) * 10; // 10 hours
     public static final long REFRESH_TOKEN_EXPIRATION_TIME = 60 * 60 * 24 * 1; // (60 * 60 * 24) * 7; // 7 days
-    public static final String ACCESS_JWT_SECRET = "WDo3aLJeuou7EEFIUQqcK8TpK9qG3TvePQ+dvqSUcua3urAIRG+nleU2c+UgmgTP";
+    public static final String ACCESS_JWT_SECRET = "WDo3aLJeuou7EEFIUQqcK8TpK9qG3TvePQ+dvqSUcua3urAIRG+nleU2c+UgmgTQ";
     public static final String REFRESH_JWT_SECRET = "rqWoQkseVZNPH+J1BZ2utQahvPzYitTkh/Ysu7pLjK9u/Kmq6ZKknXmNj82I/h03";
   }
 
@@ -21,6 +21,10 @@ public final class AppConstants {
 
   public static class Parameters {
     public static final String DB_INITIALIZED_KEY = "db_initialized";
+  }
+
+  public static class CacheKeys {
+    public static final String USER_AUTHENTICATION = "users_auth";
   }
 
   public static class ErrorMessages { 
@@ -40,6 +44,13 @@ public final class AppConstants {
     public static final String ROLE_NOT_FOUND = "Role not found";
     public static final String ROLE_DELETE_DEPS = "Cannot delete role as it as has dependent user";
 
+    public static final String STORAGE_UPLOAD_ERROR = "An error occurred when uploading the picture";
+
     public static final String UNIT_MEASUREMENT_NOT_FOUND = "Unit of measurement not found";
+
+    public static final String USER_EMAIL_IN_USE = "Email already in use";
+    public static final String USER_LOGIN_BAD_CREDENTIALS = "User not found or invalid credentials";
+    public static final String USER_NICKNAME_IN_USE = "Nickname already in use";
+    public static final String USER_NOT_FOUND = "User not found";
   }
 }

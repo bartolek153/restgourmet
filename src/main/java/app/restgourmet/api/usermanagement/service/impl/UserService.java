@@ -1,11 +1,11 @@
 package app.restgourmet.api.usermanagement.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,28 +19,34 @@ import org.springframework.util.StringUtils;
 import app.restgourmet.api.commondata.service.impl.FileSystemStorageService;
 import app.restgourmet.api.exceptions.BadRequestException;
 import app.restgourmet.api.exceptions.ResourceNotFoundException;
+import app.restgourmet.api.exceptions.StorageException;
 import app.restgourmet.api.exceptions.AppValidationException;
 import app.restgourmet.api.usermanagement.dto.user.CreateUserDto;
 import app.restgourmet.api.usermanagement.dto.user.EditProfileDto;
 import app.restgourmet.api.usermanagement.dto.user.EditUserDto;
-import app.restgourmet.api.usermanagement.dto.user.ListUserFiltersDto;
+import app.restgourmet.api.usermanagement.dto.user.UserListFiltersDto;
 import app.restgourmet.api.usermanagement.dto.user.UserDto;
 import app.restgourmet.api.usermanagement.dto.user.UserListDto;
 import app.restgourmet.api.usermanagement.mappers.IUserMapper;
-import app.restgourmet.api.usermanagement.models.Permission;
+import app.restgourmet.api.usermanagement.models.Role;
 import app.restgourmet.api.usermanagement.models.UserEntity;
-import app.restgourmet.api.usermanagement.repository.PermissionRepository;
+import app.restgourmet.api.usermanagement.models.UserGroup;
+import app.restgourmet.api.usermanagement.repository.RoleRepository;
+import app.restgourmet.api.usermanagement.repository.UserGroupRepository;
 import app.restgourmet.api.usermanagement.repository.UserRepository;
 import app.restgourmet.api.usermanagement.repository.specifications.UserSpec;
 import app.restgourmet.api.usermanagement.security.UserDetailsImpl;
 import app.restgourmet.api.usermanagement.service.spec.IUserService;
+import app.restgourmet.api.utils.AppConstants;
 import jakarta.transaction.Transactional;
 
 @Service
 public class UserService implements IUserService {
 
   private final UserRepository userRepository;
-  private final PermissionRepository permissionRepository;
+  private final UserGroupRepository userGroupRepository;
+  private final RoleRepository roleRepository;
+
   private final NicknameGenerator nicknameGenerator;
   private final PasswordEncoder passwordEncoder;
   private final FileSystemStorageService storageService;
@@ -52,48 +58,41 @@ public class UserService implements IUserService {
       UserRepository userRepository,
       NicknameGenerator nicknameGenerator,
       PasswordEncoder passwordEncoder,
-      PermissionRepository permissionRepository,
-      FileSystemStorageService storageService) {
+      FileSystemStorageService storageService,
+      UserGroupRepository userGroupRepository,
+      RoleRepository roleRepository) {
     this.userRepository = userRepository;
     this.nicknameGenerator = nicknameGenerator;
     this.passwordEncoder = passwordEncoder;
-    this.permissionRepository = permissionRepository;
     this.storageService = storageService;
+    this.userGroupRepository = userGroupRepository;
+    this.roleRepository = roleRepository;
   }
 
   @Override
-  public PagedModel<UserListDto> listUsers(PageRequest pageRequest, ListUserFiltersDto filters) {
+  public PagedModel<UserListDto> listUsers(PageRequest pageRequest, UserListFiltersDto filters) {
     Specification<UserEntity> spec = UserSpec.filterBy(filters);
-    Page<UserListDto> res = userRepository.findAll(spec, pageRequest).map(userMapper::entityToListDto);
+    Page<UserListDto> res = userRepository.findAll(spec, pageRequest).map(userMapper::toListDto);
     return new PagedModel<>(res);
   }
 
   @Override
-  @Cacheable(value = "users", key = "#id")
-  public UserDto getUser(UUID id) {
+  // @Cacheable(value = "users", key = "#id")
+  public UserDto getOne(UUID id) {
     UserEntity user = userRepository.findById(id).orElseThrow(
-        () -> new BadRequestException("User not found"));
+        () -> new BadRequestException(AppConstants.ErrorMessages.USER_NOT_FOUND));
     return userMapper.toDto(user);
   }
 
   @Override
-  public CreateUserDto createUser(CreateUserDto data) {
+  public CreateUserDto create(CreateUserDto data) {
     if (userRepository.existsByEmail(data.getEmail())) {
-      throw new AppValidationException("email", "Already in use");
-    }
-
-    // convert list of string permissions to entities
-    List<Permission> permissions = new ArrayList<>();
-
-    for (String perm : data.getPermissions()) {
-      Permission dbperm = permissionRepository.findByName(perm)
-          .orElseThrow(() -> new BadRequestException("Permission not found"));
-      permissions.add(dbperm);
+      throw new AppValidationException("email", AppConstants.ErrorMessages.USER_EMAIL_IN_USE);
     }
 
     if (StringUtils.hasText(data.getNickname())) {
       if (userRepository.existsByNickname(data.getNickname()))
-        throw new AppValidationException("nickname", "Already in use");
+        throw new AppValidationException("nickname", AppConstants.ErrorMessages.USER_NICKNAME_IN_USE);
     } else {
       data.setNickname(nicknameGenerator.generateNickname()); // if username is empty, generate a random one
     }
@@ -101,51 +100,23 @@ public class UserService implements IUserService {
     UserEntity entity = userMapper.createDtoToEntity(data);
 
     if (entity.getPicture() != null && !storageService.fileExists(entity.getPicture())) {
-      throw new BadRequestException("Picture not uploaded");
+      throw new StorageException(AppConstants.ErrorMessages.STORAGE_UPLOAD_ERROR);
     }
 
     entity.setEnabled(false);
-    // entity.setPermissions(permissions);
- 
-    userRepository.save(entity);
 
-    return data;
-  }
-
-  @Override
-  public EditUserDto editUser(UUID id, EditUserDto data) {
-    UserEntity entity = userRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException(UserEntity.class, id));
-
-    // check if the email or username is already in use
-    if (StringUtils.hasText(data.getEmail()) && !entity.getEmail().equals(data.getEmail())
-        && userRepository.existsByEmail(data.getEmail())) {
-      throw new AppValidationException("email", "Already in use");
+    Set<UserGroup> groupRefs = new HashSet<>();
+    for (UUID id : data.getGroupIds()) {
+      groupRefs.add(userGroupRepository.getReferenceById(id));
     }
 
-    if (StringUtils.hasText(data.getNickname()) && !entity.getNickname().equals(data.getNickname())
-        && userRepository.existsByNickname(data.getNickname())) {
-      throw new AppValidationException("nickname", "Already in use");
+    Set<Role> roleRefs = new HashSet<>();
+    for (UUID id : data.getRoleIds()) {
+      roleRefs.add(roleRepository.getReferenceById(id));
     }
 
-    userMapper.updateEntity(data, entity);
-
-    if (entity.getPicture() != null && !storageService.fileExists(entity.getPicture())) {
-      throw new BadRequestException("Picture not uploaded");
-    }
-
-    // convert list of string permissions to entities
-    if (data.getPermissions().size() > 0) {
-      List<Permission> permissions = new ArrayList<>();
-
-      for (String perm : data.getPermissions()) {
-        Permission dbperm = permissionRepository.findByName(perm)
-            .orElseThrow(() -> new BadRequestException("Permission not found"));
-        permissions.add(dbperm);
-      }
-      // entity.setPermissions(permissions);
-    }
-
+    entity.setGroups(groupRefs);
+    entity.setRoles(roleRefs);
     userRepository.save(entity);
 
     return data;
@@ -153,7 +124,48 @@ public class UserService implements IUserService {
 
   @Override
   @Transactional
-  public void deleteUser(UUID id) {
+  // @CacheEvict(value = "users_auth", key = "#id")
+  public EditUserDto edit(UUID id, EditUserDto data) {
+    UserEntity entity = userRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(AppConstants.ErrorMessages.USER_NOT_FOUND));
+
+    // check if the email or username is already in use
+    if (StringUtils.hasText(data.getEmail()) && !entity.getEmail().equals(data.getEmail())
+        && userRepository.existsByEmail(data.getEmail())) {
+      throw new AppValidationException("email", AppConstants.ErrorMessages.USER_EMAIL_IN_USE);
+    }
+
+    if (StringUtils.hasText(data.getNickname()) && !entity.getNickname().equals(data.getNickname())
+        && userRepository.existsByNickname(data.getNickname())) {
+      throw new AppValidationException("nickname", AppConstants.ErrorMessages.USER_NICKNAME_IN_USE);
+    }
+
+    userMapper.updateEntity(data, entity);
+
+    if (entity.getPicture() != null && !storageService.fileExists(entity.getPicture())) {
+      throw new StorageException(AppConstants.ErrorMessages.STORAGE_UPLOAD_ERROR);
+    }
+
+    Set<UserGroup> groupRefs = new HashSet<>();
+    for (UUID gid : data.getGroupIds()) {
+      groupRefs.add(userGroupRepository.getReferenceById(gid));
+    }
+
+    Set<Role> roleRefs = new HashSet<>();
+    for (UUID rid : data.getRoleIds()) {
+      roleRefs.add(roleRepository.getReferenceById(rid));
+    }
+
+    entity.setGroups(groupRefs);
+    entity.setRoles(roleRefs);
+    userRepository.save(entity);
+
+    return data;
+  }
+
+  @Override
+  @Transactional
+  public void delete(UUID id) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     UserDetailsImpl ud = (UserDetailsImpl) auth.getPrincipal();
 
@@ -162,15 +174,17 @@ public class UserService implements IUserService {
     }
 
     UserEntity user = userRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException(UserEntity.class, id));
+        .orElseThrow(() -> new ResourceNotFoundException(AppConstants.ErrorMessages.USER_NOT_FOUND));
 
-    // user.getPermissions().clear();
+    user.getRoles().clear();
+    user.getGroups().clear();
     userRepository.save(user);
+
     userRepository.deleteById(id);
   }
 
   @Override
-  public void disableUser(UUID id) {
+  public void disable(UUID id) {
     userRepository.findById(id).ifPresent(user -> {
       user.setEnabled(false);
       userRepository.save(user);
@@ -178,7 +192,7 @@ public class UserService implements IUserService {
   }
 
   @Override
-  public void enableUser(UUID id) {
+  public void enable(UUID id) {
     userRepository.findById(id).ifPresent(user -> {
       user.setEnabled(true);
       userRepository.save(user);
@@ -198,5 +212,11 @@ public class UserService implements IUserService {
       userMapper.editProfileDtoToEntity(data);
       userRepository.save(user);
     });
+  }
+
+  @Override
+  // @Cacheable(value = AppConstants.CacheKeys.USER_AUTHENTICATION, key = "#id")
+  public Optional<UserEntity> findEntity(UUID id) {
+    return userRepository.findById(id);
   }
 }

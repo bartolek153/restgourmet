@@ -10,7 +10,7 @@ public interface IAuthenticationService {
 
   ResponseEntity<String> login(LoginRequestDto request);
 
-  ResponseEntity<String> token(String refreshRoken);
+  ResponseEntity<String> newToken(String refreshRoken);
 
   ResponseEntity<String> logout();
 }

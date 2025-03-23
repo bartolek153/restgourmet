@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import app.restgourmet.api.usermanagement.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -42,7 +43,7 @@ public class UserEntity extends AuditableEntity {
   @Column(nullable = false, unique = true)
   private String email;
 
-  @Column(nullable = false)
+  @Column(nullable = true)
   @JsonIgnore
   private String password;
 
@@ -50,12 +51,18 @@ public class UserEntity extends AuditableEntity {
 
   private UserType type;
 
-  @ManyToMany
-  @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "user_role", 
+      joinColumns = @JoinColumn(name = "user_id"), 
+      inverseJoinColumns = @JoinColumn(name = "role_id"))
   private Set<Role> roles;
 
-  @ManyToMany
-  @JoinTable(name = "user_group", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
+  @ManyToMany(fetch = FetchType.LAZY)
+  @JoinTable(
+      name = "user_group",
+      joinColumns = @JoinColumn(name = "user_id"), 
+      inverseJoinColumns = @JoinColumn(name = "group_id"))
   private Set<UserGroup> groups;
 
   @Column

@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import app.restgourmet.api.usermanagement.dto.user.ListUserFiltersDto;
+import app.restgourmet.api.usermanagement.dto.user.UserListFiltersDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 
 public class UserSpec {
@@ -15,7 +15,7 @@ public class UserSpec {
   private static final String EMAIL = "email";
   private static final String NICKNAME = "nickname";
 
-  public static Specification<UserEntity> filterBy(ListUserFiltersDto filters) {
+  public static Specification<UserEntity> filterBy(UserListFiltersDto filters) {
     return Specification.where(qSearch(filters.getQ()))
         .and(isEnabled(filters.getEnabled()));
   }

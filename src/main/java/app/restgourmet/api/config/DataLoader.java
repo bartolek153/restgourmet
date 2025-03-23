@@ -60,12 +60,12 @@ public class DataLoader implements CommandLineRunner {
     // initialize permissions
     permissionRepository.saveAll(
         List.of(
-            new Permission(Permissions.READ_USERS, null, PermissionCategory.USER),
-            new Permission(Permissions.WRITE_USERS, null, PermissionCategory.USER),
-            new Permission(Permissions.READ_PRODUCT, null, PermissionCategory.PRODUCT),
-            new Permission(Permissions.WRITE_PRODUCT, null, PermissionCategory.PRODUCT),
-            new Permission(Permissions.READ_INVENTORY, null, PermissionCategory.INVENTORY),
-            new Permission(Permissions.WRITE_INVENTORY, null, PermissionCategory.INVENTORY)));
+            new Permission(Permissions.READ_USERS, null, null, PermissionCategory.USER),
+            new Permission(Permissions.WRITE_USERS, null, null, PermissionCategory.USER),
+            new Permission(Permissions.READ_PRODUCT, null, null, PermissionCategory.PRODUCT),
+            new Permission(Permissions.WRITE_PRODUCT, null, null,  PermissionCategory.PRODUCT),
+            new Permission(Permissions.READ_INVENTORY, null, null,  PermissionCategory.INVENTORY),
+            new Permission(Permissions.WRITE_INVENTORY, null, null,  PermissionCategory.INVENTORY)));
 
     // initialize users
     UserEntity admin = new UserEntity(

@@ -24,7 +24,16 @@ import { ColorModeContextProvider } from "./contexts/color-mode";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
-import { API_URL, COMMON_DATA_PARENT_MENU, EMPLOYEE_MANAGEMENT_PARENT_MENU, FINANCIALS_PARENT_MENU, INVENTORY_HANDLING_PARENT_MENU, MASTER_DATA_PARENT_MENU, RESTAURANT_MANAGEMENT_PARENT_MENU, USER_MANAGEMENT_PARENT_MENU } from "./constants";
+import {
+  API_URL,
+  COMMON_DATA_PARENT_MENU,
+  EMPLOYEE_MANAGEMENT_PARENT_MENU,
+  FINANCIALS_PARENT_MENU,
+  INVENTORY_HANDLING_PARENT_MENU,
+  MASTER_DATA_PARENT_MENU,
+  RESTAURANT_MANAGEMENT_PARENT_MENU,
+  USER_MANAGEMENT_PARENT_MENU,
+} from "./constants";
 import { UserList } from "./pages/usersmanagement/users/list";
 import { dataProvider } from "./rest-data-provider";
 import { UserCreate, UserEdit } from "./pages/usersmanagement/users";
@@ -32,6 +41,8 @@ import { ProductCategoryList } from "./pages/masterData/productCategories/list";
 import { IoMdBriefcase } from "react-icons/io";
 import { LuBriefcaseBusiness } from "react-icons/lu";
 import { RoleCreate, RoleEdit, RoleList } from "./pages/usersmanagement/roles";
+import { FaUsers } from "react-icons/fa";
+import { UserGroupCreate, UserGroupEdit, UserGroupList } from "./pages/usersmanagement/groups";
 
 function App() {
   return (
@@ -46,7 +57,8 @@ function App() {
               authProvider={authProvider}
               resources={[
                 {
-                  name: COMMON_DATA_PARENT_MENU, meta: { icon: <AiTwotoneDatabase /> }
+                  name: COMMON_DATA_PARENT_MENU,
+                  meta: { icon: <AiTwotoneDatabase /> },
                 },
                 { name: MASTER_DATA_PARENT_MENU, meta: { icon: <AiOutlineTable /> } },
                 { name: FINANCIALS_PARENT_MENU, meta: { icon: "" } },
@@ -61,8 +73,8 @@ function App() {
                   meta: {
                     parent: USER_MANAGEMENT_PARENT_MENU,
                     canDelete: true,
-                    icon: <AiOutlineUser />
-                  }
+                    icon: <AiOutlineUser />,
+                  },
                 },
                 {
                   name: "users/roles",
@@ -73,8 +85,20 @@ function App() {
                     label: "Roles",
                     parent: USER_MANAGEMENT_PARENT_MENU,
                     canDelete: true,
-                    icon: <LuBriefcaseBusiness />
-                  }
+                    icon: <LuBriefcaseBusiness />,
+                  },
+                },
+                {
+                  name: "users/groups",
+                  list: "/users/groups",
+                  create: "/users/groups/create",
+                  edit: "/users/groups/edit/:id",
+                  meta: {
+                    label: "Groups",
+                    parent: USER_MANAGEMENT_PARENT_MENU,
+                    canDelete: true,
+                    icon: <FaUsers />,
+                  },
                 },
                 {
                   name: "/units/base",
@@ -85,7 +109,7 @@ function App() {
                     label: "Base Units",
                     parent: COMMON_DATA_PARENT_MENU,
                     canDelete: true,
-                  }
+                  },
                 },
                 {
                   name: "products/categories",
@@ -96,7 +120,7 @@ function App() {
                     label: "Product Categories",
                     parent: MASTER_DATA_PARENT_MENU,
                     canDelete: true,
-                  }
+                  },
                 },
                 {
                   name: "products/families",
@@ -107,7 +131,7 @@ function App() {
                     label: "Product Families",
                     parent: MASTER_DATA_PARENT_MENU,
                     canDelete: true,
-                  }
+                  },
                 },
                 {
                   name: "product/groups",
@@ -118,7 +142,7 @@ function App() {
                     label: "Product Groups",
                     parent: MASTER_DATA_PARENT_MENU,
                     canDelete: true,
-                  }
+                  },
                 },
                 {
                   name: "products",
@@ -128,7 +152,7 @@ function App() {
                   meta: {
                     parent: MASTER_DATA_PARENT_MENU,
                     canDelete: true,
-                  }
+                  },
                 },
                 {
                   name: "units/measurements",
@@ -139,8 +163,8 @@ function App() {
                     label: "Measurement Units",
                     parent: MASTER_DATA_PARENT_MENU,
                     canDelete: true,
-                  }
-                }
+                  },
+                },
               ]}
               options={{
                 syncWithLocation: true,
@@ -171,36 +195,35 @@ function App() {
                       <Route index element={<ProductCategoryList />} />
                     </Route>
                   </Route>
-                  
+
                   <Route path="/users">
                     <Route index element={<UserList />} />
                     <Route path="create" element={<UserCreate />} />
                     <Route path="edit/:id" element={<UserEdit />} />
                     <Route path="roles">
-                      <Route index element={<RoleList/>} />
+                      <Route index element={<RoleList />} />
                       <Route path="create" element={<RoleCreate />} />
                       <Route path="edit/:id" element={<RoleEdit />} />
+                    </Route>
+                    <Route path="groups">
+                      <Route index element={<UserGroupList />} />
+                      <Route path="create" element={<UserGroupCreate />} />
+                      <Route path="edit/:id" element={<UserGroupEdit />} />
                     </Route>
                   </Route>
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>
-
+                
                 <Route
                   element={
-                    <Authenticated
-                      key="authenticated-outer"
-                      fallback={<Outlet />}
-                    >
+                    <Authenticated key="authenticated-outer" fallback={<Outlet />}>
                       <NavigateToResource />
                     </Authenticated>
                   }
                 >
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
-                  <Route
-                    path="/forgot-password"
-                    element={<ForgotPassword />}
-                  />
+                  <Route path="/forgot-password" element={<ForgotPassword />} />
                 </Route>
               </Routes>
 

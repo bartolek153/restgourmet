@@ -48,8 +48,8 @@ public class UserDetailsImpl implements UserDetails {
 
   public UserDetailsImpl(UserEntity user) {
     this.id = user.getId();
-    this.username = user.getNickname();
     this.password = user.getPassword();
+    this.username = user.getNickname();
     this.enabled = user.isEnabled();
     this.authorities = mapPermissionsToAuthorities(user.getType(), user.getRoles(), user.getGroups());
     this.accountNonExpired = true;
@@ -57,7 +57,9 @@ public class UserDetailsImpl implements UserDetails {
     this.credentialsNonExpired = true;
   }
 
-  private Set<SimpleGrantedAuthority> mapPermissionsToAuthorities(UserType type, Set<Role> roles,
+  private Set<SimpleGrantedAuthority> mapPermissionsToAuthorities(
+      UserType type,
+      Set<Role> roles,
       Set<UserGroup> groups) {
 
     Set<SimpleGrantedAuthority> authorities = roles.stream()

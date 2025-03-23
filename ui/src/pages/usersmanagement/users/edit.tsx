@@ -1,5 +1,5 @@
 import { Edit, getValueFromEvent, List, useForm } from "@refinedev/antd";
-import { Button, Checkbox, Col, Form, GetProp, Input, message, Row, Select, Table, Tabs, Upload, UploadProps } from "antd";
+import { Button, Checkbox, Col, Descriptions, Form, GetProp, Input, message, Row, Select, Table, Tabs, Upload, UploadProps } from "antd";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../../../constants";
 import { LoadingOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
@@ -9,6 +9,7 @@ type FileType = Parameters<GetProp<UploadProps, 'beforeUpload'>>[0];
 
 
 export const UserEdit = () => {
+  const [items, setItems] = useState<any[]>([]);
   const [roles, setRoles] = useState<React.Key[]>([]);
   const [groups, setGroups] = useState<React.Key[]>([]);
 
@@ -37,8 +38,22 @@ export const UserEdit = () => {
 
   useEffect(() => {
     if (!isLoading && data?.data) {
-      setRoles(data.data.roles);
-      setGroups(data.data.groups);
+      const user = data.data;
+      setRoles(user.roles);
+      setGroups(user.groups);
+
+      setItems([
+        {
+          key: "1",
+          label: "Created At",
+          children: new Date(user.createdAt).toLocaleString(),
+        },
+        {
+          key: "2",
+          label: "Updated At",
+          children: new Date(user.updatedAt).toLocaleString(),
+        },
+      ]);
     }
   }, [isLoading]);
 
@@ -121,7 +136,7 @@ export const UserEdit = () => {
                 defaultValue={"VIEWER"}
                 options={[
                   { value: "ADMIN", label: "Administrator" },
-                  { value: "MODERATOR", label: "Moderator" },
+                  { value: "NORMAL", label: "Normal" },
                   { value: "VIEWER", label: "Viewer" },
                 ]}
                 style={{ width: 200 }}
@@ -143,6 +158,7 @@ export const UserEdit = () => {
                 <Button icon={<UploadOutlined />}>Profile picture</Button>
               </Upload>
             </Form.Item>
+          <Descriptions column={4} items={items} layout="vertical" />
           </Tabs.TabPane>
           <Tabs.TabPane key="2" tab="Roles">
             <Table {...rlTableProps} rowKey="id"

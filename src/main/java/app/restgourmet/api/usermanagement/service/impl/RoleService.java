@@ -11,13 +11,16 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import app.restgourmet.api.exceptions.BadRequestException;
 import app.restgourmet.api.exceptions.ResourceNotFoundException;
+import app.restgourmet.api.usermanagement.dto.permission.PermissionDto;
+import app.restgourmet.api.usermanagement.dto.role.CreateRoleDto;
+import app.restgourmet.api.usermanagement.dto.role.EditRoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListFiltersDto;
-import app.restgourmet.api.usermanagement.dto.role.RolePermissionDto;
 import app.restgourmet.api.usermanagement.mappers.IRoleMapper;
 import app.restgourmet.api.usermanagement.models.Permission;
 import app.restgourmet.api.usermanagement.models.Role;
@@ -52,23 +55,23 @@ public class RoleService implements IRoleService {
     return roleMapper.toDto(getById(id));
   }
 
-  public List<RolePermissionDto> getPermissions(UUID id) {
-    return getById(id).getPermissions().stream().map(Permission::toRolePermissionDto).toList();
+  public List<PermissionDto> getPermissions(UUID id) {
+    return getById(id).getPermissions().stream().map(Permission::toPermissionDto).toList();
   }
 
-  public UUID create(RoleDto dto, UserEntity user) {
-    Role role = roleMapper.toEntity(dto);
+  public UUID create(CreateRoleDto dto, UserEntity user) {
+    Role role = roleMapper.createToEntity(dto);
     
     Set<Permission> permissions = extractPermissionObjs(dto.getPermissions());
     role.setPermissions(permissions);
 
     role.setCreatedBy(user);
-    role.setLastUpdatedBy(user);
+    role.setUpdatedBy(user);
 
     return roleRepository.save(role).getId();
   }
 
-  public void edit(UUID id, RoleDto dto, UserEntity user) {
+  public void edit(UUID id, EditRoleDto dto, UserEntity user) {
     Role role = getById(id);
     roleMapper.updateEntity(dto, role);
     
@@ -76,21 +79,22 @@ public class RoleService implements IRoleService {
     role.setPermissions(permissions);
 
     role.setCreatedBy(user);
-    role.setLastUpdatedBy(user);
+    role.setUpdatedBy(user);
     
     roleRepository.save(role);
   }
 
+  @Transactional
   public void delete(UUID id) {
-    if (!roleRepository.existsById(id)) {
-      throw new ResourceNotFoundException(AppConstants.ErrorMessages.ROLE_NOT_FOUND);
-    }
+    Role role = getById(id);
 
     if (roleRepository.existsByUsersNotEmpty()) {
       throw new BadRequestException(AppConstants.ErrorMessages.ROLE_DELETE_DEPS);
     }
 
-    roleRepository.deleteById(id);
+    role.getPermissions().clear();
+    roleRepository.save(role);
+    roleRepository.delete(role);
   }
 
   private Role getById(UUID id) {

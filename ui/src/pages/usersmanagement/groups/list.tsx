@@ -2,7 +2,7 @@ import { DeleteButton, EditButton, List, ShowButton, useTable } from "@refinedev
 import { BaseRecord } from "@refinedev/core";
 import { Space, Table } from "antd";
 
-export const RoleList = () => {
+export const UserGroupList = () => {
   const { tableProps } = useTable({});
 
   return (
@@ -39,7 +39,7 @@ export const RoleList = () => {
 
 const PermissionsTable = (record: any) => {
   const { tableProps: prmTableProps } = useTable({
-    resource: "users/roles/permissions",
+    resource: "users/groups/permissions",
     filters: {
       permanent: [
         {

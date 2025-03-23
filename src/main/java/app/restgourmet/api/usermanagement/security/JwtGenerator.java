@@ -36,7 +36,7 @@ public class JwtGenerator {
         .issuer("spring-security-jwt")
         .issuedAt(now)
         .expiresAt(now.plusSeconds(AppConstants.Security.ACCESS_TOKEN_EXPIRATION_TIME))
-        .subject(userDetails.getUsername())
+        .subject(userDetails.getId().toString())
         // .claim("scope", scope)
         .build();
 
@@ -54,7 +54,7 @@ public class JwtGenerator {
         .issuer("spring-security-jwt")
         .issuedAt(now)
         .expiresAt(now.plusSeconds(AppConstants.Security.REFRESH_TOKEN_EXPIRATION_TIME))
-        .subject(userDetails.getUsername())
+        .subject(userDetails.getId().toString())
         .build();
 
     JwsHeader jwsHeader = JwsHeader.with(() -> "HS256").build();

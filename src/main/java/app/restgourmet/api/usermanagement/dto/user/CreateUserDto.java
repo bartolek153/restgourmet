@@ -1,8 +1,10 @@
 package app.restgourmet.api.usermanagement.dto.user;
 
 import java.util.List;
+import java.util.UUID;
 
 import app.restgourmet.api.commondata.dto.ImageDto;
+import app.restgourmet.api.usermanagement.enums.UserType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -10,31 +12,26 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Data
 public class CreateUserDto {
-
-  @NotNull
   @Schema(description = "The full name of the user", example = "John Doe")
-  private String name;
-
-  @NotNull
-  @Schema(description = "The email address of the user", example = "johndoe@example.com")
-  private String email;
-
-  @NotNull
+  @NotNull private String name;
+  
   @Schema(description = "The role assigned to the user", example = "ADMIN")
-  private String role;
+  @NotNull private UserType type;
+
+  @Schema(description = "The email address of the user", example = "johndoe@example.com")
+  @NotNull private String email;
 
   @Schema(description = "The nickname of the user", example = "johndoe123")
   private String nickname;
 
-  // @Schema(description = "The password for the user account", example = "Password123!")
-  // private String password;
-
-  @Schema(description = "A list of permissions granted to the user", example = "[\"READ_PRIVILEGES\", \"WRITE_PRIVILEGES\"]")
-  @NotNull
-  private List<String> permissions;
-
   @Schema(description = "The profile image of the user")
   private List<ImageDto> picture;
+
+  @Schema(description = "IAM roles associated to the user")
+  private List<UUID> roleIds;
+
+  @Schema(description = "IAM groups associated to the user")
+  private List<UUID> groupIds;
 
   public String getEmail() {
     return email.toLowerCase();

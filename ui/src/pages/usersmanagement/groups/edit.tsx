@@ -1,9 +1,9 @@
 import { Edit, useForm, useTable } from "@refinedev/antd";
-import { Descriptions, Divider, Form, Input, Space, Table } from "antd";
+import { Col, Descriptions, Divider, Flex, Form, Grid, Input, Row, Space, Table } from "antd";
 import React, { useEffect, useState } from "react";
 import { snakeCaseToHumanReadable } from "../../../utils/stringUtils";
 
-export const RoleEdit = () => {
+export const UserGroupEdit = () => {
   const [permissions, setPermissions] = useState<React.Key[]>([]);
   const [items, setItems] = useState<any[]>([]);
   const { formProps, saveButtonProps, onFinish, query } = useForm({});

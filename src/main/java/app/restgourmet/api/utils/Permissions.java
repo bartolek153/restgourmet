@@ -14,5 +14,4 @@ public final class Permissions {
 
   public static final String READ_INVENTORY = "READ_INVENTORY";
   public static final String WRITE_INVENTORY = "WRITE_INVENTORY";
-
 }

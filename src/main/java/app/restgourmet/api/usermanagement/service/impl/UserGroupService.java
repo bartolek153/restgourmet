@@ -8,18 +8,26 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import app.restgourmet.api.exceptions.BadRequestException;
 import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.usermanagement.dto.group.UserGroupDto;
 import app.restgourmet.api.usermanagement.dto.group.UserGroupListDto;
 import app.restgourmet.api.usermanagement.dto.group.UserGroupListFiltersDto;
+import app.restgourmet.api.usermanagement.dto.permission.PermissionDto;
+import app.restgourmet.api.usermanagement.dto.group.CreateUserGroupDto;
+import app.restgourmet.api.usermanagement.dto.group.EditUserGroupDto;
 import app.restgourmet.api.usermanagement.mappers.IUserGroupMapper;
 import app.restgourmet.api.usermanagement.models.Permission;
 import app.restgourmet.api.usermanagement.models.UserGroup;
+import app.restgourmet.api.usermanagement.models.UserEntity;
 import app.restgourmet.api.usermanagement.repository.PermissionRepository;
 import app.restgourmet.api.usermanagement.repository.UserGroupRepository;
+import app.restgourmet.api.usermanagement.repository.specifications.UserGroupSpec;
 import app.restgourmet.api.usermanagement.service.spec.IUserGroupService;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -27,52 +35,71 @@ import app.restgourmet.api.utils.AppConstants;
 public class UserGroupService implements IUserGroupService {
 
   @Autowired
-  private IUserGroupMapper roleMapper;
-  private final UserGroupRepository roleRepository;
+  private IUserGroupMapper userGroupMapper;
+  
+  private final UserGroupRepository userGroupRepository;
   private final PermissionRepository permissionRepository;
 
-  public UserGroupService(UserGroupRepository roleRepository, PermissionRepository permissionRepository) {
-    this.roleRepository = roleRepository;
+  public UserGroupService(UserGroupRepository userGroupRepository, PermissionRepository permissionRepository) {
+    this.userGroupRepository = userGroupRepository;
     this.permissionRepository = permissionRepository;
   }
 
   public PagedModel<UserGroupListDto> list(PageRequest pagReq, UserGroupListFiltersDto dto) {
-    Page<UserGroup> roles = roleRepository.findAll(pagReq);
-    return new PagedModel<>(roles.map(roleMapper::toListDto));
+    Specification<UserGroup> spec = UserGroupSpec.filterBy(dto);
+    Page<UserGroup> groups = userGroupRepository.findAll(spec, pagReq);
+    return new PagedModel<>(groups.map(userGroupMapper::toListDto));
   }
 
   public UserGroupDto getOne(UUID id) {
-    return roleMapper.toDto(getById(id));
+    return userGroupMapper.toDto(getById(id));
   }
 
-  public UUID create(UserGroupDto dto) {
-    UserGroup role = roleMapper.toEntity(dto);
-    Set<Permission> permissions = extractPermissionObjs(dto.getPermissions());
-    role.setPermissions(permissions);
-
-    return roleRepository.save(role).getId();
+  public List<PermissionDto> getPermissions(UUID id) {
+    return getById(id).getPermissions().stream().map(Permission::toPermissionDto).toList();
   }
 
-  public void edit(UUID id, UserGroupDto dto) {
-    UserGroup role = getById(id);
-    roleMapper.updateEntity(dto, role);
+  public UUID create(CreateUserGroupDto dto, UserEntity user) {
+    UserGroup userGroup = userGroupMapper.createToEntity(dto);
     
     Set<Permission> permissions = extractPermissionObjs(dto.getPermissions());
-    role.setPermissions(permissions);
-    
-    roleRepository.save(role);
+    userGroup.setPermissions(permissions);
+
+    userGroup.setCreatedBy(user);
+    userGroup.setUpdatedBy(user);
+
+    return userGroupRepository.save(userGroup).getId();
   }
 
+  public void edit(UUID id, EditUserGroupDto dto, UserEntity user) {
+    UserGroup userGroup = getById(id);
+    userGroupMapper.updateEntity(dto, userGroup);
+    
+    Set<Permission> permissions = extractPermissionObjs(dto.getPermissions());
+    userGroup.setPermissions(permissions);
+
+    userGroup.setCreatedBy(user);
+    userGroup.setUpdatedBy(user);
+    
+    userGroupRepository.save(userGroup);
+  }
+
+  @Transactional
   public void delete(UUID id) {
-    if (!roleRepository.existsById(id)) {
-      throw new ResourceNotFoundException(AppConstants.ErrorMessages.ROLE_NOT_FOUND);
+    UserGroup group = getById(id);
+
+    if (userGroupRepository.existsByUsersNotEmpty()) {
+      throw new BadRequestException(AppConstants.ErrorMessages.ROLE_DELETE_DEPS);
     }
 
-    roleRepository.deleteById(id);
+    group.getPermissions().clear();
+    userGroupRepository.save(group);
+
+    userGroupRepository.delete(group);
   }
 
   private UserGroup getById(UUID id) {
-    return roleRepository.findById(id)
+    return userGroupRepository.findById(id)
         .orElseThrow(
             () -> new ResourceNotFoundException(AppConstants.ErrorMessages.PRODUCT_CATEGORY_NOT_FOUND));
   }

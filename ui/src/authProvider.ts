@@ -1,4 +1,4 @@
-import type { AuthProvider } from "@refinedev/core";
+import type { AuthProvider, HttpError } from "@refinedev/core";
 import { API_URL, IDENTITY_KEY, TOKEN_KEY } from "./constants";
 import { axiosInstance } from "./rest-data-provider/utils/axios";
 import { IUser } from "./components/header";
@@ -7,31 +7,32 @@ export const authProvider: AuthProvider = {
   login: async ({ username, email, password }) => {
     if ((username || email) && password) {
       try {
-        await axiosInstance.post(`${API_URL}/auth/login`, { identifier: username || email, password });
-        
-        localStorage.setItem(TOKEN_KEY, username); 
-        
-        await axiosInstance.get(`${API_URL}/users/profile`)
-          .then((res) => {
-            localStorage.setItem(IDENTITY_KEY, JSON.stringify(res.data));
-          });
+        await axiosInstance.post(`${API_URL}/auth/login`, {
+          identifier: username || email,
+          password,
+        });
 
-        return { 
-          success: true, 
-          redirectTo: "/" 
+        localStorage.setItem(TOKEN_KEY, username);
+
+        await axiosInstance.get(`${API_URL}/users/profile`).then((res) => {
+          localStorage.setItem(IDENTITY_KEY, JSON.stringify(res.data));
+        });
+
+        return {
+          success: true,
+          redirectTo: "/",
         };
       } catch (error: any) {
-
         return {
           success: false,
           error: {
             name: "Login error",
-            message: error.message
+            message: error.message,
           },
         };
       }
     }
-    
+
     return {
       success: false,
       error: {
@@ -63,12 +64,29 @@ export const authProvider: AuthProvider = {
   getPermissions: async () => null,
   getIdentity: async () => {
     const idt = localStorage.getItem(IDENTITY_KEY);
-    if (idt)
-      return JSON.parse(idt) as IUser;
+    if (idt) return JSON.parse(idt) as IUser;
     return null;
   },
   onError: async (error) => {
-    console.error(error);
+    if (error.response.status === 401) {
+      try {
+        // refresh token
+        // const response = await axiosInstance.post(`${API_URL}/auth/refresh`);
+
+        // if (response.status === 200) {
+        // } else {
+        //   return { logout: true, redirectTo: "/login", error };
+        // }
+      } catch (refreshError) {
+        console.error("Failed to refresh token:", refreshError);
+        return { logout: true, redirectTo: "/login", error };
+      }
+    } else if (error.response.status === 403) {
+      return { redirectTo: "/error/403" }; // Unauthorized
+    }
+
+    console.warn("Error caught by authProvider", error);
+
     return { error };
   },
 };

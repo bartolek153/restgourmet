@@ -11,6 +11,7 @@ import app.restgourmet.api.usermanagement.security.UserDetailsImpl;
 import app.restgourmet.api.usermanagement.security.UserDetailsServiceImpl;
 import app.restgourmet.api.usermanagement.service.spec.IAuthenticationService;
 import app.restgourmet.api.usermanagement.service.spec.INicknameGenerator;
+import app.restgourmet.api.utils.CommonUtils;
 
 import java.time.Duration;
 import org.apache.commons.lang3.StringUtils;
@@ -133,7 +134,7 @@ public class AuthenticationService implements IAuthenticationService {
    * @param refreshToken the refresh token
    * @return a ResponseEntity containing the new access token as a cookie
    */
-  public ResponseEntity<String> token(String refreshToken) {
+  public ResponseEntity<String> newToken(String refreshToken) {
     if (StringUtils.isBlank(refreshToken)) {
       return ResponseEntity.badRequest().body("Refresh token is empty");
     }
@@ -146,7 +147,7 @@ public class AuthenticationService implements IAuthenticationService {
       return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token");
     }
 
-    UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(jwt.getSubject());
+    UserDetailsImpl userDetails = userDetailsService.loadUserById(CommonUtils.parseUUID(jwt.getSubject()));
 
     String newRefreshToken = jwtGenerator.generateRefreshToken(userDetails);
     String newAccessToken = jwtGenerator.generateAccessToken(userDetails);

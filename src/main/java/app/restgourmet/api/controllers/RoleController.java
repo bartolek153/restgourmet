@@ -19,10 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.restgourmet.api.usermanagement.dto.permission.PermissionDto;
+import app.restgourmet.api.usermanagement.dto.role.CreateRoleDto;
+import app.restgourmet.api.usermanagement.dto.role.EditRoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListFiltersDto;
-import app.restgourmet.api.usermanagement.dto.role.RolePermissionDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 import app.restgourmet.api.usermanagement.service.spec.IRoleService;
 import app.restgourmet.api.usermanagement.service.spec.IUserService;
@@ -63,19 +65,19 @@ public class RoleController {
   }
 
   @GetMapping("/permissions")
-  public ResponseEntity<List<RolePermissionDto>> getRolePermissions(@RequestParam UUID id) {
+  public ResponseEntity<List<PermissionDto>> getRolePermissions(@RequestParam UUID id) {
     return ResponseEntity.ok(roleService.getPermissions(id));
   }
 
   @PostMapping
-  public ResponseEntity<UUID> createRole(@RequestBody @Valid RoleDto dto) {
+  public ResponseEntity<UUID> createRole(@RequestBody @Valid CreateRoleDto dto) {
     UserEntity user = userService.getAuthenticatedUser(SecurityContextHolder.getContext().getAuthentication());
     UUID id = roleService.create(dto, user);
     return ResponseEntity.status(HttpStatus.CREATED).body(id);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateRole(@PathVariable UUID id, @RequestBody @Valid RoleDto dto) {
+  public ResponseEntity<?> updateRole(@PathVariable UUID id, @RequestBody @Valid EditRoleDto dto) {
     UserEntity user = userService.getAuthenticatedUser(SecurityContextHolder.getContext().getAuthentication());
     roleService.edit(id, dto, user);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

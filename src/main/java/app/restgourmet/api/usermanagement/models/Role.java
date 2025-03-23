@@ -1,7 +1,7 @@
 package app.restgourmet.api.usermanagement.models;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -23,7 +23,6 @@ import java.util.Set;
 @Table(name = "roles")
 public class Role extends AuditableEntity {
     @NotNull
-    @Column
     private String name;
 
     @ManyToMany
@@ -34,14 +33,14 @@ public class Role extends AuditableEntity {
     )
     private Set<Permission> permissions;
 
-    @ManyToMany(mappedBy = "roles")
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private Set<UserEntity> users;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by")
     private UserEntity createdBy;
 
-    @ManyToOne
-    @JoinColumn(name = "last_updated_by")
-    private UserEntity lastUpdatedBy;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "updated_by")
+    private UserEntity updatedBy;
 }

@@ -53,7 +53,7 @@ export const UserList = () => {
         <Table.Column dataIndex="name" title={"Name"} sorter={true} />
         <Table.Column dataIndex="email" title={"Email"} />
         <Table.Column dataIndex="nickname" title={"Nickname"} />
-        <Table.Column dataIndex="role" title={"Role"} />
+        <Table.Column dataIndex="type" title={"Type"} />
         <Table.Column dataIndex="enabled" render={(text) => <Checkbox checked={text} />} title={"Enabled"}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>

@@ -6,10 +6,12 @@ import java.util.UUID;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PagedModel;
 
+import app.restgourmet.api.usermanagement.dto.permission.PermissionDto;
+import app.restgourmet.api.usermanagement.dto.role.CreateRoleDto;
+import app.restgourmet.api.usermanagement.dto.role.EditRoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListDto;
 import app.restgourmet.api.usermanagement.dto.role.RoleListFiltersDto;
-import app.restgourmet.api.usermanagement.dto.role.RolePermissionDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 
 public interface IRoleService {
@@ -17,11 +19,11 @@ public interface IRoleService {
 
   RoleDto getOne(UUID id);
 
-  List<RolePermissionDto> getPermissions(UUID id);
+  List<PermissionDto> getPermissions(UUID id);
 
-  UUID create(RoleDto dto, UserEntity auditUser);
+  UUID create(CreateRoleDto dto, UserEntity auditUser);
 
-  void edit(UUID id, RoleDto dto, UserEntity auditUser);
+  void edit(UUID id, EditRoleDto dto, UserEntity auditUser);
 
   void delete(UUID id);
 }

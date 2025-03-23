@@ -1,7 +1,5 @@
 package app.restgourmet.api.usermanagement.enums;
 
-import app.restgourmet.api.utils.CommonUtils;
-
 public enum PermissionCategory {
     USER,
     ROLE,

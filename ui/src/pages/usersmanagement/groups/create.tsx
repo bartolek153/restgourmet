@@ -2,7 +2,7 @@ import { Create, useForm, useTable } from "@refinedev/antd";
 import { Form, Input, Table } from "antd";
 import React, { useState } from "react";
 
-export const RoleCreate = () => {
+export const UserGroupCreate = () => {
   const [permissions, setPermissions] = useState<React.Key[]>([]);
   const { formProps, saveButtonProps, onFinish } = useForm({});
 

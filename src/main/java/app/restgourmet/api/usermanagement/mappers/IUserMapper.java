@@ -2,6 +2,8 @@ package app.restgourmet.api.usermanagement.mappers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.mapstruct.Mapper;
@@ -18,36 +20,27 @@ import app.restgourmet.api.usermanagement.dto.user.EditProfileDto;
 import app.restgourmet.api.usermanagement.dto.user.EditUserDto;
 import app.restgourmet.api.usermanagement.dto.user.UserDto;
 import app.restgourmet.api.usermanagement.dto.user.UserListDto;
-import app.restgourmet.api.usermanagement.models.Permission;
+import app.restgourmet.api.usermanagement.models.Role;
 import app.restgourmet.api.usermanagement.models.UserEntity;
+import app.restgourmet.api.usermanagement.models.UserGroup;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface IUserMapper {
 
-  @Mapping(target = "roles", ignore = true)
   @Mapping(target = "picture", source = "picture", qualifiedByName = "mapPicture")
   UserEntity createDtoToEntity(CreateUserDto dto);
 
-  @Mapping(target = "roles", ignore = true)
   @Mapping(target = "picture", source = "picture", qualifiedByName = "mapPicture")
   void updateEntity(EditUserDto dto, @MappingTarget UserEntity entity);
 
   UserEntity editProfileDtoToEntity(EditProfileDto dto);
 
-  UserEntity entityToEntity(UserEntity entity);
+  UserListDto toListDto(UserEntity entities);
 
-  UserListDto entityToListDto(UserEntity entities);
-
-  // @Mapping(target = "permissions", source = "permissions", qualifiedByName = "mapPermissionsToStrings")
   @Mapping(target = "picture", source = "picture", qualifiedByName = "mapPictureToDto")
+  @Mapping(target = "roles", source = "roles", qualifiedByName = "rolesIds")
+  @Mapping(target = "groups", source = "groups", qualifiedByName = "groupsIds")
   UserDto toDto(UserEntity entity);
-
-  @Named("mapPermissionsToStrings")
-  static List<String> mapPermissionsToStrings(List<Permission> permissions) {
-    return permissions != null ? permissions.stream()
-        .map(Permission::getName)
-        .collect(Collectors.toList()) : new ArrayList<>();
-  }
 
   @Named("mapPicture")
   static String mapPicture(List<ImageDto> pic) {
@@ -64,7 +57,7 @@ public interface IUserMapper {
 
   @Named("mapPictureToDto")
   static List<ImageDto> mapPictureToDto(String pic) {
-    if (StringUtils.hasText(pic)){ 
+    if (StringUtils.hasText(pic)) {
       ImageDto image = new ImageDto();
       image.setUrl("http://localhost:5173/api/files/" + pic);
       image.setUid(pic);
@@ -77,5 +70,21 @@ public interface IUserMapper {
     }
 
     return null;
+  }
+
+  @Named("rolesIds")
+  static List<UUID> rolesToUUID(Set<Role> roles) {
+    if (roles != null) {
+      return roles.stream().map(Role::getId).collect(Collectors.toList());
+    }
+    return new ArrayList<>();
+  }
+
+  @Named("groupsIds")
+  static List<UUID> groupsToUUID(Set<UserGroup> roles) {
+    if (roles != null) {
+      return roles.stream().map(UserGroup::getId).collect(Collectors.toList());
+    }
+    return new ArrayList<>();
   }
 }

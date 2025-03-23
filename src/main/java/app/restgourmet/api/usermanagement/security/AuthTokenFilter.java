@@ -1,6 +1,7 @@
 package app.restgourmet.api.usermanagement.security;
 
 import java.io.IOException;
+import java.util.UUID;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -21,6 +22,8 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.WebUtils;
+
+import app.restgourmet.api.utils.CommonUtils;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
   @Autowired
@@ -53,8 +56,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
       // is hitting db 9 times
 
       if (jwt != null) {
-        String username = jwt.getSubject(); // TODO: check if refresh token can be used to access resources
-        UserDetailsImpl userDetails = userDetailsService.loadUserByUsername(username);
+        UUID id = CommonUtils.parseUUID(jwt.getSubject()); // TODO: check if refresh token can be used to access resources
+        UserDetailsImpl userDetails = userDetailsService.loadUserById(id);
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
             userDetails,

@@ -65,16 +65,16 @@ public class AddressServiceImpl implements AddressService {
 
   @Override
   public UUID create(AddressDto dto) {
-    Address cat = addressMapper.toEntity(dto);
-    cat = addressRepository.save(cat);
-    return cat.getId();
+    Address add = addressMapper.toEntity(dto);
+    add = addressRepository.save(add);
+    return add.getId();
   }
 
   @Override
   public void edit(UUID id, AddressDto dto) {
-    Address cat = getById(id);
-    addressMapper.updateEntity(dto, cat);
-    addressRepository.save(cat);
+    Address add = getById(id);
+    addressMapper.updateEntity(dto, add);
+    addressRepository.save(add);
   }
 
   @Override
@@ -91,12 +91,13 @@ public class AddressServiceImpl implements AddressService {
         .orElseThrow(() -> new ResourceNotFoundException(AppConstants.ErrorMessages.ADDRESS_NOT_FOUND));
   }
 
+  @SuppressWarnings("null")  // TODO: remove?
   @Override
   public AddressDto consultBrazilianAddress(String cep) {
     try {
       ViaCepAddressDto response = restTemplate.getForObject(AppConstants.ExternalServices.Urls.VIACEP,
           ViaCepAddressDto.class, cep);
-      return response.toAddressDto();
+      return response != null ? response.toAddressDto() : null;
 
     } catch (HttpClientErrorException.NotFound ex) {
 
@@ -123,9 +124,9 @@ public class AddressServiceImpl implements AddressService {
 
       // Handle other REST client exceptions (timeouts, etc.)
       log.error("Communication error with ViaCEP service for CEP {}: {}", cep, ex.getMessage());
-      throw BadGateway.create(HttpStatus.SERVICE_UNAVAILABLE, 
-      "", null, null, null);
-      
+      throw BadGateway.create(HttpStatus.SERVICE_UNAVAILABLE,
+          "", null, null, null);
+
     }
   }
 }

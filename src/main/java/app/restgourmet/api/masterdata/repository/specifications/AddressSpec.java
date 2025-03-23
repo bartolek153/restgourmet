@@ -8,10 +8,11 @@ import org.springframework.util.StringUtils;
 import app.restgourmet.api.masterdata.dto.address.AddressListFiltersDto;
 import app.restgourmet.api.masterdata.models.Address;
 
-
 public class AddressSpec {
   private static final String ID = "id";
-  private static final String DESCRIPTION = "description";
+  private static final String ZIPCODE = "zipCode";
+  private static final String STREET = "street";
+  private static final String CITY = "city";
 
   public static Specification<Address> filterBy(AddressListFiltersDto filters) {
     return Specification.where(qSearch(filters.getQ()));
@@ -28,7 +29,9 @@ public class AddressSpec {
       }
 
       return cb.or(
-          cb.like(cb.lower(root.get(DESCRIPTION)), "%" + q.toLowerCase() + "%"));
+          cb.like(cb.lower(root.get(STREET)), "%" + q.toLowerCase() + "%"),
+          cb.like(cb.lower(root.get(CITY)), "%" + q.toLowerCase() + "%"),
+          cb.like(cb.lower(root.get(ZIPCODE)), "%" + q.toLowerCase() + "%"));
     };
   }
 }

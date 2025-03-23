@@ -42,7 +42,7 @@ public class AddressController {
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,
-      @RequestParam(defaultValue = "description") final String sort,
+      @RequestParam(defaultValue = "street") final String sort,
       @ParameterObject final AddressListFiltersDto filters) {
     return ResponseEntity.ok(addressService.list(CustomPageRequest.of(page, size, order, sort), filters));
   }

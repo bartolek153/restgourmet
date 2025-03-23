@@ -4,6 +4,7 @@ import app.restgourmet.api.usermanagement.models.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,7 +30,8 @@ public class Address extends BaseEntity {
   private String state;
 
   @Column(nullable = false)
-  private String zipCode;
+  @Pattern(regexp = "\\d{5}-\\d{3}|\\d{8}", message = "CEP must be in format 00000-000 or 00000000")
+  private String zipCode;  // TODO: validate depending on country
 
   @Column(nullable = false)
   private String country;

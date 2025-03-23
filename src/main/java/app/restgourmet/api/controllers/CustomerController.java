@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api/partners/customers")
 @Tag(name = "Customer", description = "Customer endpoints")
 public class CustomerController {
 

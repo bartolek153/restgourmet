@@ -42,6 +42,9 @@ public final class AppConstants {
     public static final String USER_LOGIN_BAD_CREDENTIALS = "User not found or invalid credentials";
     public static final String USER_NICKNAME_IN_USE = "Nickname already in use";
     public static final String USER_NOT_FOUND = "User not found";
+    
+    public static final String BUSINESS_PARTNER_NOT_FOUND = "Business partner not found";
+    public static final String BUSINESS_PARTNER_DELETE_DEPS = "Cannot delete business partner as it has dependent entities";
   }
 
   public static class ExternalServices {

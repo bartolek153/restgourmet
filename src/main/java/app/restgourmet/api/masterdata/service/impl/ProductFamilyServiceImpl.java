@@ -103,6 +103,6 @@ public class ProductFamilyServiceImpl implements ProductFamilyService {
   }
 
   private ProductFamily getById(UUID id) {
-    return productFamilyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Family not found"));
+    return productFamilyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(AppConstants.ErrorMessages.PRODUCT_FAMILY_NOT_FOUND));
   }
 }

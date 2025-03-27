@@ -1,7 +1,6 @@
-import { Edit, getValueFromEvent, useForm } from "@refinedev/antd";
+import { Create, getValueFromEvent, useForm, useTable } from "@refinedev/antd";
 import {
   Button,
-  Descriptions,
   Form,
   GetProp,
   Input,
@@ -12,24 +11,17 @@ import {
   Upload,
   UploadProps,
 } from "antd";
-import React, { useEffect, useState } from "react";
 import { API_URL } from "../../../constants";
 import { UploadOutlined } from "@ant-design/icons";
-import { useTable } from "@refinedev/antd";
+import { useState } from "react";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-export const UserEdit = () => {
-  const [items, setItems] = useState<any[]>([]);
+export const ProductCreate = () => {
   const [roles, setRoles] = useState<React.Key[]>([]);
   const [groups, setGroups] = useState<React.Key[]>([]);
 
-  const {
-    formProps,
-    saveButtonProps,
-    query: { data, isLoading },
-    onFinish,
-  } = useForm({});
+  const { formProps, saveButtonProps, onFinish } = useForm({});
 
   const handleOnFinish = (values: any) => {
     onFinish({
@@ -46,27 +38,6 @@ export const UserEdit = () => {
   const { tableProps: grTableProps } = useTable({
     resource: "users/groups",
   });
-
-  useEffect(() => {
-    if (!isLoading && data?.data) {
-      const user = data.data;
-      setRoles(user.roles);
-      setGroups(user.groups);
-
-      setItems([
-        {
-          key: "1",
-          label: "Created At",
-          children: new Date(user.createdAt).toLocaleString(),
-        },
-        {
-          key: "2",
-          label: "Updated At",
-          children: new Date(user.updatedAt).toLocaleString(),
-        },
-      ]);
-    }
-  }, [isLoading]);
 
   const onRoleSelectChange = (selectedRowKeys: React.Key[]) => {
     setRoles(selectedRowKeys);
@@ -90,7 +61,7 @@ export const UserEdit = () => {
   };
 
   return (
-    <Edit saveButtonProps={saveButtonProps} isLoading={isLoading}>
+    <Create saveButtonProps={saveButtonProps}>
       <Form
         {...formProps}
         layout="vertical"
@@ -128,7 +99,7 @@ export const UserEdit = () => {
               name="nickname"
               rules={[
                 {
-                  required: true,
+                  required: false,
                 },
               ]}
             >
@@ -170,7 +141,6 @@ export const UserEdit = () => {
                 <Button icon={<UploadOutlined />}>Profile picture</Button>
               </Upload>
             </Form.Item>
-            <Descriptions column={4} items={items} layout="vertical" />
           </Tabs.TabPane>
           <Tabs.TabPane key="2" tab="Roles">
             <Table
@@ -210,6 +180,6 @@ export const UserEdit = () => {
           </Tabs.TabPane>
         </Tabs>
       </Form>
-    </Edit>
+    </Create>
   );
 };

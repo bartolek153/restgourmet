@@ -69,19 +69,7 @@ export const authProvider: AuthProvider = {
   },
   onError: async (error) => {
     if (error.response.status === 401) {
-      try {
-        // refresh token
-        // const response = await axiosInstance.post(`${API_URL}/auth/refresh`);
-        // if (response.status === 200) {
-        // } else {
-        //   return { logout: true, redirectTo: "/login", error };
-        // }
-      } catch (refreshError) {
-        console.error("Failed to refresh token:", refreshError);
-        return { logout: true, redirectTo: "/login", error };
-      }
-    } else if (error.response.status === 403) {
-      return { redirectTo: "/error/403" }; // Unauthorized
+      return { logout: true, redirectTo: "/login", error };
     }
 
     console.warn("Error caught by authProvider", error);

@@ -1,14 +1,13 @@
 package app.restgourmet.api.masterdata.dto.group;
 
-import org.springframework.util.StringUtils;
+import java.util.List;
+import java.util.UUID;
 
 import lombok.Data;
 
 @Data
 public class ProdGroupListFiltersDto {
   private String q;
-
-  public boolean isEmpty() {
-    return !StringUtils.hasText(q);
-  }
+  private UUID familyId;
+  private List<UUID> ids;
 }

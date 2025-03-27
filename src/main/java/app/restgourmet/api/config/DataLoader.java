@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import app.restgourmet.api.usermanagement.enums.PermissionCategory;
 import app.restgourmet.api.usermanagement.enums.UserType;
@@ -18,7 +19,6 @@ import app.restgourmet.api.usermanagement.repository.PermissionRepository;
 import app.restgourmet.api.usermanagement.repository.UserRepository;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.Permissions;
-import jakarta.transaction.Transactional;
 
 @Component
 public class DataLoader implements CommandLineRunner {

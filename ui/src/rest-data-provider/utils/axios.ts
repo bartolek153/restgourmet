@@ -18,7 +18,7 @@ axiosInstance.interceptors.response.use(
     // not a 401, simply fail the response
     const customError: HttpError = {
       ...error,
-      message: error.response?.data?.message,
+      message: error.response?.data?.message || error.reponse?.data?.error,
       statusCode: error.response?.status,
       errors: error.response?.data?.errors,
     };

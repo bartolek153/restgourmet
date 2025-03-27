@@ -1,5 +1,6 @@
 package app.restgourmet.api.masterdata.repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,4 +12,8 @@ import app.restgourmet.api.masterdata.models.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, UUID>, JpaSpecificationExecutor<Product> {
   boolean existsByGroupId(UUID id);
+
+  boolean existsBySku(String sku);
+
+  Optional<Product> findByIdAndDeletedFalse(UUID id);
 }

@@ -1,11 +1,14 @@
-import { Edit, getValueFromEvent, useForm } from "@refinedev/antd";
+import { Edit, getValueFromEvent, List, useForm } from "@refinedev/antd";
 import {
   Button,
+  Checkbox,
+  Col,
   Descriptions,
   Form,
   GetProp,
   Input,
   message,
+  Row,
   Select,
   Table,
   Tabs,
@@ -14,12 +17,12 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { API_URL } from "../../../constants";
-import { UploadOutlined } from "@ant-design/icons";
+import { LoadingOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
 import { useTable } from "@refinedev/antd";
 
 type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
-export const UserEdit = () => {
+export const ProductEdit = () => {
   const [items, setItems] = useState<any[]>([]);
   const [roles, setRoles] = useState<React.Key[]>([]);
   const [groups, setGroups] = useState<React.Key[]>([]);

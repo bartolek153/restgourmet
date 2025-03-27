@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,13 @@ import app.restgourmet.api.masterdata.dto.group.ProdGroupDto;
 import app.restgourmet.api.masterdata.dto.group.ProdGroupListDto;
 import app.restgourmet.api.masterdata.dto.group.ProdGroupListFiltersDto;
 import app.restgourmet.api.masterdata.mappers.ProductGroupMapper;
+import app.restgourmet.api.masterdata.models.ProductFamily;
 import app.restgourmet.api.masterdata.models.ProductGroup;
 import app.restgourmet.api.masterdata.repository.ProductFamilyRepository;
 import app.restgourmet.api.masterdata.repository.ProductGroupRepository;
 import app.restgourmet.api.masterdata.repository.ProductRepository;
+import app.restgourmet.api.masterdata.repository.specifications.ProdFamilySpec;
+import app.restgourmet.api.masterdata.repository.specifications.ProdGroupSpec;
 import app.restgourmet.api.masterdata.service.spec.ProductGroupService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CommonUtils;
@@ -32,8 +36,10 @@ public class ProductGroupServiceImpl implements ProductGroupService {
   @Autowired
   private ProductGroupMapper productGroupMapper;
 
-  public ProductGroupServiceImpl(ProductGroupRepository productGroupRepository,
-      ProductFamilyRepository productFamilyRepository, ProductRepository productRepository) {
+  public ProductGroupServiceImpl(
+      ProductGroupRepository productGroupRepository,
+      ProductFamilyRepository productFamilyRepository, 
+      ProductRepository productRepository) {
     this.productGroupRepository = productGroupRepository;
     this.productFamilyRepository = productFamilyRepository;
     this.productRepository = productRepository;
@@ -41,16 +47,9 @@ public class ProductGroupServiceImpl implements ProductGroupService {
 
   @Override
   public PagedModel<ProdGroupListDto> list(PageRequest pageReq, ProdGroupListFiltersDto filters) {
-    Page<ProductGroup> groups;
-
-    if (filters.isEmpty()) {
-      groups = productGroupRepository.findAll(pageReq);
-    } else {
-      UUID id = CommonUtils.parseUUID(filters.getQ());
-      groups = productGroupRepository.findByIdOrDescriptionContainingIgnoreCase(id, filters.getQ(), pageReq);
-    }
-
-    return new PagedModel<>(groups.map(productGroupMapper::toListDto));
+    Specification<ProductGroup> spec = ProdGroupSpec.filterBy(filters);
+    Page<ProductGroup> group = productGroupRepository.findAll(spec, pageReq);
+    return new PagedModel<>(group.map(productGroupMapper::toListDto));
   }
 
   @Override

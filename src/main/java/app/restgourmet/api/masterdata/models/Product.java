@@ -1,6 +1,7 @@
 package app.restgourmet.api.masterdata.models;
 
 import app.restgourmet.api.masterdata.enums.ProductOrigin;
+import app.restgourmet.api.masterdata.enums.ProductStatus;
 import app.restgourmet.api.usermanagement.models.AuditableEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,20 +21,21 @@ import lombok.Setter;
 @Entity
 @Table(name = "products")
 public class Product extends AuditableEntity {
-  @Column(nullable = true, unique = true)
+  @Column(unique = true)
   private String sku;
 
   @NotNull
-  @Column
   private String description;
 
   @ManyToOne
   @JoinColumn(name = "group_id")
   private ProductGroup group;
 
-  @Column
   @NotNull
   private ProductOrigin origin;
+
+  @NotNull 
+  private ProductStatus status;
 
   @NotNull
   @ManyToOne
@@ -41,9 +43,10 @@ public class Product extends AuditableEntity {
   private UnitMeasurement inventoryUnit;
 
   @ManyToOne
-  @JoinColumn(name = "purchase_unit_id", nullable = false)
+  @JoinColumn(name = "purchase_unit_id")
   private UnitMeasurement purchaseUnit;
 
-  @Column
   private Double price;
+
+  private boolean deleted = false;
 }

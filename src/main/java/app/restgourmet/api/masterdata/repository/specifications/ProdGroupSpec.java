@@ -6,19 +6,21 @@ import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import app.restgourmet.api.masterdata.dto.category.ProdCategoryListFiltersDto;
-import app.restgourmet.api.masterdata.models.ProductCategory;
+import app.restgourmet.api.masterdata.dto.group.ProdGroupListFiltersDto;
+import app.restgourmet.api.masterdata.models.ProductGroup;
 
-public class ProdCategorySpec {
+public class ProdGroupSpec {
   private static final String ID = "id";
   private static final String DESCRIPTION = "description";
+  private static final String FAMILY = "family";
 
-  public static Specification<ProductCategory> filterBy(ProdCategoryListFiltersDto filters) {
+  public static Specification<ProductGroup> filterBy(ProdGroupListFiltersDto filters) {
     return Specification.where(qSearch(filters.getQ()))
+        .and(familySearch(filters.getFamilyId()))
         .and(hasIds(filters.getIds()));
   }
 
-  private static Specification<ProductCategory> qSearch(String q) {
+  private static Specification<ProductGroup> qSearch(String q) {
     return (root, query, cb) -> {
       if (!StringUtils.hasText(q))
         return cb.conjunction();
@@ -33,7 +35,16 @@ public class ProdCategorySpec {
     };
   }
 
-  private static Specification<ProductCategory> hasIds(List<UUID> ids) {
+  private static Specification<ProductGroup> familySearch(UUID familyId) {
+    return (root, query, cb) -> {
+      if (familyId == null)
+        return cb.conjunction();
+
+      return cb.equal(root.get(FAMILY).get(ID), familyId);
+    };
+  }
+
+  private static Specification<ProductGroup> hasIds(List<UUID> ids) {
     return (root, query, cb) -> ids == null ? cb.conjunction() : root.get(ID).in(ids);
   }
 }

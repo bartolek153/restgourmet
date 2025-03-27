@@ -114,7 +114,7 @@ export const resources = [
     },
   },
   {
-    name: "product/groups",
+    name: "products/groups",
     list: "/products/groups",
     create: "/products/groups/create",
     edit: "/products/groups/edit/:id",

@@ -14,6 +14,7 @@ public interface ProductGroupMapper {
   @Mapping(source = "family.id", target = "familyId")
   ProdGroupDto toDto(ProductGroup entity);
 
+  @Mapping(source = "family.id", target = "familyId")
   ProdGroupListDto toListDto(ProductGroup entity);
 
   ProductGroup toEntity(ProdGroupDto dto);

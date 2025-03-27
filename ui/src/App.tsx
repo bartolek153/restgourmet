@@ -39,6 +39,9 @@ import {
   BusinessPartnerList,
 } from "./pages/masterData/businessPartners";
 import { SalesOrderList, SalesOrderEdit } from "./pages/sales/orders";
+import { ProductCreate, ProductEdit, ProductList } from "./pages/masterData/product";
+import { ProductFamilyList } from "./pages/masterData/productFamilies";
+import { ProductGroupList } from "./pages/masterData/productGroups";
 
 function App() {
   return (
@@ -76,9 +79,28 @@ function App() {
                   }
                 >
                   <Route index element={<NavigateToResource resource="users" />} />
+                  
                   <Route path="/products">
+                    <Route index element={<ProductList />} />
+                    <Route path="create" element={<ProductCreate />} />
+                    <Route path="edit/:id" element={<ProductEdit />} />
+
                     <Route path="categories">
                       <Route index element={<ProductCategoryList />} />
+                      <Route path="create" />
+                      <Route path="edit/:id" />
+                    </Route>
+
+                    <Route path="families">
+                      <Route index element={<ProductFamilyList />} />
+                      <Route path="create" />
+                      <Route path="edit/:id" />
+                    </Route>
+
+                    <Route path="groups">
+                      <Route index element={<ProductGroupList />} />
+                      <Route path="create" />
+                      <Route path="edit/:id" />
                     </Route>
                   </Route>
 

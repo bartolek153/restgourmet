@@ -14,6 +14,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import app.restgourmet.api.commondata.service.impl.FileSystemStorageServiceImpl;
@@ -38,7 +39,6 @@ import app.restgourmet.api.usermanagement.repository.specifications.UserSpec;
 import app.restgourmet.api.usermanagement.security.UserDetailsImpl;
 import app.restgourmet.api.usermanagement.service.spec.UserService;
 import app.restgourmet.api.utils.AppConstants;
-import jakarta.transaction.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {

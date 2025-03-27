@@ -43,6 +43,7 @@ public class FileUploadController {
   @ResponseBody
   public ResponseEntity<Resource> serveFile(@PathVariable String filename) {
 
+    // TODO: Access control to files
     Resource file = storageService.loadAsResource(filename);
 
     if (file == null)

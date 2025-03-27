@@ -14,6 +14,7 @@ public interface ProductFamilyMapper {
   @Mapping(source = "category.id", target = "categoryId")
   ProdFamilyDto toDto(ProductFamily entity);
 
+  @Mapping(source = "category.id", target = "categoryId")
   ProdFamilyListDto toListDto(ProductFamily entity);
 
   ProductFamily toEntity(ProdFamilyDto dto);

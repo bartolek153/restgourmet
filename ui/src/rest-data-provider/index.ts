@@ -67,9 +67,7 @@ export const dataProvider = (
       { headers }
     );
 
-    return {
-      data,
-    };
+    return data.content;
   },
 
   create: async ({ resource, variables, meta }) => {

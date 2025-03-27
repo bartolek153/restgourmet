@@ -54,7 +54,7 @@ public class BusinessPartnerServiceImpl implements BusinessPartnerService {
   public BusinessPartnerDto getOne(UUID id) {
     BusinessPartnerDto dto = businessPartnerMapper.toDto(getById(id));
 
-    if (customerRepository.existsByBusinessPartnerId(id)) {
+    if (customerRepository.existsById(id)) {
       dto.setCustomer(true);
     }
     return dto;

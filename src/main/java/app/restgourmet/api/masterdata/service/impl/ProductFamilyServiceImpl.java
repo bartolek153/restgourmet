@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
@@ -18,9 +19,9 @@ import app.restgourmet.api.masterdata.models.ProductFamily;
 import app.restgourmet.api.masterdata.repository.ProductCategoryRepository;
 import app.restgourmet.api.masterdata.repository.ProductFamilyRepository;
 import app.restgourmet.api.masterdata.repository.ProductGroupRepository;
+import app.restgourmet.api.masterdata.repository.specifications.ProdFamilySpec;
 import app.restgourmet.api.masterdata.service.spec.ProductFamilyService;
 import app.restgourmet.api.utils.AppConstants;
-import app.restgourmet.api.utils.CommonUtils;
 
 @Service
 public class ProductFamilyServiceImpl implements ProductFamilyService {
@@ -33,8 +34,10 @@ public class ProductFamilyServiceImpl implements ProductFamilyService {
   @Autowired
   private ProductFamilyMapper productFamilyMapper;
 
-  public ProductFamilyServiceImpl(ProductFamilyRepository productFamilyRepository,
-      ProductCategoryRepository productCategoryRepository, ProductGroupRepository productGroupRepository) {
+  public ProductFamilyServiceImpl(
+      ProductFamilyRepository productFamilyRepository,
+      ProductCategoryRepository productCategoryRepository, 
+      ProductGroupRepository productGroupRepository) {
     this.productFamilyRepository = productFamilyRepository;
     this.productCategoryRepository = productCategoryRepository;
     this.productGroupRepository = productGroupRepository;
@@ -42,15 +45,8 @@ public class ProductFamilyServiceImpl implements ProductFamilyService {
 
   @Override
   public PagedModel<ProdFamilyListDto> list(PageRequest pageReq, ProdFamilyListFiltersDto filters) {
-    Page<ProductFamily> families;
-
-    if (filters.isEmpty()) {
-      families = productFamilyRepository.findAll(pageReq);
-    } else {
-      UUID id = CommonUtils.parseUUID(filters.getQ());
-      families = productFamilyRepository.findByIdOrDescriptionContainingIgnoreCase(id, filters.getQ(), pageReq);
-    }
-
+    Specification<ProductFamily> spec = ProdFamilySpec.filterBy(filters);
+    Page<ProductFamily> families = productFamilyRepository.findAll(spec, pageReq);
     return new PagedModel<>(families.map(productFamilyMapper::toListDto));
   }
 
@@ -103,6 +99,7 @@ public class ProductFamilyServiceImpl implements ProductFamilyService {
   }
 
   private ProductFamily getById(UUID id) {
-    return productFamilyRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(AppConstants.ErrorMessages.PRODUCT_FAMILY_NOT_FOUND));
+    return productFamilyRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(AppConstants.ErrorMessages.PRODUCT_FAMILY_NOT_FOUND));
   }
 }

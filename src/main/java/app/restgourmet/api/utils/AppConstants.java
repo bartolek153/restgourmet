@@ -19,6 +19,10 @@ public final class AppConstants {
     public static final String EXTERNAL_SERVICE_ERROR = "External service error";
     
     public static final String CEP_INVALID_FORMAT = "Invalid CEP format";
+
+    public static final String PRODUCT_NOT_FOUND = "Product not found";
+    public static final String PRODUCT_DELETE_DEPS = "Cannot delete product as it has dependent entities";
+    public static final String PRODUCT_SKU_EXISTS = "Product with this SKU already exists";
     
     public static final String PRODUCT_CATEGORY_NOT_FOUND = "Category not found";
     public static final String PRODUCT_CATEGORY_DELETE_DEPS = "Cannot delete category as it has dependent family";

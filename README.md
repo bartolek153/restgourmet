@@ -57,6 +57,7 @@ yarn dev
 - Features
   - Add multitenancy
   - Implement cancellation tokens
+  - http://python.langchain.com/docs/how_to/#qa-over-sql--csv
 - Code Improvement
   - Add unit tests
   - Remove excessive model lombok annotations

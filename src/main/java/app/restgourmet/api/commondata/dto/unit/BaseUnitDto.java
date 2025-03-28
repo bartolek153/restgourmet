@@ -5,8 +5,6 @@ import lombok.Data;
 
 @Data
 public class BaseUnitDto {
-  @NotNull
-  private String description;
-  @NotNull
-  private String shortDescription;
+  @NotNull private String description;
+  @NotNull private String shortDescription;
 }

@@ -83,7 +83,8 @@ public class UnitMeasurementServiceImpl implements UnitMeasurementService {
   }
 
   private UnitMeasurement getById(UUID id) {
-    return unitMeasurementRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Group not found"));
+    return unitMeasurementRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(AppConstants.ErrorMessages.UNIT_MEASUREMENT_NOT_FOUND));
   }
 
   private void setBaseUnitFromDto(UnitMeasurementDto dto, UnitMeasurement ent) {

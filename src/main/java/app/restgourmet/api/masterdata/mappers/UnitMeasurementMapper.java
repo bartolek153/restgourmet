@@ -14,6 +14,7 @@ public interface UnitMeasurementMapper {
   @Mapping(source = "baseUnit.id", target = "baseUnitId")
   UnitMeasurementDto toDto(UnitMeasurement ent);
 
+  @Mapping(source = "baseUnit.id", target = "baseUnitId")
   UnitMeasurementListDto toListDto(UnitMeasurement ent);
 
   UnitMeasurement toEntity(UnitMeasurementDto dto);

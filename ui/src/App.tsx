@@ -42,6 +42,8 @@ import { SalesOrderList, SalesOrderEdit } from "./pages/sales/orders";
 import { ProductCreate, ProductEdit, ProductList } from "./pages/masterData/product";
 import { ProductFamilyList } from "./pages/masterData/productFamilies";
 import { ProductGroupList } from "./pages/masterData/productGroups";
+import { BaseUnitList } from "./pages/commonData/baseUnits";
+import { UnitMeasurementList } from "./pages/masterData/unitMeasurement";
 
 function App() {
   return (
@@ -79,7 +81,14 @@ function App() {
                   }
                 >
                   <Route index element={<NavigateToResource resource="users" />} />
-                  
+
+                  <Route path="/units">
+                    <Route index element={<BaseUnitList/>} />
+                    <Route path="measurement">
+                      <Route index element={<UnitMeasurementList/>} />
+                    </Route>
+                  </Route>
+
                   <Route path="/products">
                     <Route index element={<ProductList />} />
                     <Route path="create" element={<ProductCreate />} />

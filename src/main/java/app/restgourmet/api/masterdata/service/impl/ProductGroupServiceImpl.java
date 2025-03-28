@@ -14,16 +14,13 @@ import app.restgourmet.api.masterdata.dto.group.ProdGroupDto;
 import app.restgourmet.api.masterdata.dto.group.ProdGroupListDto;
 import app.restgourmet.api.masterdata.dto.group.ProdGroupListFiltersDto;
 import app.restgourmet.api.masterdata.mappers.ProductGroupMapper;
-import app.restgourmet.api.masterdata.models.ProductFamily;
 import app.restgourmet.api.masterdata.models.ProductGroup;
 import app.restgourmet.api.masterdata.repository.ProductFamilyRepository;
 import app.restgourmet.api.masterdata.repository.ProductGroupRepository;
 import app.restgourmet.api.masterdata.repository.ProductRepository;
-import app.restgourmet.api.masterdata.repository.specifications.ProdFamilySpec;
 import app.restgourmet.api.masterdata.repository.specifications.ProdGroupSpec;
 import app.restgourmet.api.masterdata.service.spec.ProductGroupService;
 import app.restgourmet.api.utils.AppConstants;
-import app.restgourmet.api.utils.CommonUtils;
 
 @Service
 public class ProductGroupServiceImpl implements ProductGroupService {

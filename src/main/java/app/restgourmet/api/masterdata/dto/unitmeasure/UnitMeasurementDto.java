@@ -7,11 +7,9 @@ import lombok.Data;
 
 @Data
 public class UnitMeasurementDto {
-  @NotNull
-  private String description;
-  private String shortDescription;
+  @NotNull private String description;
+  @NotNull private UUID baseUnitId;
 
-  @NotNull
-  private UUID baseUnitId;
+  private String shortDescription;
   private Double conversionFactor;
 }

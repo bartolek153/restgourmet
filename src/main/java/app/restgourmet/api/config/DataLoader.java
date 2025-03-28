@@ -9,6 +9,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import app.restgourmet.api.commondata.models.BaseUnit;
+import app.restgourmet.api.commondata.repository.BaseUnitRepository;
+import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
 import app.restgourmet.api.usermanagement.enums.PermissionCategory;
 import app.restgourmet.api.usermanagement.enums.UserType;
 import app.restgourmet.api.usermanagement.models.Parameter;
@@ -24,20 +27,26 @@ import app.restgourmet.api.utils.Permissions;
 public class DataLoader implements CommandLineRunner {
 
   private static final Logger logger = LoggerFactory.getLogger(DataLoader.class);
-  private final UserRepository userRepository;
-  private final PermissionRepository permissionRepository;
+  private final BaseUnitRepository baseUnitRepository;
   private final ParameterRepository parameterRepository;
+  private final PermissionRepository permissionRepository;
+  private final UnitMeasurementRepository unitMeasurementRepository;
+  private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
   public DataLoader(
-      UserRepository userRepository,
+      BaseUnitRepository baseUnitRepository,
       PermissionRepository permissionRepository,
       ParameterRepository parameterRepository,
-      PasswordEncoder passwordEncoder) {
-    this.userRepository = userRepository;
+      PasswordEncoder passwordEncoder,
+      UnitMeasurementRepository unitMeasurementRepository,
+      UserRepository userRepository) {
+    this.baseUnitRepository = baseUnitRepository;
     this.permissionRepository = permissionRepository;
     this.parameterRepository = parameterRepository;
     this.passwordEncoder = passwordEncoder;
+    this.unitMeasurementRepository = unitMeasurementRepository;
+    this.userRepository = userRepository;
   }
 
   @Override
@@ -80,6 +89,12 @@ public class DataLoader implements CommandLineRunner {
         null);
 
     userRepository.save(admin);
+
+    baseUnitRepository.saveAll(
+        List.of(
+            new BaseUnit("Kilogram", "kg"),
+            new BaseUnit("Liter", "L"),
+            new BaseUnit("Meter", "m")));
 
     // initialize parameters
     parameterRepository.saveAll(

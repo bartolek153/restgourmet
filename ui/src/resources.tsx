@@ -60,13 +60,24 @@ export const resources = [
     },
   },
   {
-    name: "/units/base",
-    list: "/units/base",
+    name: "/units",
+    list: "/units",
     create: "/units/base/create",
     edit: "/units/base/edit/:id",
     meta: {
       label: "Base Units",
       parent: COMMON_DATA_PARENT_MENU,
+      canDelete: true,
+    },
+  },
+  {
+    name: "units/measurement",
+    list: "/units/measurement",
+    create: "/units/measurement/create",
+    edit: "/units/measurement/edit/:id",
+    meta: {
+      label: "Units of Measurement",
+      parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
     },
   },
@@ -130,17 +141,6 @@ export const resources = [
     create: "/products/create",
     edit: "/products/edit/:id",
     meta: {
-      parent: MASTER_DATA_PARENT_MENU,
-      canDelete: true,
-    },
-  },
-  {
-    name: "units/measurements",
-    list: "/units/measurements",
-    create: "/units/measurements/create",
-    edit: "/units/measurements/edit/:id",
-    meta: {
-      label: "Measurement Units",
       parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
     },

@@ -3,7 +3,6 @@ import { List, Table } from "antd"
 
 export const BaseUnitList = () => {
   const { tableProps } = useTable({
-    resource: "units"
   });
   
   return (

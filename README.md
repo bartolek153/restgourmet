@@ -63,6 +63,7 @@ yarn dev
   - Remove excessive model lombok annotations
   - Test if redis cache is working
   - Use migrations
+  - standardize ui tweaks
 - CI/CD
   - Create image build pipeline
   - Add image signing

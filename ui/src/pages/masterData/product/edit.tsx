@@ -1,218 +1,86 @@
-import { Edit, getValueFromEvent, List, useForm } from "@refinedev/antd";
+import { Edit, useForm, useSelect } from "@refinedev/antd";
+import { useOne } from "@refinedev/core";
 import {
-  Button,
-  Checkbox,
-  Col,
-  Descriptions,
   Form,
-  GetProp,
   Input,
-  message,
-  Row,
   Select,
-  Table,
-  Tabs,
-  Upload,
-  UploadProps,
 } from "antd";
-import React, { useEffect, useState } from "react";
-import { API_URL } from "../../../constants";
-import { LoadingOutlined, PlusOutlined, UploadOutlined } from "@ant-design/icons";
-import { useTable } from "@refinedev/antd";
-
-type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
 
 export const ProductEdit = () => {
-  const [items, setItems] = useState<any[]>([]);
-  const [roles, setRoles] = useState<React.Key[]>([]);
-  const [groups, setGroups] = useState<React.Key[]>([]);
+  const { formProps, saveButtonProps, query } = useForm({});
+  const { data, isLoading } = query;
 
-  const {
-    formProps,
-    saveButtonProps,
-    query: { data, isLoading },
-    onFinish,
-  } = useForm({});
-
-  const handleOnFinish = (values: any) => {
-    onFinish({
-      ...values,
-      roleIds: roles,
-      groupIds: groups,
-    });
-  };
-
-  const { tableProps: rlTableProps } = useTable({
-    resource: "users/roles",
+  const { selectProps: invUnSelectProps } = useSelect({
+    resource: "units/measurement",
+    optionLabel: (item: any) => item.shortDescription || item.description,
   });
 
-  const { tableProps: grTableProps } = useTable({
-    resource: "users/groups",
+  const { selectProps: groupSelectProps } = useSelect({
+    resource: "products/groups",
+    optionLabel: (item: any) => item.description,
   });
 
-  useEffect(() => {
-    if (!isLoading && data?.data) {
-      const user = data.data;
-      setRoles(user.roles);
-      setGroups(user.groups);
+  const {invUn} = useOne({
+    resource: "units/measurement",
+    id: data?.inventoryUnitId,
+  })
 
-      setItems([
-        {
-          key: "1",
-          label: "Created At",
-          children: new Date(user.createdAt).toLocaleString(),
-        },
-        {
-          key: "2",
-          label: "Updated At",
-          children: new Date(user.updatedAt).toLocaleString(),
-        },
-      ]);
-    }
-  }, [isLoading]);
+  const {invUn2} = useOne({
+    resource: "units/measurement",
+    id: data?.purchaseUnitId,
+  })
 
-  const onRoleSelectChange = (selectedRowKeys: React.Key[]) => {
-    setRoles(selectedRowKeys);
-  };
-
-  const onGroupSelectChange = (selectedRowKeys: React.Key[]) => {
-    setGroups(selectedRowKeys);
-  };
-
-  const beforeUpload = (file: FileType) => {
-    const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
-    if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
-    }
-    const isLt3M = file.size / 1024 / 1024 < 3;
-    if (!isLt3M) {
-      message.error("Image must smaller than 3MB!");
-    }
-
-    return isJpgOrPng && isLt3M;
-  };
+  const {group} = useOne({
+    resource: "products/groups",
+    id: data?.groupId,
+  })
 
   return (
-    <Edit saveButtonProps={saveButtonProps} isLoading={isLoading}>
-      <Form
-        {...formProps}
-        layout="vertical"
-        wrapperCol={{ span: 6 }}
-        autoComplete="off"
-        onFinish={handleOnFinish}
-      >
-        <Tabs>
-          <Tabs.TabPane key="1" tab="General">
-            <Form.Item
-              label={"Name"}
-              name={["name"]}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label={"Email"}
-              name="email"
-              rules={[
-                {
-                  required: true,
-                  type: "email",
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              label={"Nickname"}
-              name="nickname"
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Input placeholder="" />
-            </Form.Item>
-            <Form.Item
-              label={"Type"}
-              name={["type"]}
-              initialValue={"VIEWER"}
-              rules={[
-                {
-                  required: true,
-                },
-              ]}
-            >
-              <Select
-                defaultValue={"VIEWER"}
-                options={[
-                  { value: "ADMIN", label: "Administrator" },
-                  { value: "NORMAL", label: "Normal" },
-                  { value: "VIEWER", label: "Viewer" },
-                ]}
-                style={{ width: 200 }}
-              />
-            </Form.Item>
-            <Form.Item
-              name="picture"
-              valuePropName="fileList"
-              getValueFromEvent={getValueFromEvent}
-            >
-              <Upload
-                name="file"
-                action={`${API_URL}/upload`}
-                listType="picture"
-                accept="image/*"
-                maxCount={1}
-                beforeUpload={beforeUpload}
-              >
-                <Button icon={<UploadOutlined />}>Profile picture</Button>
-              </Upload>
-            </Form.Item>
-            <Descriptions column={4} items={items} layout="vertical" />
-          </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="Roles">
-            <Table
-              {...rlTableProps}
-              rowKey="id"
-              pagination={{
-                ...rlTableProps.pagination,
-                showSizeChanger: true,
-              }}
-              showSorterTooltip={true}
-              rowSelection={{
-                selectedRowKeys: roles,
-                onChange: onRoleSelectChange,
-                preserveSelectedRowKeys: true,
-              }}
-            >
-              <Table.Column dataIndex="name" title="Name" />
-            </Table>
-          </Tabs.TabPane>
-          <Tabs.TabPane key="3" tab="Groups">
-            <Table
-              {...grTableProps}
-              rowKey="id"
-              pagination={{
-                ...grTableProps.pagination,
-                showSizeChanger: true,
-              }}
-              showSorterTooltip={true}
-              rowSelection={{
-                selectedRowKeys: groups,
-                onChange: onGroupSelectChange,
-                preserveSelectedRowKeys: true,
-              }}
-            >
-              <Table.Column dataIndex="name" title="Name" />
-            </Table>
-          </Tabs.TabPane>
-        </Tabs>
+    <Edit saveButtonProps={saveButtonProps}>
+      <Form {...formProps} layout="vertical" wrapperCol={{ span: 6 }} autoComplete="off">
+        <Form.Item label="Description" name="description" rules={[{ required: true }]}>
+          <Input />
+        </Form.Item>
+
+        <Form.Item label="Status" name="status" rules={[{ required: true }]}>
+          <Select>
+            <Select.Option value="0">Active</Select.Option>
+            <Select.Option value="1">Blocked</Select.Option>
+            <Select.Option value="2">Discontinued</Select.Option>
+            <Select.Option value="3">Obsolete</Select.Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item label="SKU" name="sku">
+          <Input />
+        </Form.Item>
+
+        <Form.Item label="Price" name="price">
+          <Input type="number" />
+        </Form.Item>
+
+        <Form.Item label="Origin" name="origin" rules={[{ required: true }]}>
+          <Select>
+            <Select.Option value="0">Produced</Select.Option>
+            <Select.Option value="1">Supplied</Select.Option>
+            <Select.Option value="2">Imported</Select.Option>
+            <Select.Option value="3">Other</Select.Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item label="Inventory Unit" name="inventoryUnitId" rules={[{ required: true }]} initialValue={invUn?.id}>
+          <Select {...invUnSelectProps} allowClear />
+        </Form.Item>
+
+        <Form.Item label="Purchase Unit" name="purchaseUnitId" initialValue={invUn2?.id}>
+          <Select {...invUnSelectProps} allowClear />
+        </Form.Item>
+
+        <Form.Item label="Group" name="groupId" initialValue={group?.id}>
+          <Select {...groupSelectProps} allowClear />
+        </Form.Item>
       </Form>
     </Edit>
   );
 };
+

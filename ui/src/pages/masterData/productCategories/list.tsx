@@ -1,13 +1,12 @@
 import {
   DeleteButton,
   EditButton,
-  FilterDropdown,
   List,
   useModalForm,
   useTable,
 } from "@refinedev/antd";
 import { BaseRecord } from "@refinedev/core";
-import { Checkbox, Form, Input, Radio, Space, Table } from "antd";
+import { Form, Input, Space, Table } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
 import { ProductCategoryForm } from "./create";
 
@@ -68,7 +67,6 @@ export const ProductCategoryList = () => {
             showQuickJumper: true,
             showSizeChanger: true,
           }}
-          showSorterTooltip={true}
         >
           <Table.Column dataIndex="description" title={"Description"} sorter={true} />
           <Table.Column

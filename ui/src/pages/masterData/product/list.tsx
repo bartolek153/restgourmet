@@ -69,16 +69,16 @@ export const ProductList = () => {
                 <Input placeholder="ID, Description, SKU" prefix={<AiOutlineSearch />} allowClear />
               </Form.Item>
               <Form.Item label="Group" name="groupId">
-                <Select {...gtpSelectProps} />
+                <Select {...gtpSelectProps} allowClear />
               </Form.Item>
               <Form.Item label="Family" name="familyId">
-                <Select {...famSelectProps} />
+                <Select {...famSelectProps} allowClear />
               </Form.Item>
               <Form.Item label="Category" name="categoryId">
-                <Select {...catSelectProps} />
+                <Select {...catSelectProps} allowClear />
               </Form.Item>
               <Form.Item label="Origin" name="origin">
-                <Select>
+                <Select allowClear>
                   <Select.Option value="0">Produced</Select.Option>
                   <Select.Option value="1">Supplied</Select.Option>
                   <Select.Option value="2">Imported</Select.Option>
@@ -86,7 +86,7 @@ export const ProductList = () => {
                 </Select>
               </Form.Item>
               <Form.Item label="Inventory Unit" name="inventoryUnidId">
-                <Select {...umSelectProps} />
+                <Select {...umSelectProps} allowClear />
               </Form.Item>
               <Form.Item label="Status" name="status">
                 <Checkbox.Group style={vertRadioStyle} >
@@ -104,7 +104,7 @@ export const ProductList = () => {
         </Card>
       </Col>
       <Col lg={18} xs={24}>
-        <List>
+        <List breadcrumb={false}>
           <Table
             {...tableProps}
             rowKey="id"

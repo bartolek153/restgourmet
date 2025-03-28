@@ -60,10 +60,10 @@ export const resources = [
     },
   },
   {
-    name: "/units",
+    name: "units",
     list: "/units",
-    create: "/units/base/create",
-    edit: "/units/base/edit/:id",
+    create: "/units/create",
+    edit: "/units/edit/:id",
     meta: {
       label: "Base Units",
       parent: COMMON_DATA_PARENT_MENU,

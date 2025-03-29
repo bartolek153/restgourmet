@@ -28,7 +28,7 @@ import app.restgourmet.api.masterdata.service.spec.ProductService;
 import app.restgourmet.api.utils.AppConstants;
 
 @Service
-public class ProductServiceServiceImpl implements ProductService {
+public class ProductServiceImpl implements ProductService {
 
   private final ProductRepository productRepository;
   private final ProductGroupRepository productGroupRepository;
@@ -37,7 +37,7 @@ public class ProductServiceServiceImpl implements ProductService {
   @Autowired
   private ProductMapper productMapper;
 
-  public ProductServiceServiceImpl(
+  public ProductServiceImpl(
       ProductRepository productRepository,
       ProductGroupRepository productGroupRepository,
       UnitMeasurementRepository unitMeasurementRepository) {
@@ -63,10 +63,19 @@ public class ProductServiceServiceImpl implements ProductService {
   @Transactional
   public UUID create(CreateProductDto dto) {
     Product product = productMapper.createDtoToEntity(dto);
-    validateInput(product, dto.getSku(), dto.getGroupId(), dto.getInventoryUnitId(), dto.getPurchaseUnitId());
+    validateInput(product, dto.getGroupId(), dto.getInventoryUnitId(), dto.getPurchaseUnitId());
+
     product.setStatus(ProductStatus.ACTIVE);
 
+    if (product.getSku() != null) {
+      if (productRepository.existsBySku(product.getSku())) {
+        throw new AppValidationException("sku", AppConstants.ErrorMessages.PRODUCT_SKU_EXISTS);
+      }
+      product.setSku(product.getSku());
+    }
+
     product = productRepository.save(product);
+
     return product.getId();
   }
 
@@ -74,7 +83,14 @@ public class ProductServiceServiceImpl implements ProductService {
   @Transactional
   public void edit(UUID id, EditProductDto dto) {
     Product product = getById(id);
-    validateInput(product, dto.getSku(), dto.getGroupId(), dto.getInventoryUnitId(), dto.getPurchaseUnitId());
+    validateInput(product, dto.getGroupId(), dto.getInventoryUnitId(), dto.getPurchaseUnitId());
+
+    if (dto.getSku() != null && !dto.getSku().equals(product.getSku())) {
+      if (productRepository.existsBySku(dto.getSku())) {
+        throw new AppValidationException("sku", AppConstants.ErrorMessages.PRODUCT_SKU_EXISTS);
+      }
+      product.setSku(dto.getSku());
+    }
 
     productMapper.updateEntity(dto, product);
     productRepository.save(product);
@@ -93,7 +109,7 @@ public class ProductServiceServiceImpl implements ProductService {
   }
 
   // validateFields method is added to validate the fields of the product
-  private void validateInput(Product prod, String sku, UUID groupId, UUID inventoryUnitId, UUID purchaseUnitId) {
+  private void validateInput(Product prod, UUID groupId, UUID inventoryUnitId, UUID purchaseUnitId) {
     // required
     if (!unitMeasurementRepository.existsById(inventoryUnitId)) {
       throw new ResourceNotFoundException(AppConstants.ErrorMessages.UNIT_MEASUREMENT_NOT_FOUND);
@@ -106,14 +122,6 @@ public class ProductServiceServiceImpl implements ProductService {
         throw new ResourceNotFoundException(AppConstants.ErrorMessages.PRODUCT_GROUP_NOT_FOUND);
       }
       prod.setGroup(productGroupRepository.getReferenceById(groupId));
-    }
-
-    // optional and unique
-    if (sku != null) {
-      if (productRepository.existsBySku(sku)) {
-        throw new AppValidationException("sku", AppConstants.ErrorMessages.PRODUCT_SKU_EXISTS);
-      }
-      prod.setSku(sku);
     }
 
     // optional

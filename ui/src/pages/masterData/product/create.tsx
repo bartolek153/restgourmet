@@ -31,10 +31,10 @@ export const ProductCreate = () => {
 
         <Form.Item label="Origin" name="origin" rules={[{ required: true }]}>
           <Select>
-            <Select.Option value="0">Produced</Select.Option>
-            <Select.Option value="1">Supplied</Select.Option>
-            <Select.Option value="2">Imported</Select.Option>
-            <Select.Option value="3">Other</Select.Option>
+            <Select.Option value="PRODUCED">Produced</Select.Option>
+            <Select.Option value="SUPPLIED">Supplied</Select.Option>
+            <Select.Option value="IMPORTED">Imported</Select.Option>
+            <Select.Option value="OTHER">Other</Select.Option>
           </Select>
         </Form.Item>
 

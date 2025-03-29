@@ -5,6 +5,7 @@ import app.restgourmet.api.masterdata.enums.ProductStatus;
 import app.restgourmet.api.usermanagement.models.AuditableEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -27,7 +28,7 @@ public class Product extends AuditableEntity {
   @NotNull
   private String description;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "group_id")
   private ProductGroup group;
 
@@ -38,11 +39,11 @@ public class Product extends AuditableEntity {
   private ProductStatus status;
 
   @NotNull
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "inventory_unit_id", nullable = false)
   private UnitMeasurement inventoryUnit;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "purchase_unit_id")
   private UnitMeasurement purchaseUnit;
 

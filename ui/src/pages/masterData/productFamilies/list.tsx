@@ -2,17 +2,15 @@ import {
   DeleteButton,
   EditButton,
   List,
-  SaveButton,
   TextField,
   useModalForm,
   useSelect,
   useTable,
 } from "@refinedev/antd";
 import { BaseRecord, useMany } from "@refinedev/core";
-import { Button, Form, Input, Select, Space, Table } from "antd";
+import { Form, Input, Select, Space, Table } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
 import { ProductFamilyForm } from "./create";
-import { useEffect } from "react";
 
 export const ProductFamilyList = () => {
   const { tableProps, searchFormProps } = useTable({

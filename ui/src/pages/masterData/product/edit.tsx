@@ -44,10 +44,10 @@ export const ProductEdit = () => {
 
         <Form.Item label="Status" name="status" rules={[{ required: true }]}>
           <Select>
-            <Select.Option value="0">Active</Select.Option>
-            <Select.Option value="1">Blocked</Select.Option>
-            <Select.Option value="2">Discontinued</Select.Option>
-            <Select.Option value="3">Obsolete</Select.Option>
+            <Select.Option value="ACTIVE">Active</Select.Option>
+            <Select.Option value="DISCONTINUED">Blocked</Select.Option>
+            <Select.Option value="OBSOLETE">Discontinued</Select.Option>
+            <Select.Option value="BLOCKED">Obsolete</Select.Option>
           </Select>
         </Form.Item>
 
@@ -61,10 +61,10 @@ export const ProductEdit = () => {
 
         <Form.Item label="Origin" name="origin" rules={[{ required: true }]}>
           <Select>
-            <Select.Option value="0">Produced</Select.Option>
-            <Select.Option value="1">Supplied</Select.Option>
-            <Select.Option value="2">Imported</Select.Option>
-            <Select.Option value="3">Other</Select.Option>
+            <Select.Option value="PRODUCED">Produced</Select.Option>
+            <Select.Option value="SUPPLIED">Supplied</Select.Option>
+            <Select.Option value="IMPORTED">Imported</Select.Option>
+            <Select.Option value="OTHER">Other</Select.Option>
           </Select>
         </Form.Item>
 

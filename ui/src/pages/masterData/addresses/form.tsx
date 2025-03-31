@@ -56,7 +56,7 @@ export const AddressForm: React.FC<AddressFormProps> = ({
   };
 
   return (
-    <Modal {...modalProps}>
+    <Modal {...modalProps} loading={isLoadingAddress}>
       <Form {...formProps} layout="vertical">
         <Form.Item
           label="Zip Code"

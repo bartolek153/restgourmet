@@ -20,6 +20,8 @@ public class Address extends BaseEntity {
   @Column(nullable = false)
   private String street;
 
+  private String code;
+
   @Column(nullable = false)
   private String number;
 
@@ -36,6 +38,5 @@ public class Address extends BaseEntity {
   @Column(nullable = false)
   private String country;
 
-  @Column(nullable = false)
   private String additionalInfo;
 }

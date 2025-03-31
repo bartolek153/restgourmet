@@ -10,7 +10,7 @@ import {
 import { BaseRecord, useMany } from "@refinedev/core";
 import { Form, Input, Select, Space, Table } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
-import { ProductFamilyForm } from "./create";
+import { ProductFamilyForm } from "./form";
 
 export const ProductFamilyList = () => {
   const { tableProps, searchFormProps } = useTable({

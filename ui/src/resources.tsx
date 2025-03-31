@@ -12,6 +12,7 @@ import {
   SALES_PARENT_MENU,
   USER_MANAGEMENT_PARENT_MENU,
 } from "./constants";
+import { FaClipboardUser } from "react-icons/fa6";
 
 export const resources = [
   {
@@ -24,6 +25,16 @@ export const resources = [
   { name: INVENTORY_HANDLING_PARENT_MENU, meta: { icon: "" } },
   { name: EMPLOYEE_MANAGEMENT_PARENT_MENU, meta: { icon: "" } },
   { name: RESTAURANT_MANAGEMENT_PARENT_MENU, meta: { icon: "" } },
+  { name: USER_MANAGEMENT_PARENT_MENU, meta: { icon: <FaClipboardUser /> } },
+  {
+    name: "partners/customers",
+    create: "/partners/:partnerId/customers/create",
+    edit: "/partners/:partnerId/customers/edit",
+    meta: {
+      label: "Customers",
+      canDelete: true,
+    },
+  },
   {
     name: "users",
     list: "/users",
@@ -154,7 +165,17 @@ export const resources = [
       label: "Orders",
       parent: SALES_PARENT_MENU,
       canDelete: true,
-      icon: "",
+    },
+  },
+  {
+    name: "warehouses",
+    list: "/warehouses",
+    create: "/warehouses/create",
+    edit: "/warehouses/edit/:id",
+    meta: {
+      label: "Warehouses",
+      parent: MASTER_DATA_PARENT_MENU,
+      canDelete: true,
     },
   },
 ];

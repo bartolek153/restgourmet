@@ -1,5 +1,6 @@
 package app.restgourmet.api.masterdata.repository.specifications;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -11,6 +12,7 @@ import app.restgourmet.api.masterdata.enums.ProductStatus;
 import app.restgourmet.api.masterdata.models.Product;
 
 public class ProdSpec {
+  private static final String INVENTORY_UNIT = "inventoryUnit";
   private static final String ORIGIN = "origin";
   private static final String CATEGORY = "category";
   private static final String FAMILY = "family";
@@ -28,8 +30,9 @@ public class ProdSpec {
         .and(hasCategoryId(filters.getCategoryId()))
         .and(hasOrigin(filters.getOrigin()))
         .and(hasInventoryUnitId(filters.getInventoryUnitId()))
-        .and(hasStatus(filters.getStatus()))
-        .and(hasDeleted(filters.getDeleted()));
+        .and(hasStatuses(filters.getStatuses()))
+        .and(hasDeleted(filters.getDeleted()))
+        .and(hasIds(filters.getIds()));
   }
 
   private static Specification<Product> qSearch(String q) {
@@ -91,17 +94,17 @@ public class ProdSpec {
   private static Specification<Product> hasInventoryUnitId(UUID inventoryUnitId) {
     return (root, query, cb) -> {
       if (inventoryUnitId != null) {
-        return cb.equal(root.get("inventoryUnit").get(ID), inventoryUnitId);
+        return cb.equal(root.get(INVENTORY_UNIT).get(ID), inventoryUnitId);
       }
 
       return cb.conjunction();
     };
   }
 
-  private static Specification<Product> hasStatus(ProductStatus status) {
+  private static Specification<Product> hasStatuses(List<ProductStatus> status) {
     return (root, query, cb) -> {
       if (status != null) {
-        return cb.equal(root.get(STATUS), status);
+        return root.get(STATUS).in(status);
       }
 
       return cb.conjunction();
@@ -112,5 +115,9 @@ public class ProdSpec {
     return (root, query, cb) -> {
       return cb.equal(root.get(DELETED), deleted);
     };
+  }
+
+  private static Specification<Product> hasIds(List<UUID> ids) {
+    return (root, query, cb) -> ids == null ? cb.conjunction() : root.get(ID).in(ids);
   }
 }

@@ -1,14 +1,11 @@
 import {
   DeleteButton,
   EditButton,
-  FilterDropdown,
-  ImportButton,
   List,
   TextField,
-  useImport,
   useModal,
   useSelect,
-  useTable,
+  useTable
 } from "@refinedev/antd";
 import { useMany, type BaseRecord } from "@refinedev/core";
 import {
@@ -18,13 +15,11 @@ import {
   Col,
   Form,
   Input,
-  Radio,
   Row,
   Select,
   Space,
   Switch,
-  Table,
-  Upload,
+  Table
 } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
 import { BatchActionsModal } from "./batchActionsModal";
@@ -154,11 +149,13 @@ export const ProductList = () => {
                 showQuickJumper: true,
                 showSizeChanger: true,
               }}
+              showSorterTooltip={false}
             >
               <Table.Column dataIndex="description" title={"Description"} sorter={true} />
               <Table.Column dataIndex="sku" title={"SKU"} />
               <Table.Column
                 dataIndex="groupId"
+                sorter={true}
                 title={"Group"}
                 render={(value) => {
                   if (isLoading) {
@@ -175,8 +172,12 @@ export const ProductList = () => {
                 dataIndex="actions"
                 render={(_, record: BaseRecord) => (
                   <Space>
-                    <EditButton hideText size="small" recordItemId={record.id} />
-                    <DeleteButton hideText size="small" recordItemId={record.id} />
+                    {record.deleted ? null : (
+                      <>
+                        <EditButton hideText size="small" recordItemId={record.id} />
+                        <DeleteButton hideText size="small" recordItemId={record.id} />
+                      </>
+                    )}
                   </Space>
                 )}
               />

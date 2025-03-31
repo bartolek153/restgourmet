@@ -13,9 +13,11 @@ import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.masterdata.dto.businesspartner.BusinessPartnerDto;
 import app.restgourmet.api.masterdata.dto.businesspartner.BusinessPartnerListDto;
 import app.restgourmet.api.masterdata.dto.businesspartner.BusinessPartnerListFiltersDto;
+import app.restgourmet.api.masterdata.dto.businesspartner.CreateBusinessPartnerDto;
+import app.restgourmet.api.masterdata.dto.businesspartner.EditBusinessPartnerDto;
+import app.restgourmet.api.masterdata.enums.BusinessPartnerStatus;
 import app.restgourmet.api.masterdata.mappers.BusinessPartnerMapper;
 import app.restgourmet.api.masterdata.models.BusinessPartner;
-import app.restgourmet.api.masterdata.repository.AddressRepository;
 import app.restgourmet.api.masterdata.repository.BusinessPartnerRepository;
 import app.restgourmet.api.masterdata.repository.specifications.BusinessPartnerSpec;
 import app.restgourmet.api.masterdata.service.spec.BusinessPartnerService;
@@ -26,18 +28,15 @@ import app.restgourmet.api.utils.AppConstants;
 public class BusinessPartnerServiceImpl implements BusinessPartnerService {
 
   private final BusinessPartnerRepository businessPartnerRepository;
-  private final AddressRepository addressRepository;
   private final CustomerRepository customerRepository;
 
   @Autowired
   private BusinessPartnerMapper businessPartnerMapper;
 
   public BusinessPartnerServiceImpl(
-    BusinessPartnerRepository businessPartnerRepository,
-    AddressRepository addressRepository,
-    CustomerRepository customerRepository) {
+      BusinessPartnerRepository businessPartnerRepository,
+      CustomerRepository customerRepository) {
     this.businessPartnerRepository = businessPartnerRepository;
-    this.addressRepository = addressRepository;
     this.customerRepository = customerRepository;
   }
 
@@ -61,22 +60,16 @@ public class BusinessPartnerServiceImpl implements BusinessPartnerService {
   }
 
   @Override
-  public UUID create(BusinessPartnerDto dto) {
+  public UUID create(CreateBusinessPartnerDto dto) {
     BusinessPartner businessPartner = businessPartnerMapper.toEntity(dto);
-
-    if (dto.getAddressId() != null) {
-      if (!addressRepository.existsById(dto.getAddressId())) {
-        throw new ResourceNotFoundException(AppConstants.ErrorMessages.ADDRESS_NOT_FOUND);
-      }
-      businessPartner.setAddress(addressRepository.getReferenceById(dto.getAddressId()));
-    }
+    businessPartner.setStatus(BusinessPartnerStatus.ACTIVE);
 
     businessPartner = businessPartnerRepository.save(businessPartner);
     return businessPartner.getId();
   }
 
   @Override
-  public void edit(UUID id, BusinessPartnerDto dto) {
+  public void edit(UUID id, EditBusinessPartnerDto dto) {
     BusinessPartner businessPartner = getById(id);
     businessPartnerMapper.updateEntity(dto, businessPartner);
     businessPartnerRepository.save(businessPartner);

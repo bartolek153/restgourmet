@@ -15,11 +15,17 @@ public final class AppConstants {
 
     public static final String ADDRESS_NOT_FOUND = "Address not found";
     public static final String ADDRESS_DELETE_DEPS = "Cannot delete address as it has dependent entities";
-
-    public static final String EXTERNAL_SERVICE_ERROR = "External service error";
+    
+    public static final String BUSINESS_PARTNER_NOT_FOUND = "Business partner not found";
+    public static final String BUSINESS_PARTNER_DELETE_DEPS = "Cannot delete business partner as it has dependent entities";
     
     public static final String CEP_INVALID_FORMAT = "Invalid CEP format";
 
+    public static final String CUSTOMER_ALREADY_EXISTS = "Customer already exists";
+    public static final String CUSTOMER_NOT_FOUND = "Customer not found";
+    
+    public static final String EXTERNAL_SERVICE_ERROR = "External service error";
+    
     public static final String PRODUCT_NOT_FOUND = "Product not found";
     public static final String PRODUCT_DELETE_DEPS = "Cannot delete product as it has dependent entities";
     public static final String PRODUCT_SKU_EXISTS = "Product with this SKU already exists";
@@ -46,9 +52,9 @@ public final class AppConstants {
     public static final String USER_LOGIN_BAD_CREDENTIALS = "User not found or invalid credentials";
     public static final String USER_NICKNAME_IN_USE = "Nickname already in use";
     public static final String USER_NOT_FOUND = "User not found";
-    
-    public static final String BUSINESS_PARTNER_NOT_FOUND = "Business partner not found";
-    public static final String BUSINESS_PARTNER_DELETE_DEPS = "Cannot delete business partner as it has dependent entities";
+
+    public static final String WAREHOUSE_NOT_FOUND = "Warehouse not found";
+    public static final String WAREHOUSE_HAS_PENDING_ORDERS = "Cannot delete warehouse as it has pending orders";
   }
 
   public static class ExternalServices {

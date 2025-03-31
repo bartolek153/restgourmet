@@ -27,46 +27,47 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/partners/customers")
+@RequestMapping("/api/partners")
 @Tag(name = "Customer", description = "Customer endpoints")
 public class CustomerController {
 
-    private final CustomerService customerService;
+  private final CustomerService customerService;
 
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
-    }
+  public CustomerController(CustomerService customerService) {
+    this.customerService = customerService;
+  }
 
-    @GetMapping
-    public ResponseEntity<PagedModel<CustomerListDto>> listCustomers(
-            @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
-            @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
-            @RequestParam(defaultValue = "ASC") final Direction order,
-            @RequestParam(defaultValue = "name") final String sort,
-            @ParameterObject final CustomerListFiltersDto filters) {
-        return ResponseEntity.ok(customerService.list(CustomPageRequest.of(page, size, order, sort), filters));
-    }
+  @GetMapping("/customers")
+  public ResponseEntity<PagedModel<CustomerListDto>> listCustomers(
+      @PathVariable UUID partnerId,
+      @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
+      @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
+      @RequestParam(defaultValue = "ASC") final Direction order,
+      @RequestParam(defaultValue = "name") final String sort,
+      @ParameterObject final CustomerListFiltersDto filters) {
+    return ResponseEntity.ok(customerService.list(CustomPageRequest.of(page, size, order, sort), filters));
+  }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CustomerDto> getCustomer(@PathVariable UUID id) {
-        return ResponseEntity.ok(customerService.getOne(id));
-    }
+  @GetMapping("/customers/{id}")
+  public ResponseEntity<CustomerDto> getCustomer(@PathVariable UUID id) {
+    return ResponseEntity.ok(customerService.getOne(id));
+  }
 
-    @PostMapping
-    public ResponseEntity<UUID> createCustomer(@RequestBody @Valid CustomerDto dto) {
-        UUID id = customerService.create(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(id);
-    }
+  @PostMapping("/customers")
+  public ResponseEntity<UUID> createCustomer(@RequestBody @Valid CustomerDto dto) {
+    UUID id = customerService.create(dto.getPartnerId(), dto);
+    return ResponseEntity.status(HttpStatus.CREATED).body(id);
+  }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> editCustomer(@PathVariable UUID id, @RequestBody @Valid CustomerDto dto) {
-        customerService.edit(id, dto);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
+  @PutMapping("/customers/{id}")
+  public ResponseEntity<?> editCustomer(@PathVariable UUID id, @RequestBody @Valid CustomerDto dto) {
+    customerService.edit(id, dto);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable UUID id) {
-        customerService.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
+  @DeleteMapping("/customers/{id}")
+  public ResponseEntity<?> deleteCustomer(@PathVariable UUID id) {
+    customerService.delete(id);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
 }

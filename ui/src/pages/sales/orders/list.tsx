@@ -162,7 +162,6 @@ export const SalesOrderList = () => {
             showQuickJumper: true,
             showSizeChanger: true,
           }}
-          showSorterTooltip={true}
         >
           <Table.Column dataIndex="orderNumber" title={"Order Number"} sorter={true} />
           <Table.Column dataIndex="customerName" title={"Customer"} sorter={true} />

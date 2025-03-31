@@ -14,9 +14,9 @@ public interface CustomerService {
 
     CustomerDto getOne(UUID id);
 
-    UUID create(CustomerDto dto);
+    UUID create(UUID partnerId, CustomerDto dto);
 
-    void edit(UUID id, CustomerDto dto);
+    void edit(UUID partnerId, CustomerDto dto);
 
     void delete(UUID id);
 }

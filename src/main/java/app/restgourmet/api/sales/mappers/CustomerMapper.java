@@ -10,8 +10,6 @@ import app.restgourmet.api.sales.models.Customer;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CustomerMapper {
-    Customer toEntity(CustomerDto dto);
-
     void updateEntity(CustomerDto dto, @MappingTarget Customer entity);
 
     CustomerListDto toListDto(Customer entity);

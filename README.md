@@ -58,6 +58,8 @@ yarn dev
   - Add multitenancy
   - Implement cancellation tokens
   - http://python.langchain.com/docs/how_to/#qa-over-sql--csv
+  - patch routes (REST API)
+  - resizable sidebar
 - Code Improvement
   - Add unit tests
   - Remove excessive model lombok annotations
@@ -74,6 +76,14 @@ yarn dev
 - Bugs
   - authProvider won't retry request after refreshing token
   - Default Spring Redis serializer won't recognize LocalDateTime values
+- UI Standards
+  - No table column tooltip
+  - Use constant debounce time
+  - Use constants filter width
+  - Import/Export components
+  - Icon lib
+  - Filter Form Search Placeholder
+  - Use constant for modal width
 
 ## Technologies used
 

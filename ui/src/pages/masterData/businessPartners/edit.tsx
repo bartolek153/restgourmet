@@ -6,9 +6,7 @@ import { useEffect, useState } from "react";
 
 export const BusinessPartnerEdit = () => {
   const [isCustomer, setIsCustomer] = useState<Boolean>(false);
-  const { formProps, saveButtonProps, query, id } = useForm({
-    redirect: "list",
-  });
+  const { formProps, saveButtonProps, query, id } = useForm({});
 
   const { data, isLoading } = query;
 
@@ -17,16 +15,6 @@ export const BusinessPartnerEdit = () => {
       setIsCustomer(data.data.isCustomer);
     }
   }, [data]);
-
-  const { selectProps: addressSelectProps } = useSelect({
-    resource: "addresses",
-    optionLabel: (item: any) =>
-      `${item.street} ${item.number}, ${item.city} - ${item.state}, ${item.country} - ${item.zipCode}`,
-    optionValue: (item) => item.id,
-    pagination: {
-      mode: "server",
-    },
-  });
 
   return (
     <Edit saveButtonProps={saveButtonProps}>
@@ -44,6 +32,12 @@ export const BusinessPartnerEdit = () => {
           >
             <Input placeholder="Business Partner Name" />
           </Form.Item>
+          <Form.Item label="Status" name="status">
+            <Select>
+              <Select.Option value="ACTIVE">Active</Select.Option>
+              <Select.Option value="INACTIVE">Inactive</Select.Option>
+            </Select>
+          </Form.Item>
 
           <Form.Item
             label="Email"
@@ -51,7 +45,6 @@ export const BusinessPartnerEdit = () => {
             rules={[
               {
                 type: "email",
-                message: "Please enter a valid email",
               },
             ]}
           >
@@ -62,14 +55,26 @@ export const BusinessPartnerEdit = () => {
             <Input placeholder="Phone Number" />
           </Form.Item>
 
-          <Form.Item label="Address" name="addressId">
-            <Select
-              {...addressSelectProps}
-              placeholder="Select an address"
-              allowClear
-              showSearch
-              optionFilterProp="label"
-            />
+          <Form.Item label="Type" name="type">
+            <Select placeholder="Select a type" allowClear>
+              <Select.Option value="INDIVIDUAL">Individual</Select.Option>
+              <Select.Option value="COMPANY">Company</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item label="TIN Type" name="tinType">
+            <Select placeholder="Select a TIN type" allowClear>
+              <Select.Option value="CPF">CPF</Select.Option>
+              <Select.Option value="CNPJ">CNPJ</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item label="TIN" name="taxIdentificationNumber">
+            <Input placeholder="Tax Identification Number" />
+          </Form.Item>
+
+          <Form.Item label="Website" name="website">
+            <Input />
           </Form.Item>
         </Card>
 
@@ -79,19 +84,18 @@ export const BusinessPartnerEdit = () => {
           <Space direction="horizontal" style={{ width: "100%" }}>
             {!isCustomer ? (
               <CreateButton
-                resource="customers"
-                title="Customer"
+                resource="partners/customers"
                 type="default"
+                meta={{ partnerId: id }}
               >
                 Customer
               </CreateButton>
             ) : (
               <EditButton
-                resource="customers"
-                title="Customer"
+                resource="partners/customers"
                 icon={<FaCheckSquare />}
-                key={id}
                 type="primary"
+                meta={{ partnerId: id }}
               >
                 Customer
               </EditButton>

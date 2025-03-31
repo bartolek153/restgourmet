@@ -19,31 +19,27 @@ import { App as AntdApp } from "antd";
 import { BrowserRouter, Outlet, Route, Routes } from "react-router";
 import { authProvider } from "./authProvider";
 import { Header } from "./components/header";
+import { API_URL } from "./constants";
 import { ColorModeContextProvider } from "./contexts/color-mode";
+import { BaseUnitList } from "./pages/commonData/baseUnits";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
-import { Register } from "./pages/register";
-import { API_URL } from "./constants";
-import { UserList } from "./pages/usersmanagement/users/list";
-import { dataProvider } from "./rest-data-provider";
-import { UserCreate, UserEdit } from "./pages/usersmanagement/users";
-import { ProductCategoryList } from "./pages/masterData/productCategories/list";
-import { RoleCreate, RoleEdit, RoleList } from "./pages/usersmanagement/roles";
-import { UserGroupCreate, UserGroupEdit, UserGroupList } from "./pages/usersmanagement/groups";
-import { AddressList } from "./pages/masterData/addresses/list";
-import { AddressForm } from "./pages/masterData/addresses";
-import { resources } from "./resources";
-import {
-  BusinessPartnerCreateForm,
-  BusinessPartnerEdit,
-  BusinessPartnerList,
-} from "./pages/masterData/businessPartners";
-import { SalesOrderList, SalesOrderEdit } from "./pages/sales/orders";
-import { ProductCreate, ProductEdit, ProductList } from "./pages/masterData/product";
+import { AddressList } from "./pages/masterData/addresses";
+import { BusinessPartnerEdit, BusinessPartnerList } from "./pages/masterData/businessPartners";
+import { ProductCategoryList } from "./pages/masterData/productCategories";
 import { ProductFamilyList } from "./pages/masterData/productFamilies";
 import { ProductGroupList } from "./pages/masterData/productGroups";
-import { BaseUnitList } from "./pages/commonData/baseUnits";
-import { UnitMeasurementList } from "./pages/masterData/unitMeasurement";
+import { ProductCreate, ProductEdit, ProductList } from "./pages/masterData/products";
+import { UnitMeasurementList } from "./pages/masterData/unitsMeasurement";
+import { WarehouseList } from "./pages/masterData/warehouses";
+import { Register } from "./pages/register";
+import { CustomerCreate, CustomerEdit } from "./pages/sales/customers";
+import { SalesOrderEdit, SalesOrderList } from "./pages/sales/orders";
+import { UserGroupCreate, UserGroupEdit, UserGroupList } from "./pages/usersmanagement/groups";
+import { RoleCreate, RoleEdit, RoleList } from "./pages/usersmanagement/roles";
+import { UserCreate, UserEdit, UserList } from "./pages/usersmanagement/users";
+import { resources } from "./resources";
+import { dataProvider } from "./rest-data-provider";
 
 function App() {
   return (
@@ -83,9 +79,9 @@ function App() {
                   <Route index element={<NavigateToResource resource="users" />} />
 
                   <Route path="/units">
-                    <Route index element={<BaseUnitList/>} />
+                    <Route index element={<BaseUnitList />} />
                     <Route path="measurement">
-                      <Route index element={<UnitMeasurementList/>} />
+                      <Route index element={<UnitMeasurementList />} />
                     </Route>
                   </Route>
 
@@ -120,24 +116,14 @@ function App() {
 
                   <Route path="/addresses">
                     <Route index element={<AddressList />} />
-                    <Route path="create" element={<AddressForm modalProps={{}} formProps={{}} />} />
-                    <Route
-                      path="edit/:id"
-                      element={<AddressForm modalProps={{}} formProps={{}} />}
-                    />
                   </Route>
 
                   <Route path="/partners">
                     <Route index element={<BusinessPartnerList />} />
-                    <Route
-                      path="create"
-                      element={<BusinessPartnerCreateForm modalProps={{}} formProps={{}} />}
-                    />
                     <Route path="edit/:id" element={<BusinessPartnerEdit />} />
-                    <Route path="customers">
-                      <Route index />
-                      <Route path="create" />
-                      <Route path="edit/:id" />
+                    <Route path=":partnerId/customers">
+                      <Route path="create" element={<CustomerCreate />} />
+                      <Route path="edit" element={<CustomerEdit />} />
                     </Route>
                   </Route>
 
@@ -156,6 +142,11 @@ function App() {
                       <Route path="edit/:id" element={<UserGroupEdit />} />
                     </Route>
                   </Route>
+
+                  <Route path="/warehouses">
+                    <Route index element={<WarehouseList />} />
+                  </Route>
+
                   <Route path="*" element={<ErrorComponent />} />
                 </Route>
 

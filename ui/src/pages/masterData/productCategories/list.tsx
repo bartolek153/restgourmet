@@ -8,7 +8,7 @@ import {
 import { BaseRecord } from "@refinedev/core";
 import { Form, Input, Space, Table } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
-import { ProductCategoryForm } from "./create";
+import { ProductCategoryForm } from "./form";
 
 export const ProductCategoryList = () => {
   const { tableProps, searchFormProps } = useTable({

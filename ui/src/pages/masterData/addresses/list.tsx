@@ -9,7 +9,7 @@ import {
 import { BaseRecord } from "@refinedev/core";
 import { Form, Input, Space, Table } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
-import { AddressForm } from "./create";
+import { AddressForm } from "./form";
 
 export const AddressList = () => {
   const { tableProps, searchFormProps } = useTable({

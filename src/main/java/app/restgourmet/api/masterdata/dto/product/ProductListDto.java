@@ -12,4 +12,5 @@ public class ProductListDto {
   private UUID groupId;
   private String origin;
   private Double price;
+  private Boolean deleted;
 }

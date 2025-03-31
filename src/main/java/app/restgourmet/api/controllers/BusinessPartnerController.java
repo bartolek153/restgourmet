@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import app.restgourmet.api.masterdata.dto.businesspartner.BusinessPartnerDto;
 import app.restgourmet.api.masterdata.dto.businesspartner.BusinessPartnerListDto;
 import app.restgourmet.api.masterdata.dto.businesspartner.BusinessPartnerListFiltersDto;
+import app.restgourmet.api.masterdata.dto.businesspartner.CreateBusinessPartnerDto;
+import app.restgourmet.api.masterdata.dto.businesspartner.EditBusinessPartnerDto;
 import app.restgourmet.api.masterdata.service.spec.BusinessPartnerService;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CustomPageRequest;
@@ -53,13 +55,13 @@ public class BusinessPartnerController {
   }
 
   @PostMapping
-  public ResponseEntity<UUID> createBusinessPartner(@RequestBody @Valid BusinessPartnerDto data) {
+  public ResponseEntity<UUID> createBusinessPartner(@RequestBody @Valid CreateBusinessPartnerDto data) {
     UUID id = businessPartnerService.create(data);
     return ResponseEntity.status(HttpStatus.CREATED).body(id);
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> editBusinessPartner(@PathVariable UUID id, @Valid @RequestBody BusinessPartnerDto dto) {
+  public ResponseEntity<?> editBusinessPartner(@PathVariable UUID id, @Valid @RequestBody EditBusinessPartnerDto dto) {
     businessPartnerService.edit(id, dto);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }

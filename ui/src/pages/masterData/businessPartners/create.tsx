@@ -10,15 +10,6 @@ export const BusinessPartnerCreateForm: React.FC<BusinessPartnerFormProps> = ({
   modalProps,
   formProps,
 }) => {
-  const { selectProps: addressSelectProps } = useSelect({
-    resource: "addresses",
-    optionLabel: "street",
-    optionValue: "id",
-    pagination: {
-      mode: "server",
-    },
-  });
-
   return (
     <Modal {...modalProps}>
       <Form {...formProps} layout="vertical">
@@ -34,38 +25,43 @@ export const BusinessPartnerCreateForm: React.FC<BusinessPartnerFormProps> = ({
         >
           <Input placeholder="Business Partner Name" />
         </Form.Item>
-        
+
         <Form.Item
           label="Email"
           name="email"
           rules={[
             {
               type: "email",
-              message: "Please enter a valid email",
             },
           ]}
         >
           <Input placeholder="Email" />
         </Form.Item>
-        
-        <Form.Item
-          label="Phone"
-          name="phone"
-        >
+
+        <Form.Item label="Phone" name="phone">
           <Input placeholder="Phone Number" />
         </Form.Item>
+
+        <Form.Item label="Type" name="type">
+          <Select placeholder="Select a type" allowClear>
+            <Select.Option value="INDIVIDUAL">Individual</Select.Option>
+            <Select.Option value="COMPANY">Company</Select.Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item label="TIN Type" name="tinType">
+          <Select placeholder="Select a TIN type" allowClear>
+            <Select.Option value="CPF">CPF</Select.Option>
+            <Select.Option value="CNPJ">CNPJ</Select.Option>
+          </Select>
+        </Form.Item>
+
+        <Form.Item label="TIN" name="taxIdentificationNumber">
+          <Input placeholder="Tax Identification Number" />
+        </Form.Item>
         
-        <Form.Item
-          label="Address"
-          name="addressId"
-        >
-          <Select
-            {...addressSelectProps}
-            placeholder="Select an address"
-            allowClear
-            showSearch
-            optionFilterProp="label"
-          />
+        <Form.Item label="Website" name="website">
+          <Input />
         </Form.Item>
       </Form>
     </Modal>

@@ -1,10 +1,4 @@
-import {
-  DeleteButton,
-  EditButton,
-  List,
-  useModalForm,
-  useTable,
-} from "@refinedev/antd";
+import { DeleteButton, EditButton, List, useModalForm, useTable } from "@refinedev/antd";
 import { BaseRecord } from "@refinedev/core";
 import { Form, Input, Space, Table } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
@@ -64,18 +58,19 @@ export const BusinessPartnerList = () => {
           <Table.Column dataIndex="name" title={"Name"} sorter={true} />
           <Table.Column dataIndex="email" title={"Email"} sorter={true} />
           <Table.Column dataIndex="phone" title={"Phone"} sorter={true} />
-          <Table.Column dataIndex="addressCity" title={"City"} sorter={true} />
-          <Table.Column dataIndex="addressState" title={"State"} sorter={true} />
+          <Table.Column dataIndex="type" title={"Type"} sorter={true} />
+          <Table.Column dataIndex="status" title={"Status"} sorter={true} />
+          <Table.Column
+            dataIndex="taxIdentificationNumber"
+            title={"Tax Identification Number"}
+            sorter={true}
+          />
           <Table.Column
             title={"Actions"}
             dataIndex="actions"
             render={(_, record: BaseRecord) => (
               <Space>
-                <EditButton
-                  hideText
-                  size="small"
-                  recordItemId={record.id}
-                />
+                <EditButton hideText size="small" recordItemId={record.id} />
                 <DeleteButton hideText size="small" recordItemId={record.id} />
               </Space>
             )}

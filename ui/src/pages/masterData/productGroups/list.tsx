@@ -11,7 +11,7 @@ import {
 import { BaseRecord, useMany } from "@refinedev/core";
 import { Checkbox, Form, Input, Radio, Select, Space, Table } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
-import { ProductGroupForm } from "./create";
+import { ProductGroupForm } from "./form";
 import { useEffect } from "react";
 
 export const ProductGroupList = () => {

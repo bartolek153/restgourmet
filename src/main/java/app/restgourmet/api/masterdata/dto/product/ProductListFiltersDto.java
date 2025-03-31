@@ -1,5 +1,6 @@
 package app.restgourmet.api.masterdata.dto.product;
 
+import java.util.List;
 import java.util.UUID;
 
 import app.restgourmet.api.masterdata.enums.ProductOrigin;
@@ -14,6 +15,7 @@ public class ProductListFiltersDto {
   private UUID categoryId;
   private ProductOrigin origin;
   private UUID inventoryUnitId;
-  private ProductStatus status;
+  private List<ProductStatus> statuses;
   private Boolean deleted = false;
+  private List<UUID> ids;
 }

@@ -76,6 +76,7 @@ yarn dev
 - Bugs
   - authProvider won't retry request after refreshing token
   - Default Spring Redis serializer won't recognize LocalDateTime values
+  - After customer delete, it calls GET by id without need (UI)
 - UI Standards
   - No table column tooltip
   - Use constant debounce time

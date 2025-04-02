@@ -1,12 +1,19 @@
 import { Create, useForm, useSelect } from "@refinedev/antd";
-import { useParsed } from "@refinedev/core";
+import { useBack, useNavigation, useParsed } from "@refinedev/core";
 import { Form, Select } from "antd";
 
 export const CustomerCreate = () => {
-  const { formProps, saveButtonProps, onFinish } = useForm({});
+  const { edit } = useNavigation();
 
   const { params } = useParsed<{ partnerId?: string }>();
   const partnerId = params?.partnerId;
+
+  const { formProps, saveButtonProps, onFinish } = useForm({
+    redirect: false,
+    onMutationSuccess: () => {
+      edit("partners", partnerId!);
+    },
+  });
 
   const { selectProps } = useSelect({
     resource: "addresses",
@@ -16,7 +23,7 @@ export const CustomerCreate = () => {
   const handleOnFinish = (values: any) => {
     onFinish({
       ...values,
-      partnerId
+      partnerId,
     });
   };
 

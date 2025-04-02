@@ -7,7 +7,6 @@ import lombok.Data;
 
 @Data
 public class CustomerDto {
-  @NotNull
   private UUID partnerId;
   
   private String email;

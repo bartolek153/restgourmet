@@ -57,6 +57,8 @@ function App() {
                 syncWithLocation: true,
                 warnWhenUnsavedChanges: false,
                 useNewQueryKeys: true,
+                mutationMode: "pessimistic",
+                disableTelemetry: true,
                 projectId: "wD3FKj-uGlLKe-6ouCYb",
               }}
             >
@@ -120,11 +122,9 @@ function App() {
 
                   <Route path="/partners">
                     <Route index element={<BusinessPartnerList />} />
-                    <Route path="edit/:id" element={<BusinessPartnerEdit />} />
-                    <Route path=":partnerId/customers">
-                      <Route path="create" element={<CustomerCreate />} />
-                      <Route path="edit" element={<CustomerEdit />} />
-                    </Route>
+                    <Route path=":id/edit" element={<BusinessPartnerEdit />} />
+                    <Route path=":partnerId/customers/create" element={<CustomerCreate />} />
+                    <Route path=":id/customers/edit" element={<CustomerEdit />} />
                   </Route>
 
                   <Route path="/users">

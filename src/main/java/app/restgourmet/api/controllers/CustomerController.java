@@ -27,7 +27,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/partners")
+@RequestMapping("/api/partners/customers")
 @Tag(name = "Customer", description = "Customer endpoints")
 public class CustomerController {
 
@@ -37,7 +37,7 @@ public class CustomerController {
     this.customerService = customerService;
   }
 
-  @GetMapping("/customers")
+  @GetMapping
   public ResponseEntity<PagedModel<CustomerListDto>> listCustomers(
       @PathVariable UUID partnerId,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
@@ -48,24 +48,24 @@ public class CustomerController {
     return ResponseEntity.ok(customerService.list(CustomPageRequest.of(page, size, order, sort), filters));
   }
 
-  @GetMapping("/customers/{id}")
+  @GetMapping("/{id}")
   public ResponseEntity<CustomerDto> getCustomer(@PathVariable UUID id) {
     return ResponseEntity.ok(customerService.getOne(id));
   }
 
-  @PostMapping("/customers")
+  @PostMapping
   public ResponseEntity<UUID> createCustomer(@RequestBody @Valid CustomerDto dto) {
-    UUID id = customerService.create(dto.getPartnerId(), dto);
+    UUID id = customerService.create(dto);
     return ResponseEntity.status(HttpStatus.CREATED).body(id);
   }
 
-  @PutMapping("/customers/{id}")
+  @PutMapping("/{id}")
   public ResponseEntity<?> editCustomer(@PathVariable UUID id, @RequestBody @Valid CustomerDto dto) {
     customerService.edit(id, dto);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 
-  @DeleteMapping("/customers/{id}")
+  @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteCustomer(@PathVariable UUID id) {
     customerService.delete(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

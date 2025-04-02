@@ -1,6 +1,7 @@
 package app.restgourmet.api.sales.mappers;
 
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 
@@ -10,9 +11,13 @@ import app.restgourmet.api.sales.models.Customer;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface CustomerMapper {
-    void updateEntity(CustomerDto dto, @MappingTarget Customer entity);
+  Customer toEntity(CustomerDto dto);
+  
+  void updateEntity(CustomerDto dto, @MappingTarget Customer entity);
 
-    CustomerListDto toListDto(Customer entity);
+  CustomerListDto toListDto(Customer entity);
 
-    CustomerDto toDto(Customer entity);
+  @Mapping(source = "billingAddress.id", target = "billingAddressId")
+  @Mapping(source = "businessPartner.id", target = "partnerId")
+  CustomerDto toDto(Customer entity);
 }

@@ -29,7 +29,7 @@ export const resources = [
   {
     name: "partners/customers",
     create: "/partners/:partnerId/customers/create",
-    edit: "/partners/:partnerId/customers/edit",
+    edit: "/partners/:id/customers/edit",
     meta: {
       label: "Customers",
       canDelete: true,
@@ -106,7 +106,7 @@ export const resources = [
     name: "partners",
     list: "/partners",
     create: "/partners/create",
-    edit: "/partners/edit/:id",
+    edit: "/partners/:id/edit",
     meta: {
       label: "Business Partners",
       parent: MASTER_DATA_PARENT_MENU,

@@ -31,7 +31,7 @@ public interface SalesOrderMapper {
     @Mapping(target = "warehouse", ignore = true)
     void updateEntity(SalesOrderDto dto, @MappingTarget SalesOrder entity);
 
-    @Mapping(target = "customerName", source = "customer.name")
+    // @Mapping(target = "customerName", source = "customer.name")
     SalesOrderListDto toListDto(SalesOrder entity);
 
     @Mapping(target = "customerId", source = "customer.id")

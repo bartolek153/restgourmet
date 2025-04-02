@@ -25,6 +25,7 @@ public final class AppConstants {
     public static final String CUSTOMER_NOT_FOUND = "Customer not found";
     
     public static final String EXTERNAL_SERVICE_ERROR = "External service error";
+    public static final String EXTERNAL_DATABASE_ERROR = "A database error occurred while processing the request. Please, try again later.";
     
     public static final String PRODUCT_NOT_FOUND = "Product not found";
     public static final String PRODUCT_DELETE_DEPS = "Cannot delete product as it has dependent entities";

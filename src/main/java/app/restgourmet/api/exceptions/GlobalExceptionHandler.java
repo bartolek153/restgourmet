@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.hibernate.exception.GenericJDBCException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import app.restgourmet.api.utils.AppConstants;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
@@ -124,6 +126,15 @@ public class GlobalExceptionHandler {
         .build();
 
     return ResponseEntity.badRequest().body(err);
+  }
+
+  @ExceptionHandler(GenericJDBCException.class)
+  public ResponseEntity<ErrorObject> handlePSQLException(GenericJDBCException e) {
+    ErrorObject err = ErrorObject.builder()
+        .message(AppConstants.ErrorMessages.EXTERNAL_DATABASE_ERROR)
+        .build();
+
+    return ResponseEntity.internalServerError().body(err);
   }
 
   /**

@@ -12,7 +12,7 @@ export const BusinessPartnerEdit = () => {
 
   useEffect(() => {
     if (!isLoading && data?.data) {
-      setIsCustomer(data.data.isCustomer);
+      setIsCustomer(data.data.customer);
     }
   }, [data]);
 
@@ -94,6 +94,7 @@ export const BusinessPartnerEdit = () => {
               <EditButton
                 resource="partners/customers"
                 icon={<FaCheckSquare />}
+                recordItemId={id}
                 type="primary"
                 meta={{ partnerId: id }}
               >

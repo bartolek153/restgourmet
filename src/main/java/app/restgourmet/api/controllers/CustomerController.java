@@ -39,11 +39,10 @@ public class CustomerController {
 
   @GetMapping
   public ResponseEntity<PagedModel<CustomerListDto>> listCustomers(
-      @PathVariable UUID partnerId,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,
-      @RequestParam(defaultValue = "name") final String sort,
+      @RequestParam(defaultValue = "id") final String sort,
       @ParameterObject final CustomerListFiltersDto filters) {
     return ResponseEntity.ok(customerService.list(CustomPageRequest.of(page, size, order, sort), filters));
   }

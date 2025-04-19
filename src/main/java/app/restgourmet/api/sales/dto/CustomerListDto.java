@@ -6,8 +6,6 @@ import lombok.Data;
 
 @Data
 public class CustomerListDto {
-    private UUID id;
-    private String name;
-    private String email;
-    private String phone;
+  private UUID id;
+  private String name;
 }

@@ -11,6 +11,7 @@ import app.restgourmet.api.sales.models.Customer;
 
 public class CustomerSpec {
   private static final String ID = "id";
+  private static final String BUSINESS_PARTNER = "businessPartner";
   private static final String NAME = "name";
 
   public static Specification<Customer> filterBy(CustomerListFiltersDto filters) {
@@ -29,7 +30,7 @@ public class CustomerSpec {
       }
 
       return cb.or(
-          cb.like(cb.lower(root.get(NAME)), "%" + q.toLowerCase() + "%"));
+          cb.like(cb.lower(root.get(BUSINESS_PARTNER).get(NAME)), "%" + q.toLowerCase() + "%"));
     };
   }
 

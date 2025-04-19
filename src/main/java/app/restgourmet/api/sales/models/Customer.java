@@ -19,7 +19,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "customers")
 public class Customer extends BaseEntity {
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne(fetch = FetchType.EAGER)
   @JoinColumn(unique = true)
   private BusinessPartner businessPartner;
   

@@ -16,9 +16,8 @@ export const SalesOrderCreateForm: React.FC<SalesOrderFormProps> = ({
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
 
   const { selectProps: customerSelectProps } = useSelect({
-    resource: "customers",
+    resource: "partners/customers",
     optionLabel: "name",
-    optionValue: "id",
     pagination: {
       mode: "server",
     },

@@ -15,6 +15,7 @@ public interface CustomerMapper {
   
   void updateEntity(CustomerDto dto, @MappingTarget Customer entity);
 
+  @Mapping(source = "businessPartner.name", target = "name")
   CustomerListDto toListDto(Customer entity);
 
   @Mapping(source = "billingAddress.id", target = "billingAddressId")

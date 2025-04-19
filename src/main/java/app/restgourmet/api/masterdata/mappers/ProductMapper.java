@@ -1,5 +1,6 @@
 package app.restgourmet.api.masterdata.mappers;
 
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -11,7 +12,7 @@ import app.restgourmet.api.masterdata.dto.product.ProductDto;
 import app.restgourmet.api.masterdata.dto.product.ProductListDto;
 import app.restgourmet.api.masterdata.models.Product;
 
-@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface ProductMapper {
   @Mapping(target = "groupId", source = "group.id")
   @Mapping(target = "inventoryUnitId", source = "inventoryUnit.id")

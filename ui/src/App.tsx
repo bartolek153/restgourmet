@@ -40,6 +40,7 @@ import { RoleCreate, RoleEdit, RoleList } from "./pages/usersmanagement/roles";
 import { UserCreate, UserEdit, UserList } from "./pages/usersmanagement/users";
 import { resources } from "./resources";
 import { dataProvider } from "./rest-data-provider";
+import Dashboard from "./pages/donations/dashboard";
 
 function App() {
   return (
@@ -78,7 +79,8 @@ function App() {
                     </Authenticated>
                   }
                 >
-                  <Route index element={<NavigateToResource resource="users" />} />
+                  {/* <Route index element={<NavigateToResource resource="users" />} /> */}
+                  <Route index element={<Dashboard/>} />
 
                   <Route path="/units">
                     <Route index element={<BaseUnitList />} />

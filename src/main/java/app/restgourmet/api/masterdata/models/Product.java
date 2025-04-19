@@ -2,6 +2,7 @@ package app.restgourmet.api.masterdata.models;
 
 import app.restgourmet.api.masterdata.enums.ProductOrigin;
 import app.restgourmet.api.masterdata.enums.ProductStatus;
+import app.restgourmet.api.masterdata.enums.ProductType;
 import app.restgourmet.api.usermanagement.models.AuditableEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -50,4 +51,6 @@ public class Product extends AuditableEntity {
   private Double price;
 
   private boolean deleted = false;
+
+  private ProductType type;
 }

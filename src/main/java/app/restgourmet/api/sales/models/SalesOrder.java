@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import app.restgourmet.api.masterdata.models.Address;
 import app.restgourmet.api.masterdata.models.Warehouse;
 import app.restgourmet.api.sales.enums.OrderStatus;
 import app.restgourmet.api.sales.enums.PaymentMethod;
@@ -46,7 +47,7 @@ public class SalesOrder extends AuditableEntity {
 
     @ManyToOne
     @JoinColumn(name = "delivery_address_id")
-    private app.restgourmet.api.masterdata.models.Address deliveryAddress;
+    private Address deliveryAddress;
 
     @Column
     private LocalDate orderDate;

@@ -23,9 +23,17 @@ public final class AppConstants {
 
     public static final String CUSTOMER_ALREADY_EXISTS = "Customer already exists";
     public static final String CUSTOMER_NOT_FOUND = "Customer not found";
+
+    public static final String EXPENSE_NOT_FOUND = "Expense not found";
+    
+    public static final String EXPENSE_CATEGORY_NOT_FOUND = "Expense category not found";
     
     public static final String EXTERNAL_SERVICE_ERROR = "External service error";
     public static final String EXTERNAL_DATABASE_ERROR = "A database error occurred while processing the request. Please, try again later.";
+
+    public static final String PAYMENT_TERM_NOT_FOUND = "Payment term not found";
+
+    public static final String PERMISSION_NOT_FOUND = "Permission not found";
     
     public static final String PRODUCT_NOT_FOUND = "Product not found";
     public static final String PRODUCT_DELETE_DEPS = "Cannot delete product as it has dependent entities";
@@ -36,8 +44,6 @@ public final class AppConstants {
 
     public static final String PRODUCT_FAMILY_NOT_FOUND = "Family not found";
     public static final String PRODUCT_FAMILY_DELETE_DEPS = "Cannot delete family as it has dependent group";
-
-    public static final String PERMISSION_NOT_FOUND = "Permission not found";
 
     public static final String PRODUCT_GROUP_NOT_FOUND = "Group not found";
     public static final String PRODUCT_GROUP_DELETE_DEPS = "Cannot delete group as it has dependent product";
@@ -56,6 +62,8 @@ public final class AppConstants {
 
     public static final String WAREHOUSE_NOT_FOUND = "Warehouse not found";
     public static final String WAREHOUSE_HAS_PENDING_ORDERS = "Cannot delete warehouse as it has pending orders";
+
+    public static final String VENDOR_NOT_FOUND = "Vendor not found";
   }
 
   public static class ExternalServices {

@@ -23,11 +23,11 @@ import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.masterdata.dto.address.AddressDto;
 import app.restgourmet.api.masterdata.dto.address.AddressListDto;
 import app.restgourmet.api.masterdata.dto.address.AddressListFiltersDto;
-import app.restgourmet.api.masterdata.dto.address.ViaCepAddressDto;
+import app.restgourmet.api.masterdata.dto.address.ViaCepResponseDto;
 import app.restgourmet.api.masterdata.mappers.AddressMapper;
 import app.restgourmet.api.masterdata.models.Address;
 import app.restgourmet.api.masterdata.repository.AddressRepository;
-import app.restgourmet.api.masterdata.repository.specifications.AddressSpec;
+import app.restgourmet.api.masterdata.repository.specifications.AddressSpecification;
 import app.restgourmet.api.masterdata.service.spec.AddressService;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -51,7 +51,7 @@ public class AddressServiceImpl implements AddressService {
 
   @Override
   public PagedModel<AddressListDto> list(PageRequest pageReq, AddressListFiltersDto filters) {
-    Specification<Address> spec = AddressSpec.filterBy(filters);
+    Specification<Address> spec = AddressSpecification.filterBy(filters);
     Page<AddressListDto> res = addressRepository.findAll(spec, pageReq)
         .map(addressMapper::toListDto);
 
@@ -95,8 +95,8 @@ public class AddressServiceImpl implements AddressService {
   @Override
   public AddressDto consultBrazilianAddress(String cep) {
     try {
-      ViaCepAddressDto response = restTemplate.getForObject(AppConstants.ExternalServices.Urls.VIACEP,
-          ViaCepAddressDto.class, cep);
+      ViaCepResponseDto response = restTemplate.getForObject(AppConstants.ExternalServices.Urls.VIACEP,
+          ViaCepResponseDto.class, cep);
       return response != null ? response.toAddressDto() : null;
 
     } catch (HttpClientErrorException.NotFound ex) {

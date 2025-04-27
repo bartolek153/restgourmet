@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import app.restgourmet.api.commondata.models.BaseUnit;
+import app.restgourmet.api.commondata.models.Setting;
 import app.restgourmet.api.commondata.repository.BaseUnitRepository;
+import app.restgourmet.api.commondata.repository.SettingRepository;
 import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
 import app.restgourmet.api.usermanagement.enums.PermissionCategory;
 import app.restgourmet.api.usermanagement.enums.UserType;
-import app.restgourmet.api.usermanagement.models.Parameter;
 import app.restgourmet.api.usermanagement.models.Permission;
 import app.restgourmet.api.usermanagement.models.UserEntity;
-import app.restgourmet.api.usermanagement.repository.ParameterRepository;
 import app.restgourmet.api.usermanagement.repository.PermissionRepository;
 import app.restgourmet.api.usermanagement.repository.UserRepository;
 import app.restgourmet.api.utils.AppConstants;
@@ -28,7 +28,7 @@ public class DataLoader implements CommandLineRunner {
 
   private static final Logger logger = LoggerFactory.getLogger(DataLoader.class);
   private final BaseUnitRepository baseUnitRepository;
-  private final ParameterRepository parameterRepository;
+  private final SettingRepository parameterRepository;
   private final PermissionRepository permissionRepository;
   private final UnitMeasurementRepository unitMeasurementRepository;
   private final UserRepository userRepository;
@@ -37,7 +37,7 @@ public class DataLoader implements CommandLineRunner {
   public DataLoader(
       BaseUnitRepository baseUnitRepository,
       PermissionRepository permissionRepository,
-      ParameterRepository parameterRepository,
+      SettingRepository parameterRepository,
       PasswordEncoder passwordEncoder,
       UnitMeasurementRepository unitMeasurementRepository,
       UserRepository userRepository) {
@@ -99,6 +99,6 @@ public class DataLoader implements CommandLineRunner {
     // initialize parameters
     parameterRepository.saveAll(
         List.of(
-            new Parameter(AppConstants.Parameters.DB_INITIALIZED_KEY, "true")));
+            new Setting(AppConstants.Parameters.DB_INITIALIZED_KEY, "true")));
   }
 }

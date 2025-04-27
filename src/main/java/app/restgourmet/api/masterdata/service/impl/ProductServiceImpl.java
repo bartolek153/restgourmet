@@ -23,7 +23,7 @@ import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.repository.ProductGroupRepository;
 import app.restgourmet.api.masterdata.repository.ProductRepository;
 import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
-import app.restgourmet.api.masterdata.repository.specifications.ProdSpec;
+import app.restgourmet.api.masterdata.repository.specifications.ProductSpecification;
 import app.restgourmet.api.masterdata.service.spec.ProductService;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   public PagedModel<ProductListDto> list(PageRequest pageReq, ProductListFiltersDto filters) {
-    Specification<Product> spec = ProdSpec.filterBy(filters);
+    Specification<Product> spec = ProductSpecification.filterBy(filters);
     Page<Product> page = productRepository.findAll(spec, pageReq);
     return new PagedModel<>(page.map(productMapper::toListDto));
   }

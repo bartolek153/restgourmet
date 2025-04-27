@@ -66,6 +66,8 @@ yarn dev
   - Test if redis cache is working
   - Use migrations
   - standardize ui tweaks
+  - standardize mapper DI
+  - standardize specification pattern structure
 - CI/CD
   - Create image build pipeline
   - Add image signing

@@ -27,7 +27,7 @@ import app.restgourmet.api.usermanagement.models.UserGroup;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 import app.restgourmet.api.usermanagement.repository.PermissionRepository;
 import app.restgourmet.api.usermanagement.repository.UserGroupRepository;
-import app.restgourmet.api.usermanagement.repository.specifications.UserGroupSpec;
+import app.restgourmet.api.usermanagement.repository.specifications.UserGroupSpecification;
 import app.restgourmet.api.usermanagement.service.spec.UserGroupService;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -46,7 +46,7 @@ public class UserGroupServiceImpl implements UserGroupService {
   }
 
   public PagedModel<UserGroupListDto> list(PageRequest pagReq, UserGroupListFiltersDto dto) {
-    Specification<UserGroup> spec = UserGroupSpec.filterBy(dto);
+    Specification<UserGroup> spec = UserGroupSpecification.filterBy(dto);
     Page<UserGroup> groups = userGroupRepository.findAll(spec, pagReq);
     return new PagedModel<>(groups.map(userGroupMapper::toListDto));
   }

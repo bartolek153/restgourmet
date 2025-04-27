@@ -19,7 +19,7 @@ import app.restgourmet.api.masterdata.models.ProductFamily;
 import app.restgourmet.api.masterdata.repository.ProductCategoryRepository;
 import app.restgourmet.api.masterdata.repository.ProductFamilyRepository;
 import app.restgourmet.api.masterdata.repository.ProductGroupRepository;
-import app.restgourmet.api.masterdata.repository.specifications.ProdFamilySpec;
+import app.restgourmet.api.masterdata.repository.specifications.ProductFamilySpecification;
 import app.restgourmet.api.masterdata.service.spec.ProductFamilyService;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -45,7 +45,7 @@ public class ProductFamilyServiceImpl implements ProductFamilyService {
 
   @Override
   public PagedModel<ProdFamilyListDto> list(PageRequest pageReq, ProdFamilyListFiltersDto filters) {
-    Specification<ProductFamily> spec = ProdFamilySpec.filterBy(filters);
+    Specification<ProductFamily> spec = ProductFamilySpecification.filterBy(filters);
     Page<ProductFamily> families = productFamilyRepository.findAll(spec, pageReq);
     return new PagedModel<>(families.map(productFamilyMapper::toListDto));
   }

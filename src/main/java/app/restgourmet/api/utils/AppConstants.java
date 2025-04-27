@@ -21,8 +21,13 @@ public final class AppConstants {
     
     public static final String CEP_INVALID_FORMAT = "Invalid CEP format";
 
+    public static final String CURRENCY_NOT_FOUND = "Currency not found";
+    public static final String CURRENCY_ALREADY_EXISTS = "The currency code is already registered";
+
     public static final String CUSTOMER_ALREADY_EXISTS = "Customer already exists";
     public static final String CUSTOMER_NOT_FOUND = "Customer not found";
+
+    public static final String EXCHANGE_RATE_UNAVAILABLE_SERVICE = "Could not obtain the exchange rate using a third pary service. Try again later or fill the form manually.";
 
     public static final String EXPENSE_NOT_FOUND = "Expense not found";
     
@@ -51,6 +56,8 @@ public final class AppConstants {
     public static final String ROLE_NOT_FOUND = "Role not found";
     public static final String ROLE_DELETE_DEPS = "Cannot delete role as it as has dependent user";
 
+    public static final String SECRET_INVALID = "The provided secret is invalid or unavailable";
+
     public static final String STORAGE_UPLOAD_ERROR = "An error occurred when uploading the picture";
 
     public static final String UNIT_MEASUREMENT_NOT_FOUND = "Unit of measurement not found";
@@ -69,6 +76,7 @@ public final class AppConstants {
   public static class ExternalServices {
     public static class Urls {
       public static final String VIACEP = "https://viacep.com.br/ws/{cep}/json/";
+      public static final String OPEN_EXCHANGE_RATES_CONVERT = "https://openexchangerates.org/api/convert/{}/{}/{}?app_id={}&prettyprint=false";
     }
   }
 

@@ -36,6 +36,8 @@ public class CreateUserDto {
   @Schema(description = "IAM groups associated to the user")
   private List<UUID> groupIds;
 
+  private boolean createEmployee;
+
   public String getEmail() {
     return email.toLowerCase();
   }

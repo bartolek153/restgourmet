@@ -53,4 +53,6 @@ public class Product extends AuditableEntity {
   private boolean deleted = false;
 
   private ProductType type;
+
+  private String image;
 }

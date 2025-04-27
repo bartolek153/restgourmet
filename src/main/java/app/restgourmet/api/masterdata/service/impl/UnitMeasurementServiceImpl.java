@@ -17,7 +17,7 @@ import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementListFilters
 import app.restgourmet.api.masterdata.mappers.UnitMeasurementMapper;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
-import app.restgourmet.api.masterdata.repository.specifications.UnitMeasSpec;
+import app.restgourmet.api.masterdata.repository.specifications.UnitMeasurementSpecification;
 import app.restgourmet.api.masterdata.service.spec.UnitMeasurementService;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -38,7 +38,7 @@ public class UnitMeasurementServiceImpl implements UnitMeasurementService {
 
   @Override
   public PagedModel<UnitMeasurementListDto> list(PageRequest pageReq, UnitMeasurementListFiltersDto filters) {
-    Specification<UnitMeasurement> spec = UnitMeasSpec.filterBy(filters);
+    Specification<UnitMeasurement> spec = UnitMeasurementSpecification.filterBy(filters);
     Page<UnitMeasurementListDto> units = unitMeasurementRepository.findAll(spec, pageReq).map(
         unitMeasurementMapper::toListDto);
 

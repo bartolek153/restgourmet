@@ -27,7 +27,7 @@ import app.restgourmet.api.usermanagement.models.Role;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 import app.restgourmet.api.usermanagement.repository.PermissionRepository;
 import app.restgourmet.api.usermanagement.repository.RoleRepository;
-import app.restgourmet.api.usermanagement.repository.specifications.RoleSpec;
+import app.restgourmet.api.usermanagement.repository.specifications.RoleSpecification;
 import app.restgourmet.api.usermanagement.service.spec.RoleService;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -46,7 +46,7 @@ public class RoleServiceImpl implements RoleService {
   }
 
   public PagedModel<RoleListDto> list(PageRequest pagReq, RoleListFiltersDto dto) {
-    Specification<Role> spec = RoleSpec.filterBy(dto);
+    Specification<Role> spec = RoleSpecification.filterBy(dto);
     Page<Role> roles = roleRepository.findAll(spec, pagReq);
     return new PagedModel<>(roles.map(roleMapper::toListDto));
   }

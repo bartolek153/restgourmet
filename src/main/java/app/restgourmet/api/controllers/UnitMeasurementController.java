@@ -21,8 +21,8 @@ import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementDto;
 import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementListDto;
 import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementListFiltersDto;
 import app.restgourmet.api.masterdata.service.spec.UnitMeasurementService;
+import app.restgourmet.api.shared.controller.CustomPageRequest;
 import app.restgourmet.api.utils.AppConstants;
-import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 

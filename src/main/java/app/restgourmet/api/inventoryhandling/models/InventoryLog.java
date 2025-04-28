@@ -6,7 +6,7 @@ import java.util.UUID;
 import app.restgourmet.api.inventoryhandling.enums.TransactionType;
 import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.Warehouse;
-import app.restgourmet.api.usermanagement.models.BaseEntity;
+import app.restgourmet.api.shared.models.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;

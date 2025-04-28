@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Set;
 
+import app.restgourmet.api.shared.models.AuditableEntity;
+
 @Getter
 @Setter
 @NoArgsConstructor

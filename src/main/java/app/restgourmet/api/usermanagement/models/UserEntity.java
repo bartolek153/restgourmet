@@ -6,6 +6,7 @@ import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import app.restgourmet.api.shared.models.AuditableEntity;
 import app.restgourmet.api.usermanagement.enums.UserType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

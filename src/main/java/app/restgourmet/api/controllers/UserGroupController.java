@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import app.restgourmet.api.shared.controller.CustomPageRequest;
 import app.restgourmet.api.usermanagement.dto.group.CreateUserGroupDto;
 import app.restgourmet.api.usermanagement.dto.group.EditUserGroupDto;
 import app.restgourmet.api.usermanagement.dto.group.UserGroupDto;
@@ -29,7 +30,6 @@ import app.restgourmet.api.usermanagement.models.UserEntity;
 import app.restgourmet.api.usermanagement.service.spec.UserGroupService;
 import app.restgourmet.api.usermanagement.service.spec.UserService;
 import app.restgourmet.api.utils.AppConstants;
-import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 

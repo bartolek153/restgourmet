@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 import app.restgourmet.api.commondata.dto.paymentterm.PaymentTermListDto;
 import app.restgourmet.api.commondata.dto.paymentterm.PaymentTermListFiltersDto;
 import app.restgourmet.api.commondata.service.spec.PaymentTermService;
+import app.restgourmet.api.shared.controller.CustomPageRequest;
 import app.restgourmet.api.commondata.dto.paymentterm.PaymentTermDto;
 import app.restgourmet.api.utils.AppConstants;
-import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 

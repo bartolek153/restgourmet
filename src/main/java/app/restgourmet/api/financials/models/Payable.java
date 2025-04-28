@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import app.restgourmet.api.financials.enums.PayableStatus;
-import app.restgourmet.api.usermanagement.models.BaseEntity;
+import app.restgourmet.api.shared.models.BaseEntity;
 
 public class Payable extends BaseEntity {
   private UUID vendor;

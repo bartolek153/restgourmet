@@ -17,14 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.procurement.dto.expense.CreateExpenseDto;
-import app.restgourmet.api.procurement.dto.expense.EditExpenseDto;
-import app.restgourmet.api.procurement.dto.expense.ExpenseDto;
-import app.restgourmet.api.procurement.dto.expense.ExpenseListDto;
-import app.restgourmet.api.procurement.dto.expense.ExpenseListFiltersDto;
-import app.restgourmet.api.procurement.service.spec.ExpenseService;
+import app.restgourmet.api.financials.dto.expense.CreateExpenseDto;
+import app.restgourmet.api.financials.dto.expense.EditExpenseDto;
+import app.restgourmet.api.financials.dto.expense.ExpenseDto;
+import app.restgourmet.api.financials.dto.expense.ExpenseListDto;
+import app.restgourmet.api.financials.dto.expense.ExpenseListFiltersDto;
+import app.restgourmet.api.financials.service.spec.ExpenseService;
+import app.restgourmet.api.shared.controller.CustomPageRequest;
 import app.restgourmet.api.utils.AppConstants;
-import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 

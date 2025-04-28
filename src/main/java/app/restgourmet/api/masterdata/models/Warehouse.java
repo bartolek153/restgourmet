@@ -1,7 +1,7 @@
 package app.restgourmet.api.masterdata.models;
 
 import app.restgourmet.api.masterdata.enums.WarehouseStatus;
-import app.restgourmet.api.usermanagement.models.BaseEntity;
+import app.restgourmet.api.shared.models.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;

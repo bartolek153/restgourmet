@@ -3,7 +3,7 @@ package app.restgourmet.api.masterdata.models;
 import app.restgourmet.api.masterdata.enums.BusinessPartnerStatus;
 import app.restgourmet.api.masterdata.enums.BusinessPartnerType;
 import app.restgourmet.api.masterdata.enums.TaxIdentificationNumberType;
-import app.restgourmet.api.usermanagement.models.BaseEntity;
+import app.restgourmet.api.shared.models.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

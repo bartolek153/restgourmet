@@ -21,8 +21,8 @@ import app.restgourmet.api.commondata.dto.unit.BaseUnitDto;
 import app.restgourmet.api.commondata.dto.unit.BaseUnitListDto;
 import app.restgourmet.api.commondata.dto.unit.BaseUnitListFiltersDto;
 import app.restgourmet.api.commondata.service.spec.BaseUnitService;
+import app.restgourmet.api.shared.controller.CustomPageRequest;
 import app.restgourmet.api.utils.AppConstants;
-import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 

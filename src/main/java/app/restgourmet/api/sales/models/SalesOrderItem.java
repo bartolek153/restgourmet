@@ -1,7 +1,7 @@
 package app.restgourmet.api.sales.models;
 
 import app.restgourmet.api.masterdata.models.Product;
-import app.restgourmet.api.usermanagement.models.BaseEntity;
+import app.restgourmet.api.shared.models.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;

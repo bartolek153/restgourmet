@@ -21,8 +21,8 @@ import app.restgourmet.api.masterdata.dto.family.ProdFamilyDto;
 import app.restgourmet.api.masterdata.dto.family.ProdFamilyListDto;
 import app.restgourmet.api.masterdata.dto.family.ProdFamilyListFiltersDto;
 import app.restgourmet.api.masterdata.service.spec.ProductFamilyService;
+import app.restgourmet.api.shared.controller.CustomPageRequest;
 import app.restgourmet.api.utils.AppConstants;
-import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 

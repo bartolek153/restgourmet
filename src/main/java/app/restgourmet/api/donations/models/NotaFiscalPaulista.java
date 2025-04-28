@@ -2,7 +2,7 @@ package app.restgourmet.api.donations.models;
 
 import java.time.LocalDateTime;
 
-import app.restgourmet.api.usermanagement.models.AuditableEntity;
+import app.restgourmet.api.shared.models.AuditableEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;

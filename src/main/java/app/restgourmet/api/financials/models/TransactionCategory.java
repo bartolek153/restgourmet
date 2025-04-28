@@ -1,7 +1,7 @@
 package app.restgourmet.api.financials.models;
 
 import app.restgourmet.api.financials.enums.TransactionCategoryType;
-import app.restgourmet.api.usermanagement.models.AuditableEntity;
+import app.restgourmet.api.shared.models.AuditableEntity;
 
 public class TransactionCategory extends AuditableEntity {
   private String name;

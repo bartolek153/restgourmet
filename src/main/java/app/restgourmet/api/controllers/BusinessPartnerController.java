@@ -23,8 +23,8 @@ import app.restgourmet.api.masterdata.dto.businesspartner.BusinessPartnerListFil
 import app.restgourmet.api.masterdata.dto.businesspartner.CreateBusinessPartnerDto;
 import app.restgourmet.api.masterdata.dto.businesspartner.EditBusinessPartnerDto;
 import app.restgourmet.api.masterdata.service.spec.BusinessPartnerService;
+import app.restgourmet.api.shared.controller.CustomPageRequest;
 import app.restgourmet.api.utils.AppConstants;
-import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 

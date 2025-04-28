@@ -2,6 +2,7 @@ package app.restgourmet.api.usermanagement.models;
 
 import java.util.Set;
 
+import app.restgourmet.api.shared.models.AuditableEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;

@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.Set;
 
+import app.restgourmet.api.shared.models.BaseEntity;
 import app.restgourmet.api.usermanagement.dto.permission.PermissionDto;
 import app.restgourmet.api.usermanagement.enums.PermissionCategory;
 

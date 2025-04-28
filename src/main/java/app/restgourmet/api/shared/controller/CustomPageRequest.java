@@ -1,8 +1,10 @@
-package app.restgourmet.api.utils;
+package app.restgourmet.api.shared.controller;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
+
+import app.restgourmet.api.utils.AppConstants;
 
 public class CustomPageRequest {
   public static PageRequest of(int page, int size, Sort sort) {

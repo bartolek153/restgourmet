@@ -3,7 +3,7 @@ package app.restgourmet.api.masterdata.models;
 import app.restgourmet.api.masterdata.enums.ProductOrigin;
 import app.restgourmet.api.masterdata.enums.ProductStatus;
 import app.restgourmet.api.masterdata.enums.ProductType;
-import app.restgourmet.api.usermanagement.models.AuditableEntity;
+import app.restgourmet.api.shared.models.AuditableEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

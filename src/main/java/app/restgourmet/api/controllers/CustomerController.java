@@ -21,8 +21,8 @@ import app.restgourmet.api.sales.dto.CustomerDto;
 import app.restgourmet.api.sales.dto.CustomerListDto;
 import app.restgourmet.api.sales.dto.CustomerListFiltersDto;
 import app.restgourmet.api.sales.service.spec.CustomerService;
+import app.restgourmet.api.shared.controller.CustomPageRequest;
 import app.restgourmet.api.utils.AppConstants;
-import app.restgourmet.api.utils.CustomPageRequest;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 

@@ -3,7 +3,7 @@ package app.restgourmet.api.financials.models;
 import java.time.LocalDateTime;
 
 import app.restgourmet.api.financials.enums.TransactionType;
-import app.restgourmet.api.usermanagement.models.BaseEntity;
+import app.restgourmet.api.shared.models.BaseEntity;
 
 public class Transaction extends BaseEntity {
   private FinancialAccount account;

@@ -11,47 +11,45 @@ import org.springframework.transaction.annotation.Transactional;
 
 import app.restgourmet.api.commondata.models.BaseUnit;
 import app.restgourmet.api.commondata.repository.BaseUnitRepository;
+import app.restgourmet.api.commondata.service.impl.GlobalParametersServiceImpl;
 import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
+import app.restgourmet.api.shared.models.parameters.GlobalParameters;
 import app.restgourmet.api.usermanagement.enums.PermissionCategory;
 import app.restgourmet.api.usermanagement.enums.UserType;
-import app.restgourmet.api.usermanagement.models.Parameter;
 import app.restgourmet.api.usermanagement.models.Permission;
 import app.restgourmet.api.usermanagement.models.UserEntity;
-import app.restgourmet.api.usermanagement.repository.ParameterRepository;
 import app.restgourmet.api.usermanagement.repository.PermissionRepository;
 import app.restgourmet.api.usermanagement.repository.UserRepository;
-import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.Permissions;
 
 @Component
 public class DataLoader implements CommandLineRunner {
 
+  private final GlobalParametersServiceImpl globalParametersServiceImpl;
+
   private static final Logger logger = LoggerFactory.getLogger(DataLoader.class);
   private final BaseUnitRepository baseUnitRepository;
-  private final ParameterRepository parameterRepository;
   private final PermissionRepository permissionRepository;
-  private final UnitMeasurementRepository unitMeasurementRepository;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
   public DataLoader(
       BaseUnitRepository baseUnitRepository,
       PermissionRepository permissionRepository,
-      ParameterRepository parameterRepository,
       PasswordEncoder passwordEncoder,
       UnitMeasurementRepository unitMeasurementRepository,
-      UserRepository userRepository) {
+      UserRepository userRepository,
+      GlobalParametersServiceImpl globalParametersServiceImpl) {
     this.baseUnitRepository = baseUnitRepository;
     this.permissionRepository = permissionRepository;
-    this.parameterRepository = parameterRepository;
     this.passwordEncoder = passwordEncoder;
-    this.unitMeasurementRepository = unitMeasurementRepository;
     this.userRepository = userRepository;
+    this.globalParametersServiceImpl = globalParametersServiceImpl;
   }
 
   @Override
   public void run(String... args) throws Exception {
-    parameterRepository.findByOptionKey(AppConstants.Parameters.DB_INITIALIZED_KEY).ifPresentOrElse((p) -> {
+    globalParametersServiceImpl.getActive().ifPresentOrElse((p) -> {
       logger.info("Database already initialized.");
     }, () -> {
       try {
@@ -97,8 +95,11 @@ public class DataLoader implements CommandLineRunner {
             new BaseUnit("Meter", "m")));
 
     // initialize parameters
-    parameterRepository.saveAll(
-        List.of(
-            new Parameter(AppConstants.Parameters.DB_INITIALIZED_KEY, "true")));
+    globalParametersServiceImpl.create(
+        new GlobalParameters(
+            true,
+            null,
+            "",
+            true));
   }
 }

@@ -1,4 +1,4 @@
-package app.restgourmet.api.procurement.repository.specifications;
+package app.restgourmet.api.financials.repository.specifications;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,19 +6,19 @@ import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import app.restgourmet.api.procurement.dto.expensecategory.ExpenseCategoryListFiltersDto;
-import app.restgourmet.api.procurement.models.ExpenseCategory;
+import app.restgourmet.api.financials.dto.expense.ExpenseListFiltersDto;
+import app.restgourmet.api.financials.models.Expense;
 
-public class ExpenseCategorySpec {
+public class ExpenseSpecification {
   private static final String ID = "id";
   private static final String NAME = "name";
 
-  public static Specification<ExpenseCategory> filterBy(ExpenseCategoryListFiltersDto filters) {
+  public static Specification<Expense> filterBy(ExpenseListFiltersDto filters) {
     return Specification.where(qSearch(filters.getQ()))
         .and(hasIds(filters.getIds()));
   }
 
-  private static Specification<ExpenseCategory> qSearch(String q) {
+  private static Specification<Expense> qSearch(String q) {
     return (root, query, cb) -> {
       if (!StringUtils.hasText(q))
         return cb.conjunction();
@@ -28,7 +28,7 @@ public class ExpenseCategorySpec {
     };
   }
 
-  private static Specification<ExpenseCategory> hasIds(List<UUID> ids) {
+  private static Specification<Expense> hasIds(List<UUID> ids) {
     return (root, query, cb) -> ids == null ? cb.conjunction() : root.get(ID).in(ids);
   }
 }

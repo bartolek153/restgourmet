@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 import app.restgourmet.api.masterdata.dto.family.ProdFamilyListFiltersDto;
 import app.restgourmet.api.masterdata.models.ProductFamily;
 
-public class ProdFamilySpec {
+public class ProductFamilySpecification {
   private static final String ID = "id";
   private static final String DESCRIPTION = "description";
   private static final String CATEGORY = "category";

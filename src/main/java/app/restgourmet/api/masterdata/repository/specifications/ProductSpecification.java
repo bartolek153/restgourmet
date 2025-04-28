@@ -11,7 +11,7 @@ import app.restgourmet.api.masterdata.enums.ProductOrigin;
 import app.restgourmet.api.masterdata.enums.ProductStatus;
 import app.restgourmet.api.masterdata.models.Product;
 
-public class ProdSpec {
+public class ProductSpecification {
   private static final String INVENTORY_UNIT = "inventoryUnit";
   private static final String ORIGIN = "origin";
   private static final String CATEGORY = "category";

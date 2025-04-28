@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementListFiltersDto;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 
-public class UnitMeasSpec {
+public class UnitMeasurementSpecification {
   private static final String ID = "id";
   private static final String DESCRIPTION = "description";
   private static final String BASE_UNIT = "baseUnit";

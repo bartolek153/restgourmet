@@ -12,7 +12,7 @@ import app.restgourmet.api.usermanagement.models.UserEntity;
 import app.restgourmet.api.usermanagement.models.UserGroup;
 import jakarta.persistence.criteria.Join;
 
-public class UserGroupSpec {
+public class UserGroupSpecification {
   private static final String USERS = "users";
   private static final String NAME = "name";
   private static final String PERMISSIONS = "permissions";

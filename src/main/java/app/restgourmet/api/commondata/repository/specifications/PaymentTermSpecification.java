@@ -6,7 +6,7 @@ import org.springframework.util.StringUtils;
 import app.restgourmet.api.commondata.dto.paymentterm.PaymentTermListFiltersDto;
 import app.restgourmet.api.commondata.models.PaymentTerm;
 
-public class PaymentTermSpec {
+public class PaymentTermSpecification {
   private static final String DESCRIPTION = "description";
 
   public static Specification<PaymentTerm> hasFilters(PaymentTermListFiltersDto filters) {

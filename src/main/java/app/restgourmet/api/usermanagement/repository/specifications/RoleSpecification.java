@@ -11,7 +11,7 @@ import app.restgourmet.api.usermanagement.models.Role;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 import jakarta.persistence.criteria.Join;
 
-public class RoleSpec {
+public class RoleSpecification {
   private static final String USERS = "users";
   private static final String NAME = "name";
   private static final String PERMISSIONS = "permissions";

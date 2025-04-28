@@ -1,4 +1,4 @@
-package app.restgourmet.api.sales.repository.specifications;
+package app.restgourmet.api.masterdata.repository.specifications;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,20 +6,19 @@ import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import app.restgourmet.api.sales.dto.CustomerListFiltersDto;
-import app.restgourmet.api.sales.models.Customer;
+import app.restgourmet.api.masterdata.dto.category.ProdCategoryListFiltersDto;
+import app.restgourmet.api.masterdata.models.ProductCategory;
 
-public class CustomerSpec {
+public class ProductCategorySpecification {
   private static final String ID = "id";
-  private static final String BUSINESS_PARTNER = "businessPartner";
-  private static final String NAME = "name";
+  private static final String DESCRIPTION = "description";
 
-  public static Specification<Customer> filterBy(CustomerListFiltersDto filters) {
+  public static Specification<ProductCategory> filterBy(ProdCategoryListFiltersDto filters) {
     return Specification.where(qSearch(filters.getQ()))
         .and(hasIds(filters.getIds()));
   }
 
-  private static Specification<Customer> qSearch(String q) {
+  private static Specification<ProductCategory> qSearch(String q) {
     return (root, query, cb) -> {
       if (!StringUtils.hasText(q))
         return cb.conjunction();
@@ -30,11 +29,11 @@ public class CustomerSpec {
       }
 
       return cb.or(
-          cb.like(cb.lower(root.get(BUSINESS_PARTNER).get(NAME)), "%" + q.toLowerCase() + "%"));
+          cb.like(cb.lower(root.get(DESCRIPTION)), "%" + q.toLowerCase() + "%"));
     };
   }
 
-  private static Specification<Customer> hasIds(List<UUID> ids) {
+  private static Specification<ProductCategory> hasIds(List<UUID> ids) {
     return (root, query, cb) -> ids == null ? cb.conjunction() : root.get(ID).in(ids);
   }
 }

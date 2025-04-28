@@ -8,7 +8,7 @@ import org.springframework.util.StringUtils;
 import app.restgourmet.api.usermanagement.dto.user.UserListFiltersDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 
-public class UserSpec {
+public class UserSpecification {
   private static final String ENABLED = "enabled";
   private static final String ID = "id";
   private static final String NAME = "name";

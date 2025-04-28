@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 import app.restgourmet.api.masterdata.dto.address.AddressListFiltersDto;
 import app.restgourmet.api.masterdata.models.Address;
 
-public class AddressSpec {
+public class AddressSpecification {
   private static final String ID = "id";
   private static final String ZIPCODE = "zipCode";
   private static final String STREET = "street";

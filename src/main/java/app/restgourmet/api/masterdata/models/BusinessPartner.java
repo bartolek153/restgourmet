@@ -35,4 +35,7 @@ public class BusinessPartner extends BaseEntity {
   private TaxIdentificationNumberType tinType;
 
   private String taxIdentificationNumber;
+
+  // TODO: implement
+  private boolean isActive;
 }

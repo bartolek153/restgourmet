@@ -9,8 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
-import app.restgourmet.api.exceptions.BadRequestException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.masterdata.dto.warehouse.WarehouseDto;
 import app.restgourmet.api.masterdata.dto.warehouse.WarehouseListDto;
 import app.restgourmet.api.masterdata.dto.warehouse.WarehouseListFiltersDto;
@@ -23,6 +21,8 @@ import app.restgourmet.api.masterdata.repository.specifications.WarehouseSpec;
 import app.restgourmet.api.masterdata.service.spec.WarehouseService;
 import app.restgourmet.api.sales.enums.OrderStatus;
 import app.restgourmet.api.sales.repository.SalesOrderRepository;
+import app.restgourmet.api.shared.exceptions.BadRequestException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 
 @Service

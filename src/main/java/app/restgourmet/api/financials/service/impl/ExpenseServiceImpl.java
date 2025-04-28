@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.financials.dto.expense.CreateExpenseDto;
 import app.restgourmet.api.financials.dto.expense.EditExpenseDto;
 import app.restgourmet.api.financials.dto.expense.ExpenseDto;
@@ -20,6 +19,7 @@ import app.restgourmet.api.financials.models.Expense;
 import app.restgourmet.api.financials.repository.ExpenseRepository;
 import app.restgourmet.api.financials.repository.specifications.ExpenseSpecification;
 import app.restgourmet.api.financials.service.spec.ExpenseService;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 import jakarta.transaction.Transactional;
 

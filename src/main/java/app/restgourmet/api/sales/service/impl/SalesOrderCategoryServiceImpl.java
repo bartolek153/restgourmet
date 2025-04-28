@@ -9,8 +9,6 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import app.restgourmet.api.exceptions.BadRequestException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.sales.dto.ordercategory.SalesOrderCategoryDto;
 import app.restgourmet.api.sales.dto.ordercategory.SalesOrderCategoryListDto;
 import app.restgourmet.api.sales.dto.ordercategory.SalesOrderCategoryListFiltersDto;
@@ -19,6 +17,8 @@ import app.restgourmet.api.sales.models.SalesOrderCategory;
 import app.restgourmet.api.sales.repository.SalesOrderCategoryRepository;
 import app.restgourmet.api.sales.repository.specifications.SalesOrderCategorySpecification;
 import app.restgourmet.api.sales.service.spec.SalesOrderCategoryService;
+import app.restgourmet.api.shared.exceptions.BadRequestException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants.ErrorMessages;
 
 @Service

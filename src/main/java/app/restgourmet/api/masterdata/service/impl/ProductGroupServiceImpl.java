@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.masterdata.dto.group.ProdGroupDto;
 import app.restgourmet.api.masterdata.dto.group.ProdGroupListDto;
 import app.restgourmet.api.masterdata.dto.group.ProdGroupListFiltersDto;
@@ -20,6 +19,7 @@ import app.restgourmet.api.masterdata.repository.ProductGroupRepository;
 import app.restgourmet.api.masterdata.repository.ProductRepository;
 import app.restgourmet.api.masterdata.repository.specifications.ProductGroupSpecification;
 import app.restgourmet.api.masterdata.service.spec.ProductGroupService;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 
 @Service

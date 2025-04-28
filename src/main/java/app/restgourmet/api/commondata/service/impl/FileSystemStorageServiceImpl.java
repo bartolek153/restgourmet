@@ -20,8 +20,8 @@ import org.springframework.web.multipart.MultipartFile;
 import app.restgourmet.api.commondata.dto.storage.UploadedFileDto;
 import app.restgourmet.api.commondata.service.spec.StorageService;
 import app.restgourmet.api.config.StorageProperties;
-import app.restgourmet.api.exceptions.StorageException;
-import app.restgourmet.api.exceptions.StorageFileNotFoundException;
+import app.restgourmet.api.shared.exceptions.StorageException;
+import app.restgourmet.api.shared.exceptions.StorageFileNotFoundException;
 
 @Service
 public class FileSystemStorageServiceImpl implements StorageService {

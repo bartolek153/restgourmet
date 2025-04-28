@@ -17,7 +17,7 @@ import app.restgourmet.api.commondata.models.PaymentTerm;
 import app.restgourmet.api.commondata.repository.PaymentTermRepository;
 import app.restgourmet.api.commondata.repository.specifications.PaymentTermSpecification;
 import app.restgourmet.api.commondata.service.spec.PaymentTermService;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 
 @Service

@@ -9,7 +9,6 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.financials.dto.expensenature.ExpenseNatureDto;
 import app.restgourmet.api.financials.dto.expensenature.ExpenseNatureListDto;
 import app.restgourmet.api.financials.dto.expensenature.ExpenseNatureListFiltersDto;
@@ -19,6 +18,7 @@ import app.restgourmet.api.financials.repository.ExpenseNatureRepository;
 import app.restgourmet.api.financials.repository.specifications.ExpenseNatureSpecification;
 import app.restgourmet.api.financials.service.spec.ExpenseNatureService;
 import app.restgourmet.api.masterdata.repository.BusinessPartnerRepository;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 
 @Service

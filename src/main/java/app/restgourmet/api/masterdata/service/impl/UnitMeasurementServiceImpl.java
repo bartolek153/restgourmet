@@ -10,7 +10,6 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
 import app.restgourmet.api.commondata.repository.BaseUnitRepository;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementDto;
 import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementListDto;
 import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementListFiltersDto;
@@ -19,6 +18,7 @@ import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
 import app.restgourmet.api.masterdata.repository.specifications.UnitMeasurementSpecification;
 import app.restgourmet.api.masterdata.service.spec.UnitMeasurementService;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 
 @Service

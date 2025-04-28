@@ -11,8 +11,6 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import app.restgourmet.api.exceptions.BadRequestException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.inventoryhandling.dto.inventory.InventoryDto;
 import app.restgourmet.api.inventoryhandling.dto.inventory.InventoryListDto;
 import app.restgourmet.api.inventoryhandling.dto.inventory.InventoryListFiltersDto;
@@ -25,6 +23,8 @@ import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.models.Warehouse;
 import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
+import app.restgourmet.api.shared.exceptions.BadRequestException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants.ErrorMessages;
 
 @Service

@@ -17,8 +17,8 @@ import app.restgourmet.api.commondata.dto.exchange.ExchangeRateDto;
 import app.restgourmet.api.commondata.dto.exchange.OpenExchangeRatesResponseDto;
 import app.restgourmet.api.commondata.models.Currency;
 import app.restgourmet.api.commondata.service.spec.ExchangeRateService;
-import app.restgourmet.api.exceptions.InvalidSecretException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
+import app.restgourmet.api.shared.exceptions.InvalidSecretException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.AppConstants.ErrorMessages;
 

@@ -13,12 +13,12 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import app.restgourmet.api.exceptions.BadRequestException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.usermanagement.dto.group.UserGroupDto;
 import app.restgourmet.api.usermanagement.dto.group.UserGroupListDto;
 import app.restgourmet.api.usermanagement.dto.group.UserGroupListFiltersDto;
 import app.restgourmet.api.usermanagement.dto.permission.PermissionDto;
+import app.restgourmet.api.shared.exceptions.BadRequestException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.usermanagement.dto.group.CreateUserGroupDto;
 import app.restgourmet.api.usermanagement.dto.group.EditUserGroupDto;
 import app.restgourmet.api.usermanagement.mappers.UserGroupMapper;

@@ -18,8 +18,8 @@ import app.restgourmet.api.commondata.models.Currency;
 import app.restgourmet.api.commondata.repository.CurrencyRepository;
 import app.restgourmet.api.commondata.repository.specifications.CurrencySpecification;
 import app.restgourmet.api.commondata.service.spec.CurrencyService;
-import app.restgourmet.api.exceptions.BadRequestException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
+import app.restgourmet.api.shared.exceptions.BadRequestException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants.ErrorMessages;
 
 @Service

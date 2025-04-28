@@ -9,8 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
-import app.restgourmet.api.exceptions.BadRequestException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.masterdata.dto.family.ProdFamilyDto;
 import app.restgourmet.api.masterdata.dto.family.ProdFamilyListDto;
 import app.restgourmet.api.masterdata.dto.family.ProdFamilyListFiltersDto;
@@ -21,6 +19,8 @@ import app.restgourmet.api.masterdata.repository.ProductFamilyRepository;
 import app.restgourmet.api.masterdata.repository.ProductGroupRepository;
 import app.restgourmet.api.masterdata.repository.specifications.ProductFamilySpecification;
 import app.restgourmet.api.masterdata.service.spec.ProductFamilyService;
+import app.restgourmet.api.shared.exceptions.BadRequestException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 
 @Service

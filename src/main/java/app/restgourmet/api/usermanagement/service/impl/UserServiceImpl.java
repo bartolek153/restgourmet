@@ -18,10 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import app.restgourmet.api.commondata.service.impl.FileSystemStorageServiceImpl;
-import app.restgourmet.api.exceptions.BadRequestException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
-import app.restgourmet.api.exceptions.StorageException;
-import app.restgourmet.api.exceptions.AppValidationException;
+import app.restgourmet.api.shared.exceptions.AppValidationException;
+import app.restgourmet.api.shared.exceptions.BadRequestException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
+import app.restgourmet.api.shared.exceptions.StorageException;
 import app.restgourmet.api.usermanagement.dto.user.CreateUserDto;
 import app.restgourmet.api.usermanagement.dto.user.EditProfileDto;
 import app.restgourmet.api.usermanagement.dto.user.EditUserDto;

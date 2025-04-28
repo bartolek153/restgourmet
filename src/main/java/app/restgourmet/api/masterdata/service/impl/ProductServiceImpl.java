@@ -10,8 +10,6 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import app.restgourmet.api.exceptions.AppValidationException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.masterdata.dto.product.CreateProductDto;
 import app.restgourmet.api.masterdata.dto.product.EditProductDto;
 import app.restgourmet.api.masterdata.dto.product.ProductDto;
@@ -25,6 +23,8 @@ import app.restgourmet.api.masterdata.repository.ProductRepository;
 import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
 import app.restgourmet.api.masterdata.repository.specifications.ProductSpecification;
 import app.restgourmet.api.masterdata.service.spec.ProductService;
+import app.restgourmet.api.shared.exceptions.AppValidationException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 
 @Service

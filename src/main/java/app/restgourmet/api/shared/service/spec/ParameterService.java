@@ -8,9 +8,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PagedModel;
 import org.springframework.transaction.annotation.Transactional;
 
-import app.restgourmet.api.exceptions.BadRequestException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.shared.dto.ParameterListFiltersDto;
+import app.restgourmet.api.shared.exceptions.BadRequestException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.shared.models.parameters.BaseParameter;
 import app.restgourmet.api.shared.repository.ParameterRepository;
 import app.restgourmet.api.utils.AppConstants.ErrorMessages;

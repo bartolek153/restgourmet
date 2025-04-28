@@ -18,8 +18,6 @@ import org.springframework.web.client.HttpServerErrorException.BadGateway;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
-import app.restgourmet.api.exceptions.BadRequestException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.masterdata.dto.address.AddressDto;
 import app.restgourmet.api.masterdata.dto.address.AddressListDto;
 import app.restgourmet.api.masterdata.dto.address.AddressListFiltersDto;
@@ -29,6 +27,8 @@ import app.restgourmet.api.masterdata.models.Address;
 import app.restgourmet.api.masterdata.repository.AddressRepository;
 import app.restgourmet.api.masterdata.repository.specifications.AddressSpecification;
 import app.restgourmet.api.masterdata.service.spec.AddressService;
+import app.restgourmet.api.shared.exceptions.BadRequestException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 
 @Service

@@ -15,7 +15,7 @@ import app.restgourmet.api.commondata.mappers.BaseUnitMapper;
 import app.restgourmet.api.commondata.models.BaseUnit;
 import app.restgourmet.api.commondata.repository.BaseUnitRepository;
 import app.restgourmet.api.commondata.service.spec.BaseUnitService;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 import app.restgourmet.api.utils.CommonUtils;
 

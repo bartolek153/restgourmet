@@ -9,7 +9,6 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.masterdata.repository.AddressRepository;
 import app.restgourmet.api.masterdata.repository.BusinessPartnerRepository;
 import app.restgourmet.api.sales.dto.CustomerDto;
@@ -20,6 +19,7 @@ import app.restgourmet.api.sales.models.Customer;
 import app.restgourmet.api.sales.repository.CustomerRepository;
 import app.restgourmet.api.sales.repository.specifications.CustomerSpecification;
 import app.restgourmet.api.sales.service.spec.CustomerService;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 
 @Service

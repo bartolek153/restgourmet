@@ -1,6 +1,6 @@
 package app.restgourmet.api.usermanagement.service.impl;
 
-import app.restgourmet.api.exceptions.BadRequestException;
+import app.restgourmet.api.shared.exceptions.BadRequestException;
 import app.restgourmet.api.usermanagement.dto.auth.LoginRequestDto;
 import app.restgourmet.api.usermanagement.dto.auth.RegisterRequestDto;
 import app.restgourmet.api.usermanagement.enums.UserType;

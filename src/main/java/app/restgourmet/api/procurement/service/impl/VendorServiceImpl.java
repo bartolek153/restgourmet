@@ -9,7 +9,6 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.masterdata.repository.BusinessPartnerRepository;
 import app.restgourmet.api.procurement.dto.vendor.VendorDto;
 import app.restgourmet.api.procurement.dto.vendor.VendorListDto;
@@ -19,6 +18,7 @@ import app.restgourmet.api.procurement.models.Vendor;
 import app.restgourmet.api.procurement.repository.VendorRepository;
 import app.restgourmet.api.procurement.repository.specifications.VendorSpecification;
 import app.restgourmet.api.procurement.service.spec.VendorService;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 
 @Service

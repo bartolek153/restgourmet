@@ -12,8 +12,6 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import app.restgourmet.api.exceptions.BadRequestException;
-import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.inventoryhandling.enums.TransactionType;
 import app.restgourmet.api.inventoryhandling.models.InventoryLog;
 import app.restgourmet.api.inventoryhandling.models.ProductInventory;
@@ -36,6 +34,8 @@ import app.restgourmet.api.sales.models.SalesOrderItem;
 import app.restgourmet.api.sales.repository.CustomerRepository;
 import app.restgourmet.api.sales.repository.SalesOrderRepository;
 import app.restgourmet.api.sales.service.spec.SalesOrderService;
+import app.restgourmet.api.shared.exceptions.BadRequestException;
+import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.criteria.Predicate;

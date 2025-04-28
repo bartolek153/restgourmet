@@ -18,7 +18,7 @@ import app.restgourmet.api.sales.dto.CustomerListFiltersDto;
 import app.restgourmet.api.sales.mappers.CustomerMapper;
 import app.restgourmet.api.sales.models.Customer;
 import app.restgourmet.api.sales.repository.CustomerRepository;
-import app.restgourmet.api.sales.repository.specifications.CustomerSpec;
+import app.restgourmet.api.sales.repository.specifications.CustomerSpecification;
 import app.restgourmet.api.sales.service.spec.CustomerService;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -43,7 +43,7 @@ public class CustomerServiceImpl implements CustomerService {
 
   @Override
   public PagedModel<CustomerListDto> list(PageRequest pageReq, CustomerListFiltersDto filters) {
-    Specification<Customer> spec = CustomerSpec.filterBy(filters);
+    Specification<Customer> spec = CustomerSpecification.filterBy(filters);
     Page<Customer> page = customerRepository.findAll(spec, pageReq);
     return new PagedModel<>(page.map(customerMapper::toListDto));
   }

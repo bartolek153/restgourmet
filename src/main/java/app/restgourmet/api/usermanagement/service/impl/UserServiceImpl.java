@@ -35,7 +35,7 @@ import app.restgourmet.api.usermanagement.models.UserGroup;
 import app.restgourmet.api.usermanagement.repository.RoleRepository;
 import app.restgourmet.api.usermanagement.repository.UserGroupRepository;
 import app.restgourmet.api.usermanagement.repository.UserRepository;
-import app.restgourmet.api.usermanagement.repository.specifications.UserSpec;
+import app.restgourmet.api.usermanagement.repository.specifications.UserSpecification;
 import app.restgourmet.api.usermanagement.security.UserDetailsImpl;
 import app.restgourmet.api.usermanagement.service.spec.UserService;
 import app.restgourmet.api.utils.AppConstants;
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public PagedModel<UserListDto> listUsers(PageRequest pageRequest, UserListFiltersDto filters) {
-    Specification<UserEntity> spec = UserSpec.filterBy(filters);
+    Specification<UserEntity> spec = UserSpecification.filterBy(filters);
     Page<UserListDto> res = userRepository.findAll(spec, pageRequest).map(userMapper::toListDto);
     return new PagedModel<>(res);
   }

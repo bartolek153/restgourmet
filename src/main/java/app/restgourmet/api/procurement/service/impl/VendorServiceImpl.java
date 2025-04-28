@@ -17,7 +17,7 @@ import app.restgourmet.api.procurement.dto.vendor.VendorListFiltersDto;
 import app.restgourmet.api.procurement.mappers.VendorMapper;
 import app.restgourmet.api.procurement.models.Vendor;
 import app.restgourmet.api.procurement.repository.VendorRepository;
-import app.restgourmet.api.procurement.repository.specifications.VendorSpec;
+import app.restgourmet.api.procurement.repository.specifications.VendorSpecification;
 import app.restgourmet.api.procurement.service.spec.VendorService;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -39,7 +39,7 @@ public class VendorServiceImpl implements VendorService {
 
   @Override
   public PagedModel<VendorListDto> list(PageRequest pageReq, VendorListFiltersDto filters) {
-    Specification<Vendor> spec = VendorSpec.filterBy(filters);
+    Specification<Vendor> spec = VendorSpecification.filterBy(filters);
     Page<Vendor> page = vendorRepository.findAll(spec, pageReq);
     return new PagedModel<>(page.map(vendorMapper::toListDto));
   }

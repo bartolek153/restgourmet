@@ -15,7 +15,7 @@ import app.restgourmet.api.commondata.dto.paymentterm.PaymentTermListFiltersDto;
 import app.restgourmet.api.commondata.mappers.PaymentTermMapper;
 import app.restgourmet.api.commondata.models.PaymentTerm;
 import app.restgourmet.api.commondata.repository.PaymentTermRepository;
-import app.restgourmet.api.commondata.repository.specifications.PaymentTermSpec;
+import app.restgourmet.api.commondata.repository.specifications.PaymentTermSpecification;
 import app.restgourmet.api.commondata.service.spec.PaymentTermService;
 import app.restgourmet.api.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
@@ -34,7 +34,7 @@ public class PaymentTermServiceImpl implements PaymentTermService {
 
   @Override
   public PagedModel<PaymentTermListDto> list(PageRequest pagReq, PaymentTermListFiltersDto filters) {
-    Specification<PaymentTerm> spec = PaymentTermSpec.hasFilters(filters);
+    Specification<PaymentTerm> spec = PaymentTermSpecification.hasFilters(filters);
     Page<PaymentTerm> page = paymentTermRepository.findAll(spec, pagReq);
     return new PagedModel<>(page.map(paymentTermMapper::toListDto));
   }

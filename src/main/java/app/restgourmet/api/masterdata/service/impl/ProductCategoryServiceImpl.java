@@ -18,7 +18,7 @@ import app.restgourmet.api.masterdata.mappers.ProductCategoryMapper;
 import app.restgourmet.api.masterdata.models.ProductCategory;
 import app.restgourmet.api.masterdata.repository.ProductCategoryRepository;
 import app.restgourmet.api.masterdata.repository.ProductFamilyRepository;
-import app.restgourmet.api.masterdata.repository.specifications.ProdCategorySpec;
+import app.restgourmet.api.masterdata.repository.specifications.ProductCategorySpecification;
 import app.restgourmet.api.masterdata.service.spec.ProductCategoryService;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -39,7 +39,7 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
   @Override
   public PagedModel<ProdCategoryListDto> list(PageRequest pageReq, ProdCategoryListFiltersDto filters) {
-    Specification<ProductCategory> spec = ProdCategorySpec.filterBy(filters);
+    Specification<ProductCategory> spec = ProductCategorySpecification.filterBy(filters);
     Page<ProdCategoryListDto> res = productCategoryRepository.findAll(spec, pageReq)
         .map(productCategoryMapper::toListDto);
 

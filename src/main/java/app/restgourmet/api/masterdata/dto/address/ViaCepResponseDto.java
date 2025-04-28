@@ -4,7 +4,7 @@ import app.restgourmet.api.utils.AppConstants;
 import lombok.Data;
 
 @Data
-public class ViaCepAddressDto {
+public class ViaCepResponseDto {
   private String cep;
   private String logradouro;
   private String complemento;

@@ -1,10 +1,10 @@
-package app.restgourmet.api.procurement.dto.expensecategory;
+package app.restgourmet.api.financials.dto.expensenature;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class ExpenseCategoryDto {
+public class ExpenseNatureDto {
   @NotNull
   private String name;
 

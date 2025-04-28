@@ -1,14 +1,14 @@
-package app.restgourmet.api.procurement.mappers;
+package app.restgourmet.api.financials.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 
-import app.restgourmet.api.procurement.dto.expense.CreateExpenseDto;
-import app.restgourmet.api.procurement.dto.expense.EditExpenseDto;
-import app.restgourmet.api.procurement.dto.expense.ExpenseDto;
-import app.restgourmet.api.procurement.dto.expense.ExpenseListDto;
-import app.restgourmet.api.procurement.models.Expense;
+import app.restgourmet.api.financials.dto.expense.CreateExpenseDto;
+import app.restgourmet.api.financials.dto.expense.EditExpenseDto;
+import app.restgourmet.api.financials.dto.expense.ExpenseDto;
+import app.restgourmet.api.financials.dto.expense.ExpenseListDto;
+import app.restgourmet.api.financials.models.Expense;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ExpenseMapper {

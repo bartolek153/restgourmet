@@ -1,4 +1,4 @@
-package app.restgourmet.api.procurement.dto.expense;
+package app.restgourmet.api.financials.dto.expense;
 
 import lombok.Data;
 

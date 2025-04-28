@@ -1,9 +1,6 @@
-package app.restgourmet.api.procurement.models;
+package app.restgourmet.api.financials.models;
 
-import java.util.List;
-
-import app.restgourmet.api.masterdata.models.Product;
-import app.restgourmet.api.usermanagement.models.BaseEntity;
+import app.restgourmet.api.shared.models.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -21,13 +18,11 @@ import lombok.Setter;
 @Entity
 @Table(name = "expense_items")
 public class ExpenseItem extends BaseEntity {
-  private Product item;
+  private ExpenseNature nature;
 
-  private Double quantity;
+  private Double totalAmount;
 
-  private Double price;
-
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "expense_id")
-  private List<Expense> expense;
+  private Expense expense;
 }

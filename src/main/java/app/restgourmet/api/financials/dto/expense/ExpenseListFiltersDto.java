@@ -1,4 +1,4 @@
-package app.restgourmet.api.procurement.dto.expensecategory;
+package app.restgourmet.api.financials.dto.expense;
 
 import java.util.List;
 import java.util.UUID;
@@ -6,7 +6,7 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class ExpenseCategoryListFiltersDto {
+public class ExpenseListFiltersDto {
   private String q;
   private List<UUID> ids;
 }

@@ -1,4 +1,4 @@
-package app.restgourmet.api.procurement.service.impl;
+package app.restgourmet.api.financials.service.impl;
 
 import java.util.UUID;
 
@@ -10,16 +10,16 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
 import app.restgourmet.api.exceptions.ResourceNotFoundException;
-import app.restgourmet.api.procurement.dto.expense.CreateExpenseDto;
-import app.restgourmet.api.procurement.dto.expense.EditExpenseDto;
-import app.restgourmet.api.procurement.dto.expense.ExpenseDto;
-import app.restgourmet.api.procurement.dto.expense.ExpenseListDto;
-import app.restgourmet.api.procurement.dto.expense.ExpenseListFiltersDto;
-import app.restgourmet.api.procurement.mappers.ExpenseMapper;
-import app.restgourmet.api.procurement.models.Expense;
-import app.restgourmet.api.procurement.repository.ExpenseRepository;
-import app.restgourmet.api.procurement.repository.specifications.ExpenseSpec;
-import app.restgourmet.api.procurement.service.spec.ExpenseService;
+import app.restgourmet.api.financials.dto.expense.CreateExpenseDto;
+import app.restgourmet.api.financials.dto.expense.EditExpenseDto;
+import app.restgourmet.api.financials.dto.expense.ExpenseDto;
+import app.restgourmet.api.financials.dto.expense.ExpenseListDto;
+import app.restgourmet.api.financials.dto.expense.ExpenseListFiltersDto;
+import app.restgourmet.api.financials.mappers.ExpenseMapper;
+import app.restgourmet.api.financials.models.Expense;
+import app.restgourmet.api.financials.repository.ExpenseRepository;
+import app.restgourmet.api.financials.repository.specifications.ExpenseSpecification;
+import app.restgourmet.api.financials.service.spec.ExpenseService;
 import app.restgourmet.api.utils.AppConstants;
 import jakarta.transaction.Transactional;
 
@@ -37,7 +37,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 
   @Override
   public PagedModel<ExpenseListDto> list(PageRequest pagReq, ExpenseListFiltersDto filters) {
-    Specification<Expense> spec = ExpenseSpec.filterBy(filters);
+    Specification<Expense> spec = ExpenseSpecification.filterBy(filters);
     Page<Expense> exps = expenseRepository.findAll(spec, pagReq);
     return new PagedModel<>(exps.map(expenseMapper::toListDto));
   }

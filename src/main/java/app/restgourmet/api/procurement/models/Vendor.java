@@ -2,7 +2,7 @@ package app.restgourmet.api.procurement.models;
 
 import app.restgourmet.api.commondata.models.PaymentTerm;
 import app.restgourmet.api.masterdata.models.BusinessPartner;
-import app.restgourmet.api.usermanagement.models.AuditableEntity;
+import app.restgourmet.api.shared.models.AuditableEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;

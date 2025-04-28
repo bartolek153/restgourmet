@@ -41,6 +41,7 @@ import { UserCreate, UserEdit, UserList } from "./pages/usersmanagement/users";
 import { resources } from "./resources";
 import { dataProvider } from "./rest-data-provider";
 import Dashboard from "./pages/donations/dashboard";
+import { CurrencyEdit, CurrencyList } from "./pages/commonData/currencies";
 
 function App() {
   return (
@@ -79,14 +80,22 @@ function App() {
                     </Authenticated>
                   }
                 >
-                  {/* <Route index element={<NavigateToResource resource="users" />} /> */}
-                  <Route index element={<Dashboard/>} />
+                  <Route index element={<Dashboard />} />
 
-                  <Route path="/units">
-                    <Route index element={<BaseUnitList />} />
-                    <Route path="measurement">
-                      <Route index element={<UnitMeasurementList />} />
-                    </Route>
+                  <Route path="/addresses">
+                    <Route index element={<AddressList />} />
+                  </Route>
+
+                  <Route path="/currencies">
+                    <Route index element={<CurrencyList />} />
+                    <Route path=":id" element={<CurrencyEdit/>} />
+                  </Route>
+
+                  <Route path="/partners">
+                    <Route index element={<BusinessPartnerList />} />
+                    <Route path=":id/edit" element={<BusinessPartnerEdit />} />
+                    <Route path=":partnerId/customers/create" element={<CustomerCreate />} />
+                    <Route path=":id/customers/edit" element={<CustomerEdit />} />
                   </Route>
 
                   <Route path="/products">
@@ -118,15 +127,11 @@ function App() {
                     <Route path="edit/:id" element={<SalesOrderEdit />} />
                   </Route>
 
-                  <Route path="/addresses">
-                    <Route index element={<AddressList />} />
-                  </Route>
-
-                  <Route path="/partners">
-                    <Route index element={<BusinessPartnerList />} />
-                    <Route path=":id/edit" element={<BusinessPartnerEdit />} />
-                    <Route path=":partnerId/customers/create" element={<CustomerCreate />} />
-                    <Route path=":id/customers/edit" element={<CustomerEdit />} />
+                  <Route path="/units">
+                    <Route index element={<BaseUnitList />} />
+                    <Route path="measurement">
+                      <Route index element={<UnitMeasurementList />} />
+                    </Route>
                   </Route>
 
                   <Route path="/users">

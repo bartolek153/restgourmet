@@ -27,6 +27,26 @@ export const resources = [
   { name: RESTAURANT_MANAGEMENT_PARENT_MENU, meta: { icon: "" } },
   { name: USER_MANAGEMENT_PARENT_MENU, meta: { icon: <FaClipboardUser /> } },
   {
+    name: "addresses",
+    list: "/addresses",
+    create: "/addresses/create",
+    edit: "/addresses/edit/:id",
+    meta: {
+      parent: MASTER_DATA_PARENT_MENU,
+      canDelete: true,
+    },
+  },
+  {
+    name: "currencies",
+    list: "/currencies",
+    create: "/currencies/create",
+    edit: "/addresses/edit/:id",
+    meta: {
+      parent: COMMON_DATA_PARENT_MENU,
+      canDelete: true
+    }
+  },
+  {
     name: "partners/customers",
     create: "/partners/:partnerId/customers/create",
     edit: "/partners/:id/customers/edit",
@@ -88,16 +108,6 @@ export const resources = [
     edit: "/units/measurement/edit/:id",
     meta: {
       label: "Units of Measurement",
-      parent: MASTER_DATA_PARENT_MENU,
-      canDelete: true,
-    },
-  },
-  {
-    name: "addresses",
-    list: "/addresses",
-    create: "/addresses/create",
-    edit: "/addresses/edit/:id",
-    meta: {
       parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
     },

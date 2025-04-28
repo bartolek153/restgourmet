@@ -60,12 +60,16 @@ yarn dev
   - http://python.langchain.com/docs/how_to/#qa-over-sql--csv
   - patch routes (REST API)
   - resizable sidebar
+  - Langchain
+  - Whatsapp / Telegram integration
 - Code Improvement
   - Add unit tests
   - Remove excessive model lombok annotations
   - Test if redis cache is working
   - Use migrations
   - standardize ui tweaks
+  - standardize mapper DI
+  - standardize specification pattern structure
 - CI/CD
   - Create image build pipeline
   - Add image signing

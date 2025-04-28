@@ -15,24 +15,36 @@ public final class AppConstants {
 
     public static final String ADDRESS_NOT_FOUND = "Address not found";
     public static final String ADDRESS_DELETE_DEPS = "Cannot delete address as it has dependent entities";
-    
+
     public static final String BUSINESS_PARTNER_NOT_FOUND = "Business partner not found";
     public static final String BUSINESS_PARTNER_DELETE_DEPS = "Cannot delete business partner as it has dependent entities";
-    
+
     public static final String CEP_INVALID_FORMAT = "Invalid CEP format";
+
+    public static final String CURRENCY_NOT_FOUND = "Currency not found";
+    public static final String CURRENCY_ALREADY_EXISTS = "The currency code is already registered";
 
     public static final String CUSTOMER_ALREADY_EXISTS = "Customer already exists";
     public static final String CUSTOMER_NOT_FOUND = "Customer not found";
 
+    public static final String EXCHANGE_RATE_UNAVAILABLE_SERVICE = "Could not obtain the exchange rate using a third pary service. Try again later or fill the form manually.";
+
     public static final String EXPENSE_NOT_FOUND = "Expense not found";
-    
+
     public static final String EXPENSE_CATEGORY_NOT_FOUND = "Expense category not found";
-    
+
     public static final String EXTERNAL_SERVICE_ERROR = "External service error";
     public static final String EXTERNAL_DATABASE_ERROR = "A database error occurred while processing the request. Please, try again later.";
 
-    public static final String PAYMENT_TERM_NOT_FOUND = "Payment term not found";
+    public static final String INVENTORY_INSUFFICIENT = "Insufficient inventory available to fulfill the request.";
+    public static final String INVENTORY_NOT_FOUND = "Inventory record not found.";
+    public static final String INVENTORY_QUANTITY_EXCEEDED = "Requested quantity exceeds available inventory.";
+    public static final String INVENTORY_UNAVAILABLE = "Inventory is currently unavailable.";
+    
+    public static final String PARAMETER_NOT_FOUND = "Parameter not found.";
 
+    public static final String PAYMENT_TERM_NOT_FOUND = "Payment term not found";
+    
     public static final String PERMISSION_NOT_FOUND = "Permission not found";
     
     public static final String PRODUCT_NOT_FOUND = "Product not found";
@@ -41,18 +53,24 @@ public final class AppConstants {
     
     public static final String PRODUCT_CATEGORY_NOT_FOUND = "Category not found";
     public static final String PRODUCT_CATEGORY_DELETE_DEPS = "Cannot delete category as it has dependent family";
-
+    
     public static final String PRODUCT_FAMILY_NOT_FOUND = "Family not found";
     public static final String PRODUCT_FAMILY_DELETE_DEPS = "Cannot delete family as it has dependent group";
-
+    
     public static final String PRODUCT_GROUP_NOT_FOUND = "Group not found";
     public static final String PRODUCT_GROUP_DELETE_DEPS = "Cannot delete group as it has dependent product";
 
     public static final String ROLE_NOT_FOUND = "Role not found";
     public static final String ROLE_DELETE_DEPS = "Cannot delete role as it as has dependent user";
 
+    public static final String SALES_ORDER_CATEGORY_DUPLICATE_CODE = "Sales order category code already exists.";
+    public static final String SALES_ORDER_CATEGORY_NOT_FOUND = "Sales order category not found.";
+
+    public static final String SECRET_INVALID = "The provided secret is invalid or unavailable";
+
     public static final String STORAGE_UPLOAD_ERROR = "An error occurred when uploading the picture";
 
+    public static final String UNIT_MEASUREMENT_BAD_CONVERSION = "Invalid or unsupported unit of measurement conversion.";
     public static final String UNIT_MEASUREMENT_NOT_FOUND = "Unit of measurement not found";
 
     public static final String USER_EMAIL_IN_USE = "Email already in use";
@@ -64,11 +82,15 @@ public final class AppConstants {
     public static final String WAREHOUSE_HAS_PENDING_ORDERS = "Cannot delete warehouse as it has pending orders";
 
     public static final String VENDOR_NOT_FOUND = "Vendor not found";
+
+    public static final String PARAMETER_DELETE_IS_ACTIVE = "a";
+
   }
 
   public static class ExternalServices {
     public static class Urls {
       public static final String VIACEP = "https://viacep.com.br/ws/{cep}/json/";
+      public static final String OPEN_EXCHANGE_RATES_CONVERT = "https://openexchangerates.org/api/convert/{}/{}/{}?app_id={}&prettyprint=false";
     }
   }
 

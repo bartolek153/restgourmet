@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 import app.restgourmet.api.shared.models.parameters.BaseParameter;
 
 @Repository
-public interface ParameterRepository<T extends BaseParameter> extends JpaRepository<T, UUID> {
+public interface BaseParameterRepository<T extends BaseParameter> extends JpaRepository<T, UUID> {
   Optional<T> findFirstByIsActiveTrue();
 }

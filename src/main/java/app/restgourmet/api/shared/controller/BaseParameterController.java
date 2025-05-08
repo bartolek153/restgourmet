@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.restgourmet.api.shared.dto.ParameterListFiltersDto;
 import app.restgourmet.api.shared.models.parameters.BaseParameter;
-import app.restgourmet.api.shared.service.spec.ParameterService;
+import app.restgourmet.api.shared.service.spec.BaseParameterService;
 import app.restgourmet.api.utils.AppConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,9 +29,9 @@ import jakarta.validation.Valid;
 @Tag(name = "Parameter", description = "Parameter endpoints")
 public abstract class BaseParameterController<T extends BaseParameter> {
 
-  protected final ParameterService<T> parameterService;
+  protected final BaseParameterService<T> parameterService;
 
-  public BaseParameterController(ParameterService<T> parameterService) {
+  public BaseParameterController(BaseParameterService<T> parameterService) {
     this.parameterService = parameterService;
   }
 

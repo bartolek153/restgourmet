@@ -12,14 +12,14 @@ import app.restgourmet.api.shared.dto.ParameterListFiltersDto;
 import app.restgourmet.api.shared.exceptions.BadRequestException;
 import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.shared.models.parameters.BaseParameter;
-import app.restgourmet.api.shared.repository.ParameterRepository;
+import app.restgourmet.api.shared.repository.BaseParameterRepository;
 import app.restgourmet.api.utils.AppConstants.ErrorMessages;
 
-public abstract class ParameterService<T extends BaseParameter> {
+public abstract class BaseParameterService<T extends BaseParameter> {
 
-  private final ParameterRepository<T> parameterRepository;
+  private final BaseParameterRepository<T> parameterRepository;
 
-  public ParameterService(ParameterRepository<T> parameterRepository) {
+  public BaseParameterService(BaseParameterRepository<T> parameterRepository) {
     this.parameterRepository = parameterRepository;
   }
 

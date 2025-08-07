@@ -1,3 +1,9 @@
 {
-  "image": "mcr.microsoft.com/devcontainers/universal:2"
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "extensions": [
+    "vscjava.vscode-java-pack",
+    "dracula-theme.theme-dracula",
+    "pkief.material-icon-theme"
+  ],
+  "postCreateCommand": "sdk install java 21.0.7-ms"
 }

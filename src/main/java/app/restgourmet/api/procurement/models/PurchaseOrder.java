@@ -37,9 +37,6 @@ public class PurchaseOrder extends AuditableEntity {
   @ManyToOne
   private PurchaseRequisition requisition;
 
-  @NotNull
-  private LocalDate orderDate;
-
   private LocalDate expectedDeliveryDate;
 
   private PurchaseOrderStatus status;

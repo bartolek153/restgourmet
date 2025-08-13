@@ -14,6 +14,7 @@ import app.restgourmet.api.commondata.repository.BaseUnitRepository;
 import app.restgourmet.api.commondata.service.impl.GlobalParametersServiceImpl;
 import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
 import app.restgourmet.api.shared.models.parameters.GlobalParameters;
+import app.restgourmet.api.shared.service.impl.InventoryParameterServiceImpl;
 import app.restgourmet.api.usermanagement.enums.PermissionCategory;
 import app.restgourmet.api.usermanagement.enums.UserType;
 import app.restgourmet.api.usermanagement.models.Permission;
@@ -28,6 +29,7 @@ public class DataLoader implements CommandLineRunner {
   private final GlobalParametersServiceImpl globalParametersServiceImpl;
 
   private static final Logger logger = LoggerFactory.getLogger(DataLoader.class);
+  private final InventoryParameterServiceImpl inventoryParameterServiceImpl;
   private final BaseUnitRepository baseUnitRepository;
   private final PermissionRepository permissionRepository;
   private final UserRepository userRepository;
@@ -39,16 +41,20 @@ public class DataLoader implements CommandLineRunner {
       PasswordEncoder passwordEncoder,
       UnitMeasurementRepository unitMeasurementRepository,
       UserRepository userRepository,
+      InventoryParameterServiceImpl inventoryParameterServiceImpl,
       GlobalParametersServiceImpl globalParametersServiceImpl) {
     this.baseUnitRepository = baseUnitRepository;
     this.permissionRepository = permissionRepository;
     this.passwordEncoder = passwordEncoder;
     this.userRepository = userRepository;
+    this.inventoryParameterServiceImpl = inventoryParameterServiceImpl;
     this.globalParametersServiceImpl = globalParametersServiceImpl;
   }
 
   @Override
   public void run(String... args) throws Exception {
+    System.out.println(inventoryParameterServiceImpl.getActive());
+
     globalParametersServiceImpl.getActive().ifPresentOrElse((p) -> {
       logger.info("Database already initialized.");
     }, () -> {

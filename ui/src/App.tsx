@@ -1,4 +1,4 @@
-import { Authenticated, Refine } from "@refinedev/core";
+import { Authenticated, I18nProvider, Refine } from "@refinedev/core";
 import { RefineKbar, RefineKbarProvider } from "@refinedev/kbar";
 
 import {
@@ -42,8 +42,21 @@ import { resources } from "./resources";
 import { dataProvider } from "./rest-data-provider";
 import Dashboard from "./pages/donations/dashboard";
 import { CurrencyEdit, CurrencyList } from "./pages/commonData/currencies";
+import { PurchaseOrderList } from "./pages/procurement/orders/list";
+import { PurchaseOrderEdit } from "./pages/procurement/orders/edit";
+import "./i18n";
+import { useTranslation } from "react-i18next";
+
 
 function App() {
+  const { t, i18n } = useTranslation();
+
+  const i18nProvider: I18nProvider = {
+    translate: (key: string, options?: any, defaultMessage?: string) => t(key, options),
+    changeLocale: (lang: string) => i18n.changeLanguage(lang),
+    getLocale: () => i18n.language,
+  };
+
   return (
     <BrowserRouter>
       <RefineKbarProvider>
@@ -55,6 +68,7 @@ function App() {
               routerProvider={routerBindings}
               authProvider={authProvider}
               resources={resources}
+              i18nProvider={i18nProvider}
               options={{
                 syncWithLocation: true,
                 warnWhenUnsavedChanges: false,
@@ -88,7 +102,7 @@ function App() {
 
                   <Route path="/currencies">
                     <Route index element={<CurrencyList />} />
-                    <Route path=":id" element={<CurrencyEdit/>} />
+                    <Route path=":id" element={<CurrencyEdit />} />
                   </Route>
 
                   <Route path="/partners">
@@ -119,6 +133,13 @@ function App() {
                       <Route index element={<ProductGroupList />} />
                       <Route path="create" />
                       <Route path="edit/:id" />
+                    </Route>
+                  </Route>
+
+                  <Route path="purchases">
+                    <Route path="orders">
+                      <Route index element={<PurchaseOrderList />} />
+                      <Route path="edit/:id" element={<PurchaseOrderEdit />} />
                     </Route>
                   </Route>
 

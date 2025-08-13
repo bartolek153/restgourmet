@@ -1,6 +1,7 @@
 import { RefineThemes } from "@refinedev/antd";
 import { ConfigProvider, theme } from "antd";
 import { type PropsWithChildren, createContext, useEffect, useState } from "react";
+import pt_BR from "antd/locale/pt_BR";
 
 type ColorModeContextType = {
   mode: string;
@@ -43,6 +44,7 @@ export const ColorModeContextProvider: React.FC<PropsWithChildren> = ({ children
           ...RefineThemes.Red,
           algorithm: mode === "light" ? defaultAlgorithm : darkAlgorithm,
         }}
+        locale={pt_BR}
       >
         {children}
       </ConfigProvider>

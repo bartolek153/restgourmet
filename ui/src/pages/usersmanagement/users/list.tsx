@@ -21,8 +21,8 @@ export const UserList = () => {
     <List>
       <Form {...searchFormProps} layout="horizontal" onValuesChange={filterPageDelayed}>
         <Space wrap>
-          <Form.Item label="Search" name="q">
-            <Input placeholder="ID, Name, Nick, etc." prefix={<AiOutlineSearch />} allowClear />
+          <Form.Item label="Pesquisa" name="q">
+            <Input placeholder="ID, Nome, Usuário, etc." prefix={<AiOutlineSearch />} allowClear />
           </Form.Item>
         </Space>
       </Form>
@@ -31,37 +31,37 @@ export const UserList = () => {
         rowKey="id"
         pagination={{
           ...tableProps.pagination,
-          showTotal: (total) => `Total ${total} items`,
+          showTotal: (total) => `${total} registro(s)`,
           showQuickJumper: true,
           showSizeChanger: true,
         }}
         showSorterTooltip={true}
       >
-        <Table.Column dataIndex="name" title={"Name"} sorter={true} />
-        <Table.Column dataIndex="email" title={"Email"} />
-        <Table.Column dataIndex="nickname" title={"Nickname"} />
-        <Table.Column dataIndex="type" title={"Type"} />
+        <Table.Column dataIndex="name" title={"Nome"} sorter={true} />
+        <Table.Column dataIndex="email" title={"E-mail"} />
+        <Table.Column dataIndex="nickname" title={"Usuário"} />
+        <Table.Column dataIndex="type" title={"Tipo"} />
         <Table.Column
           dataIndex="enabled"
           render={(text) => <Checkbox checked={text} />}
-          title={"Enabled"}
+          title={"Ativo"}
           filterDropdown={(props) => (
             <FilterDropdown {...props}>
               <Radio.Group>
-                <Radio value="true">Enabled</Radio>
-                <Radio value="false">Disabled</Radio>
+                <Radio value="true">Ativo</Radio>
+                <Radio value="false">Inativo</Radio>
               </Radio.Group>
             </FilterDropdown>
           )}
         />
         <Table.Column
           dataIndex="createdAt"
-          title={"Created at"}
+          title={"Criado em"}
           sorter={true}
           render={(text) => new Date(text).toLocaleString()}
         />
         <Table.Column
-          title={"Actions"}
+          title={"Ações"}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>

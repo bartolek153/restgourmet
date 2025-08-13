@@ -2,14 +2,14 @@ package app.restgourmet.api.shared.service.impl;
 
 import org.springframework.stereotype.Service;
 
+import app.restgourmet.api.inventoryhandling.repository.InventoryParametersRepository;
 import app.restgourmet.api.shared.models.parameters.InventoryParameters;
-import app.restgourmet.api.shared.repository.ParameterRepository;
-import app.restgourmet.api.shared.service.spec.ParameterService;
+import app.restgourmet.api.shared.service.spec.BaseParameterService;
 
 @Service
-public class InventoryParameterServiceImpl extends ParameterService<InventoryParameters> {
+public class InventoryParameterServiceImpl extends BaseParameterService<InventoryParameters> {
 
-  public InventoryParameterServiceImpl(ParameterRepository<InventoryParameters> parameterRepository) {
+  public InventoryParameterServiceImpl(InventoryParametersRepository parameterRepository) {
     super(parameterRepository);
   }
 

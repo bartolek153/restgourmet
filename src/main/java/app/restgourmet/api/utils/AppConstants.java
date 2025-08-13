@@ -60,6 +60,12 @@ public final class AppConstants {
     public static final String PRODUCT_GROUP_NOT_FOUND = "Group not found";
     public static final String PRODUCT_GROUP_DELETE_DEPS = "Cannot delete group as it has dependent product";
 
+    public static final String PURCHASE_ORDER_NOT_FOUND = "Purchase order not found";
+    public static final String PURCHASE_ORDER_DELETE_APPROVED = "Cannot delete approved purchase order";
+
+    public static final String PURCHASE_REQUISITION_NOT_FOUND = "Purchase requisition not found";
+    public static final String PURCHASE_REQUISITION_DELETE_APPROVED = "Cannot delete approved purchase requisition";
+
     public static final String ROLE_NOT_FOUND = "Role not found";
     public static final String ROLE_DELETE_DEPS = "Cannot delete role as it as has dependent user";
 

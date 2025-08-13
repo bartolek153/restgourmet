@@ -1,18 +1,16 @@
 import { AiOutlineTable, AiOutlineUser, AiTwotoneDatabase } from "react-icons/ai";
-import { LuBriefcaseBusiness } from "react-icons/lu";
 import { FaUsers } from "react-icons/fa";
+import { FaClipboardUser } from "react-icons/fa6";
+import { LuBriefcaseBusiness } from "react-icons/lu";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import {
   COMMON_DATA_PARENT_MENU,
-  EMPLOYEE_MANAGEMENT_PARENT_MENU,
   FINANCIALS_PARENT_MENU,
   INVENTORY_HANDLING_PARENT_MENU,
   MASTER_DATA_PARENT_MENU,
-  RESTAURANT_MANAGEMENT_PARENT_MENU,
-  SALES_PARENT_MENU,
+  PROCUREMENT_PARENT_MENU,
   USER_MANAGEMENT_PARENT_MENU,
 } from "./constants";
-import { FaClipboardUser } from "react-icons/fa6";
 
 export const resources = [
   {
@@ -20,11 +18,9 @@ export const resources = [
     meta: { icon: <AiTwotoneDatabase /> },
   },
   { name: MASTER_DATA_PARENT_MENU, meta: { icon: <AiOutlineTable /> } },
-  { name: SALES_PARENT_MENU, meta: { icon: <MdOutlineShoppingCart /> } },
   { name: FINANCIALS_PARENT_MENU, meta: { icon: "" } },
   { name: INVENTORY_HANDLING_PARENT_MENU, meta: { icon: "" } },
-  { name: EMPLOYEE_MANAGEMENT_PARENT_MENU, meta: { icon: "" } },
-  { name: RESTAURANT_MANAGEMENT_PARENT_MENU, meta: { icon: "" } },
+  { name: PROCUREMENT_PARENT_MENU, meta: { icon: <MdOutlineShoppingCart/> }},
   { name: USER_MANAGEMENT_PARENT_MENU, meta: { icon: <FaClipboardUser /> } },
   {
     name: "addresses",
@@ -34,17 +30,8 @@ export const resources = [
     meta: {
       parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
+      label: "Endereços"
     },
-  },
-  {
-    name: "currencies",
-    list: "/currencies",
-    create: "/currencies/create",
-    edit: "/addresses/edit/:id",
-    meta: {
-      parent: COMMON_DATA_PARENT_MENU,
-      canDelete: true
-    }
   },
   {
     name: "partners/customers",
@@ -64,6 +51,7 @@ export const resources = [
       parent: USER_MANAGEMENT_PARENT_MENU,
       canDelete: true,
       icon: <AiOutlineUser />,
+      label: "Usuários"
     },
   },
   {
@@ -72,7 +60,7 @@ export const resources = [
     create: "/users/roles/create",
     edit: "/users/roles/edit/:id",
     meta: {
-      label: "Roles",
+      label: "Funções",
       parent: USER_MANAGEMENT_PARENT_MENU,
       canDelete: true,
       icon: <LuBriefcaseBusiness />,
@@ -84,7 +72,7 @@ export const resources = [
     create: "/users/groups/create",
     edit: "/users/groups/edit/:id",
     meta: {
-      label: "Groups",
+      label: "Grupos",  
       parent: USER_MANAGEMENT_PARENT_MENU,
       canDelete: true,
       icon: <FaUsers />,
@@ -96,7 +84,7 @@ export const resources = [
     create: "/units/create",
     edit: "/units/edit/:id",
     meta: {
-      label: "Base Units",
+      label: "Unidades básicas",
       parent: COMMON_DATA_PARENT_MENU,
       canDelete: true,
     },
@@ -107,7 +95,7 @@ export const resources = [
     create: "/units/measurement/create",
     edit: "/units/measurement/edit/:id",
     meta: {
-      label: "Units of Measurement",
+      label: "Unidades de medida",
       parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
     },
@@ -118,7 +106,7 @@ export const resources = [
     create: "/partners/create",
     edit: "/partners/:id/edit",
     meta: {
-      label: "Business Partners",
+      label: "Parceiros",
       parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
     },
@@ -129,7 +117,7 @@ export const resources = [
     create: "/products/categories/create",
     edit: "/products/categories/edit/:id",
     meta: {
-      label: "Product Categories",
+      label: "Categorias de Produto",
       parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
     },
@@ -140,7 +128,7 @@ export const resources = [
     create: "/products/families/create",
     edit: "/products/families/edit/:id",
     meta: {
-      label: "Product Families",
+      label: "Famílias de Produto",
       parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
     },
@@ -151,7 +139,7 @@ export const resources = [
     create: "/products/groups/create",
     edit: "/products/groups/edit/:id",
     meta: {
-      label: "Product Groups",
+      label: "Grupos de Produto",
       parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
     },
@@ -162,20 +150,20 @@ export const resources = [
     create: "/products/create",
     edit: "/products/edit/:id",
     meta: {
+      label: "Produtos",
       parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
     },
   },
   {
-    name: "sales/orders",
-    list: "/sales/orders",
-    create: "/sales/orders/create",
-    edit: "/sales/orders/edit/:id",
+    name: "purchases/orders",
+    list: "/purchases/orders",
+    create: "/purchases/create",
     meta: {
-      label: "Orders",
-      parent: SALES_PARENT_MENU,
+      parent: PROCUREMENT_PARENT_MENU,
       canDelete: true,
-    },
+      label: "Pedidos"
+    }
   },
   {
     name: "warehouses",
@@ -183,7 +171,7 @@ export const resources = [
     create: "/warehouses/create",
     edit: "/warehouses/edit/:id",
     meta: {
-      label: "Warehouses",
+      label: "Armazéns",
       parent: MASTER_DATA_PARENT_MENU,
       canDelete: true,
     },

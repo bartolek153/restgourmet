@@ -7,7 +7,6 @@ import lombok.Data;
 @Data
 public class AddressListDto {
   private UUID id;
-  private String name;
   private String street;
   private String number;
   private String zipCode;

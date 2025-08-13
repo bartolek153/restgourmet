@@ -85,46 +85,43 @@ export const ProductList = () => {
     <>
       <Row gutter={[16, 16]}>
         <Col lg={6} xs={24}>
-          <Card title="Filters">
+          <Card title="Filtros">
             <Form {...searchFormProps} layout="vertical" onValuesChange={filterPageDelayed}>
               <Space wrap direction="vertical">
-                <Form.Item label="Search" name="q">
+                <Form.Item label="Pesquisa" name="q">
                   <Input
-                    placeholder="ID, Description, SKU"
+                    placeholder="ID, Descrição, SKU"
                     prefix={<AiOutlineSearch />}
                     allowClear
                   />
                 </Form.Item>
-                <Form.Item label="Group" name="groupId">
+                <Form.Item label="Grupo" name="groupId">
                   <Select {...gtpSelectProps} allowClear />
                 </Form.Item>
-                <Form.Item label="Family" name="familyId">
+                <Form.Item label="Família" name="familyId">
                   <Select {...famSelectProps} allowClear />
                 </Form.Item>
-                <Form.Item label="Category" name="categoryId">
+                <Form.Item label="Categoria" name="categoryId">
                   <Select {...catSelectProps} allowClear />
                 </Form.Item>
-                <Form.Item label="Origin" name="origin">
+                <Form.Item label="Origem" name="origin">
                   <Select allowClear>
-                    <Select.Option value="PRODUCED">Produced</Select.Option>
-                    <Select.Option value="SUPPLIED">Supplied</Select.Option>
-                    <Select.Option value="IMPORTED">Imported</Select.Option>
-                    <Select.Option value="OTHER">Other</Select.Option>
+                    <Select.Option value="PRODUCED">Produzido</Select.Option>
+                    <Select.Option value="SUPPLIED">Fornecido</Select.Option>
+                    <Select.Option value="IMPORTED">Importado</Select.Option>
+                    <Select.Option value="OTHER">Outro</Select.Option>
                   </Select>
                 </Form.Item>
-                <Form.Item label="Inventory Unit" name="inventoryUnitId">
+                <Form.Item label="Unidade de Estoque" name="inventoryUnitId">
                   <Select {...umSelectProps} allowClear />
                 </Form.Item>
                 <Form.Item label="Status" name="status">
                   <Checkbox.Group style={vertRadioStyle}>
-                    <Checkbox value="ACTIVE">Active</Checkbox>
-                    <Checkbox value="DISCONTINUED">Discontinued</Checkbox>
-                    <Checkbox value="OBSOLETE">Obsolete</Checkbox>
-                    <Checkbox value="BLOCKED">Blocked</Checkbox>
+                    <Checkbox value="ACTIVE">Ativo</Checkbox>
+                    <Checkbox value="DISCONTINUED">Descontinuado</Checkbox>
+                    <Checkbox value="OBSOLETE">Obsoleto</Checkbox>
+                    <Checkbox value="BLOCKED">Bloqueado</Checkbox>
                   </Checkbox.Group>
-                </Form.Item>
-                <Form.Item label="Deleted" name="deleted">
-                  <Switch />
                 </Form.Item>
               </Space>
             </Form>
@@ -151,12 +148,12 @@ export const ProductList = () => {
               }}
               showSorterTooltip={false}
             >
-              <Table.Column dataIndex="description" title={"Description"} sorter={true} />
+              <Table.Column dataIndex="description" title={"Descrição"} sorter={true} />
               <Table.Column dataIndex="sku" title={"SKU"} />
               <Table.Column
                 dataIndex="groupId"
                 sorter={true}
-                title={"Group"}
+                title={"Grupo"}
                 render={(value) => {
                   if (isLoading) {
                     return <TextField value="Loading..." />;
@@ -165,10 +162,10 @@ export const ProductList = () => {
                   return <TextField value={data?.find((item) => item.id === value)?.description} />;
                 }}
               />
-              <Table.Column dataIndex="origin" title={"Origin"} />
-              <Table.Column dataIndex="price" title={"Price"} />
+              <Table.Column dataIndex="origin" title={"Origem"} />
+              <Table.Column dataIndex="price" title={"Preço"} />
               <Table.Column
-                title={"Actions"}
+                title={"Ações"}
                 dataIndex="actions"
                 render={(_, record: BaseRecord) => (
                   <Space>

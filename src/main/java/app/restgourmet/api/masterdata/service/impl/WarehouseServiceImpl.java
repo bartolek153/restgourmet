@@ -19,8 +19,6 @@ import app.restgourmet.api.masterdata.repository.AddressRepository;
 import app.restgourmet.api.masterdata.repository.WarehouseRepository;
 import app.restgourmet.api.masterdata.repository.specifications.WarehouseSpec;
 import app.restgourmet.api.masterdata.service.spec.WarehouseService;
-import app.restgourmet.api.sales.enums.OrderStatus;
-import app.restgourmet.api.sales.repository.SalesOrderRepository;
 import app.restgourmet.api.shared.exceptions.BadRequestException;
 import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
@@ -29,7 +27,6 @@ import app.restgourmet.api.utils.AppConstants;
 public class WarehouseServiceImpl implements WarehouseService {
 
   private final AddressRepository addressRepository;
-  private final SalesOrderRepository salesOrderRepository;
   private final WarehouseRepository warehouseRepository;
 
   @Autowired
@@ -37,11 +34,9 @@ public class WarehouseServiceImpl implements WarehouseService {
 
   public WarehouseServiceImpl(
       AddressRepository addressRepository,
-      WarehouseRepository prodCategoryRepository, 
-      SalesOrderRepository salesOrderRepository) {
+      WarehouseRepository prodCategoryRepository) {
     this.addressRepository = addressRepository;
     this.warehouseRepository = prodCategoryRepository;
-    this.salesOrderRepository = salesOrderRepository;
   }
 
   @Override
@@ -89,27 +84,16 @@ public class WarehouseServiceImpl implements WarehouseService {
   }
 
   /*
-   * Delete a warehouse. 
-   * If the warehouse has pending orders, it will be marked as inactive instead of being deleted. 
-   * If the warehouse is not found, a ResourceNotFoundException will be thrown. 
+   * Delete a warehouse.
+   * If the warehouse has pending orders, it will be marked as inactive instead of
+   * being deleted.
+   * If the warehouse is not found, a ResourceNotFoundException will be thrown.
    * If the warehouse has pending orders, a BadRequestException will be thrown.
    */
   @Override
   public void delete(UUID id) {
     if (!warehouseRepository.existsById(id)) {
       throw new ResourceNotFoundException(AppConstants.ErrorMessages.WAREHOUSE_NOT_FOUND);
-    }
-
-    if (salesOrderRepository.existsByWarehouseId(id)) {
-      if (salesOrderRepository
-          .existsByStatusNotIn(new OrderStatus[] { OrderStatus.CANCELLED, OrderStatus.DELIVERED })) {
-        throw new BadRequestException(AppConstants.ErrorMessages.WAREHOUSE_HAS_PENDING_ORDERS);
-      }
-
-      Warehouse wh = getById(id);
-      wh.setStatus(WarehouseStatus.INACTIVE);
-      warehouseRepository.save(wh);
-      return;
     }
 
     warehouseRepository.deleteById(id);

@@ -56,12 +56,12 @@ export const UserEdit = () => {
       setItems([
         {
           key: "1",
-          label: "Created At",
+          label: "Criado em",
           children: new Date(user.createdAt).toLocaleString(),
         },
         {
           key: "2",
-          label: "Updated At",
+          label: "Atualizado em",
           children: new Date(user.updatedAt).toLocaleString(),
         },
       ]);

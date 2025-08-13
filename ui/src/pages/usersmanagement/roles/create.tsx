@@ -31,7 +31,7 @@ export const RoleCreate = () => {
   });
 
   return (
-    <Create saveButtonProps={saveButtonProps}>
+    <Create saveButtonProps={saveButtonProps} title="Criar função">
       <Form
         {...formProps}
         onFinish={handleOnFinish}
@@ -40,7 +40,7 @@ export const RoleCreate = () => {
         autoComplete="off"
       >
         <Form.Item
-          label={"Name"}
+          label={"Nome"}
           name={["name"]}
           rules={[
             {
@@ -61,7 +61,7 @@ export const RoleCreate = () => {
           }}
           rowHoverable={true}
         >
-          <Table.Column title="Permissions" dataIndex="name" />
+          <Table.Column title="Permissões" dataIndex="name" />
           <Table.Column dataIndex="isParent" hidden />
         </Table>
       </Form>

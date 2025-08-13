@@ -16,15 +16,15 @@ export const UserGroupList = () => {
           },
         }}
       >
-        <Table.Column title={"Name"} dataIndex={"name"} />
-        <Table.Column title={"Created by"} dataIndex={"createdBy"} />
+        <Table.Column title={"Nome"} dataIndex={"name"} />
+        <Table.Column title={"Criado por"} dataIndex={"createdBy"} />
         <Table.Column
-          title={"Last updated at"}
+          title={"Atualizado em"}
           dataIndex={"updatedAt"}
           render={(text) => new Date(text).toLocaleString()}
         />
         <Table.Column
-          title={"Actions"}
+          title={"Ações"}
           dataIndex="actions"
           render={(_, record: BaseRecord) => (
             <Space>

@@ -31,7 +31,7 @@ export const UserGroupCreate = () => {
   });
 
   return (
-    <Create saveButtonProps={saveButtonProps}>
+    <Create saveButtonProps={saveButtonProps} title="Criar Grupo">
       <Form
         {...formProps}
         onFinish={handleOnFinish}
@@ -40,7 +40,7 @@ export const UserGroupCreate = () => {
         autoComplete="off"
       >
         <Form.Item
-          label={"Name"}
+          label={"Nome"}
           name={["name"]}
           rules={[
             {
@@ -61,7 +61,7 @@ export const UserGroupCreate = () => {
           }}
           rowHoverable={true}
         >
-          <Table.Column title="Permissions" dataIndex="name" />
+          <Table.Column title="Permissões" dataIndex="name" />
           <Table.Column dataIndex="isParent" hidden />
         </Table>
       </Form>

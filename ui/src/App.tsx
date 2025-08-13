@@ -33,15 +33,12 @@ import { ProductCreate, ProductEdit, ProductList } from "./pages/masterData/prod
 import { UnitMeasurementList } from "./pages/masterData/unitsMeasurement";
 import { WarehouseList } from "./pages/masterData/warehouses";
 import { Register } from "./pages/authentication/register";
-import { CustomerCreate, CustomerEdit } from "./pages/sales/customers";
-import { SalesOrderEdit, SalesOrderList } from "./pages/sales/orders";
 import { UserGroupCreate, UserGroupEdit, UserGroupList } from "./pages/usersmanagement/groups";
 import { RoleCreate, RoleEdit, RoleList } from "./pages/usersmanagement/roles";
 import { UserCreate, UserEdit, UserList } from "./pages/usersmanagement/users";
 import { resources } from "./resources";
 import { dataProvider } from "./rest-data-provider";
 import Dashboard from "./pages/donations/dashboard";
-import { CurrencyEdit, CurrencyList } from "./pages/commonData/currencies";
 import { PurchaseOrderList } from "./pages/procurement/orders/list";
 import { PurchaseOrderEdit } from "./pages/procurement/orders/edit";
 import "./i18n";
@@ -100,18 +97,6 @@ function App() {
                     <Route index element={<AddressList />} />
                   </Route>
 
-                  <Route path="/currencies">
-                    <Route index element={<CurrencyList />} />
-                    <Route path=":id" element={<CurrencyEdit />} />
-                  </Route>
-
-                  <Route path="/partners">
-                    <Route index element={<BusinessPartnerList />} />
-                    <Route path=":id/edit" element={<BusinessPartnerEdit />} />
-                    <Route path=":partnerId/customers/create" element={<CustomerCreate />} />
-                    <Route path=":id/customers/edit" element={<CustomerEdit />} />
-                  </Route>
-
                   <Route path="/products">
                     <Route index element={<ProductList />} />
                     <Route path="create" element={<ProductCreate />} />
@@ -141,11 +126,6 @@ function App() {
                       <Route index element={<PurchaseOrderList />} />
                       <Route path="edit/:id" element={<PurchaseOrderEdit />} />
                     </Route>
-                  </Route>
-
-                  <Route path="/sales/orders">
-                    <Route index element={<SalesOrderList />} />
-                    <Route path="edit/:id" element={<SalesOrderEdit />} />
                   </Route>
 
                   <Route path="/units">

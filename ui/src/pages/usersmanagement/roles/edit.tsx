@@ -16,22 +16,22 @@ export const RoleEdit = () => {
       setItems([
         {
           key: "1",
-          label: "Created By",
+          label: "Criado por",
           children: role.createdBy,
         },
         {
           key: "2",
-          label: "Created At",
+          label: "Criado em",
           children: new Date(role.createdAt).toLocaleString(),
         },
         {
           key: "3",
-          label: "Updated By",
+          label: "Atualizado por",
           children: role.updatedBy,
         },
         {
           key: "4",
-          label: "Updated At",
+          label: "Atualizado em",
           children: new Date(role.updatedAt).toLocaleString(),
         },
       ]);
@@ -63,7 +63,7 @@ export const RoleEdit = () => {
   });
 
   return (
-    <Edit saveButtonProps={saveButtonProps} isLoading={isLoading}>
+    <Edit saveButtonProps={saveButtonProps} isLoading={isLoading} title="Editar função">
       <Form
         {...formProps}
         onFinish={handleOnFinish}
@@ -73,7 +73,7 @@ export const RoleEdit = () => {
       >
         <Space direction="vertical">
           <Form.Item
-            label={"Name"}
+            label={"Nome"}
             name={["name"]}
             style={{ width: "100%" }}
             rules={[
@@ -87,7 +87,7 @@ export const RoleEdit = () => {
 
           <Descriptions column={4} items={items} layout="vertical" />
 
-          <Divider orientation="left">Permissions</Divider>
+          <Divider orientation="left">Permissões</Divider>
           <Table
             {...tableProps}
             rowKey={"name"}

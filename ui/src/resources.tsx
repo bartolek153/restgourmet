@@ -11,8 +11,9 @@ import {
   PROCUREMENT_PARENT_MENU,
   USER_MANAGEMENT_PARENT_MENU,
 } from "./constants";
+import { ResourceProps } from "@refinedev/core";
 
-export const resources = [
+export const resources: ResourceProps[] = [
   {
     name: COMMON_DATA_PARENT_MENU,
     meta: { icon: <AiTwotoneDatabase /> },
@@ -59,6 +60,7 @@ export const resources = [
     list: "/users/roles",
     create: "/users/roles/create",
     edit: "/users/roles/edit/:id",
+    identifier: "Função",
     meta: {
       label: "Funções",
       parent: USER_MANAGEMENT_PARENT_MENU,
@@ -71,6 +73,7 @@ export const resources = [
     list: "/users/groups",
     create: "/users/groups/create",
     edit: "/users/groups/edit/:id",
+    identifier: "Grupo",
     meta: {
       label: "Grupos",  
       parent: USER_MANAGEMENT_PARENT_MENU,

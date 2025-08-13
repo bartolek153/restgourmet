@@ -79,18 +79,18 @@ export const UserEdit = () => {
   const beforeUpload = (file: FileType) => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
-      message.error("You can only upload JPG/PNG file!");
+      message.error("Apenas arquivos PNG/PNJ são permitidos!");
     }
     const isLt3M = file.size / 1024 / 1024 < 3;
     if (!isLt3M) {
-      message.error("Image must smaller than 3MB!");
+      message.error("Imagem deve ser menor que 3MB!");
     }
 
     return isJpgOrPng && isLt3M;
   };
 
   return (
-    <Edit saveButtonProps={saveButtonProps} isLoading={isLoading}>
+    <Edit saveButtonProps={saveButtonProps} isLoading={isLoading} title="Editar usuário"> 
       <Form
         {...formProps}
         layout="vertical"
@@ -99,9 +99,9 @@ export const UserEdit = () => {
         onFinish={handleOnFinish}
       >
         <Tabs>
-          <Tabs.TabPane key="1" tab="General">
+          <Tabs.TabPane key="1" tab="Geral">
             <Form.Item
-              label={"Name"}
+              label={"Nome"}
               name={["name"]}
               rules={[
                 {
@@ -112,7 +112,7 @@ export const UserEdit = () => {
               <Input />
             </Form.Item>
             <Form.Item
-              label={"Email"}
+              label={"E-mail"}
               name="email"
               rules={[
                 {
@@ -124,7 +124,7 @@ export const UserEdit = () => {
               <Input />
             </Form.Item>
             <Form.Item
-              label={"Nickname"}
+              label={"Usuário"}
               name="nickname"
               rules={[
                 {
@@ -135,7 +135,7 @@ export const UserEdit = () => {
               <Input placeholder="" />
             </Form.Item>
             <Form.Item
-              label={"Type"}
+              label={"Tipo"}
               name={["type"]}
               initialValue={"VIEWER"}
               rules={[
@@ -147,9 +147,9 @@ export const UserEdit = () => {
               <Select
                 defaultValue={"VIEWER"}
                 options={[
-                  { value: "ADMIN", label: "Administrator" },
+                  { value: "ADMIN", label: "Administrador" },
                   { value: "NORMAL", label: "Normal" },
-                  { value: "VIEWER", label: "Viewer" },
+                  { value: "VIEWER", label: "Visualizador" },
                 ]}
                 style={{ width: 200 }}
               />
@@ -167,12 +167,12 @@ export const UserEdit = () => {
                 maxCount={1}
                 beforeUpload={beforeUpload}
               >
-                <Button icon={<UploadOutlined />}>Profile picture</Button>
+                <Button icon={<UploadOutlined />}>Foto de perfil</Button>
               </Upload>
             </Form.Item>
             <Descriptions column={4} items={items} layout="vertical" />
           </Tabs.TabPane>
-          <Tabs.TabPane key="2" tab="Roles">
+          <Tabs.TabPane key="2" tab="Funções">
             <Table
               {...rlTableProps}
               rowKey="id"
@@ -190,7 +190,7 @@ export const UserEdit = () => {
               <Table.Column dataIndex="name" title="Name" />
             </Table>
           </Tabs.TabPane>
-          <Tabs.TabPane key="3" tab="Groups">
+          <Tabs.TabPane key="3" tab="Grupos">
             <Table
               {...grTableProps}
               rowKey="id"

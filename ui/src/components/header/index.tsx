@@ -37,8 +37,8 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({ sticky = tru
     <AntdLayout.Header style={headerStyles}>
       <Space>
         <Switch
-          checkedChildren="🌛"
-          unCheckedChildren="🔆"
+          checkedChildren="I"
+          unCheckedChildren="O"
           onChange={() => setMode(mode === "light" ? "dark" : "light")}
           defaultChecked={mode === "dark"}
         />

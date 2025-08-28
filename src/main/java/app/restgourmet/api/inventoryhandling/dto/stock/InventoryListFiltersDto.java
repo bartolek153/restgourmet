@@ -1,4 +1,4 @@
-package app.restgourmet.api.inventoryhandling.dto.inventory;
+package app.restgourmet.api.inventoryhandling.dto.stock;
 
 import java.util.UUID;
 

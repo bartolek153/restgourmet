@@ -8,15 +8,15 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import app.restgourmet.api.inventoryhandling.models.Inventory;
+import app.restgourmet.api.inventoryhandling.models.CurrentStock;
 import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.Warehouse;
 
 @Repository
-public interface InventoryRepository extends JpaRepository<Inventory, UUID>, JpaSpecificationExecutor<Inventory> {
+public interface InventoryRepository extends JpaRepository<CurrentStock, UUID>, JpaSpecificationExecutor<CurrentStock> {
   boolean existsByWarehouseIdAndProductIdAndQuantityGreaterThan(UUID warehouseId, UUID productId, int quantity);
 
-  Optional<Inventory> findByWarehouseAndProduct(Warehouse wh, Product prod);
+  Optional<CurrentStock> findByWarehouseAndProduct(Warehouse wh, Product prod);
 
   @Query("SELECT SUM(i.quantity) FROM Inventory i WHERE i.product.id = :productId")
   Double sumQuantityByProductId(UUID productId);

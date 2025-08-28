@@ -9,6 +9,7 @@ import {
   INVENTORY_HANDLING_PARENT_MENU,
   MASTER_DATA_PARENT_MENU,
   PROCUREMENT_PARENT_MENU,
+  PRODUCT_SUBMENU,
   USER_MANAGEMENT_PARENT_MENU,
 } from "./constants";
 import { ResourceProps } from "@refinedev/core";
@@ -19,6 +20,7 @@ export const resources: ResourceProps[] = [
     meta: { icon: <AiTwotoneDatabase /> },
   },
   { name: MASTER_DATA_PARENT_MENU, meta: { icon: <AiOutlineTable /> } },
+  { name: PRODUCT_SUBMENU, meta: { parent: MASTER_DATA_PARENT_MENU } },
   { name: FINANCIALS_PARENT_MENU, meta: { icon: "" } },
   { name: INVENTORY_HANDLING_PARENT_MENU, meta: { icon: "" } },
   { name: PROCUREMENT_PARENT_MENU, meta: { icon: <MdOutlineShoppingCart/> }},
@@ -120,8 +122,8 @@ export const resources: ResourceProps[] = [
     create: "/products/categories/create",
     edit: "/products/categories/edit/:id",
     meta: {
-      label: "Categorias de Produto",
-      parent: MASTER_DATA_PARENT_MENU,
+      label: "Categorias",
+      parent: PRODUCT_SUBMENU,
       canDelete: true,
     },
   },
@@ -131,8 +133,8 @@ export const resources: ResourceProps[] = [
     create: "/products/families/create",
     edit: "/products/families/edit/:id",
     meta: {
-      label: "Famílias de Produto",
-      parent: MASTER_DATA_PARENT_MENU,
+      label: "Famílias",
+      parent: PRODUCT_SUBMENU,
       canDelete: true,
     },
   },
@@ -142,8 +144,8 @@ export const resources: ResourceProps[] = [
     create: "/products/groups/create",
     edit: "/products/groups/edit/:id",
     meta: {
-      label: "Grupos de Produto",
-      parent: MASTER_DATA_PARENT_MENU,
+      label: "Grupos",
+      parent: PRODUCT_SUBMENU,
       canDelete: true,
     },
   },
@@ -154,7 +156,7 @@ export const resources: ResourceProps[] = [
     edit: "/products/edit/:id",
     meta: {
       label: "Produtos",
-      parent: MASTER_DATA_PARENT_MENU,
+      parent: PRODUCT_SUBMENU,
       canDelete: true,
     },
   },

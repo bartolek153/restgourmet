@@ -5,9 +5,9 @@ import java.util.UUID;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PagedModel;
 
-import app.restgourmet.api.inventoryhandling.dto.inventory.InventoryDto;
-import app.restgourmet.api.inventoryhandling.dto.inventory.InventoryListDto;
-import app.restgourmet.api.inventoryhandling.dto.inventory.InventoryListFiltersDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.InventoryDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.InventoryListDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.InventoryListFiltersDto;
 import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.models.Warehouse;

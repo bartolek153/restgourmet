@@ -22,7 +22,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "product_inventory", uniqueConstraints = @UniqueConstraint(columnNames = { "product_id",
     "warehouse_id" }))
-public class Inventory extends BaseEntity {
+public class CurrentStock extends BaseEntity {
   @ManyToOne
   @JoinColumn(name = "product_id", nullable = false)
   private Product product;
@@ -35,47 +35,16 @@ public class Inventory extends BaseEntity {
   private Double quantity;
 
   @Min(0)
-  private Double allocatedQuantity;
-
-  @Min(0)
-  private Double threshold;
+  private Double minQuantity;
 
   @ManyToOne
   @JoinColumn(name = "min_quantity_unit_id")
-  private UnitMeasurement thresholdUnit;
+  private UnitMeasurement minQuantityUnit;
 
   @Min(0)
-  private Double maxQuantityAllowed;
+  private Double maxQuantity;
 
   @ManyToOne
   @JoinColumn(name = "max_quantity_unit_id")
-  private UnitMeasurement maxQuantityAllowedUnit;
-
-  public void increaseQuantity(Double add) {
-    this.quantity = this.quantity + add;
-  }
-
-  public void decreaseQuantity(Double sub) {
-    this.quantity = this.quantity - sub;
-  }
-
-  public boolean insufficientStock() {
-    return this.quantity < 0;
-  }
-  
-  public boolean quantityExceeded() {
-    return this.quantity > this.maxQuantityAllowed;
-  }
-
-  public boolean underThreshold() {
-    return this.quantity < this.threshold;
-  }
-
-  public void allocate(Double qty) {
-    this.allocatedQuantity = this.allocatedQuantity + qty;
-  }
-
-  public void deallocate(Double qty) {
-    this.allocatedQuantity = this.allocatedQuantity - qty;
-  }
+  private UnitMeasurement maxQuantityUnit;
 }

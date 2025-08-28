@@ -19,8 +19,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "inventory_transactions")
-public class InventoryLog extends BaseEntity {
+@Table(name = "stock_transactions")
+public class StockTransaction extends BaseEntity {
 
   private Warehouse warehouse;
 

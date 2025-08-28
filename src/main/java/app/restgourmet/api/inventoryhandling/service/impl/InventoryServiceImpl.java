@@ -1,6 +1,5 @@
 package app.restgourmet.api.inventoryhandling.service.impl;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,13 +8,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import app.restgourmet.api.inventoryhandling.dto.inventory.InventoryDto;
-import app.restgourmet.api.inventoryhandling.dto.inventory.InventoryListDto;
-import app.restgourmet.api.inventoryhandling.dto.inventory.InventoryListFiltersDto;
-import app.restgourmet.api.inventoryhandling.mappers.InventoryMapper;
-import app.restgourmet.api.inventoryhandling.models.Inventory;
+import app.restgourmet.api.inventoryhandling.dto.stock.InventoryDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.InventoryListDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.InventoryListFiltersDto;
+import app.restgourmet.api.inventoryhandling.mappers.CurrentStockMapper;
+import app.restgourmet.api.inventoryhandling.models.CurrentStock;
 import app.restgourmet.api.inventoryhandling.repository.InventoryRepository;
 import app.restgourmet.api.inventoryhandling.repository.specifications.InventorySpecification;
 import app.restgourmet.api.inventoryhandling.service.spec.InventoryService;
@@ -34,7 +32,7 @@ public class InventoryServiceImpl implements InventoryService {
   private final UnitMeasurementRepository unitMeasurementRepository;
 
   @Autowired
-  private InventoryMapper inventoryMapper;
+  private CurrentStockMapper inventoryMapper;
 
   public InventoryServiceImpl(
       InventoryRepository inventoryRepository,
@@ -44,8 +42,8 @@ public class InventoryServiceImpl implements InventoryService {
   }
 
   public PagedModel<InventoryListDto> list(PageRequest pagReq, InventoryListFiltersDto filters) {
-    Specification<Inventory> spec = InventorySpecification.filterBy(filters);
-    Page<Inventory> pg = inventoryRepository.findAll(spec, pagReq);
+    Specification<CurrentStock> spec = InventorySpecification.filterBy(filters);
+    Page<CurrentStock> pg = inventoryRepository.findAll(spec, pagReq);
     return new PagedModel<>(pg.map(inventoryMapper::toListDto));
   }
 
@@ -58,7 +56,7 @@ public class InventoryServiceImpl implements InventoryService {
   }
 
   public boolean checkStockAvailability(Warehouse wh, Product prod, Double qty) {
-    Inventory inv = getByWarehouseProduct(wh, prod);
+    CurrentStock inv = getByWarehouseProduct(wh, prod);
     return inv.getQuantity() > qty;
   }
 
@@ -70,7 +68,7 @@ public class InventoryServiceImpl implements InventoryService {
   }
 
   public void increaseStock(Warehouse wh, Product prod, Double qty) {
-    Inventory inv = getByWarehouseProduct(wh, prod);
+    CurrentStock inv = getByWarehouseProduct(wh, prod);
     inv.increaseQuantity(qty);
 
     // validate max qty rules
@@ -86,7 +84,7 @@ public class InventoryServiceImpl implements InventoryService {
   }
 
   public void decreaseStock(Warehouse wh, Product prod, Double qty) {
-    Inventory inv = getByWarehouseProduct(wh, prod);
+    CurrentStock inv = getByWarehouseProduct(wh, prod);
     inv.decreaseQuantity(qty);
 
     if (inv.insufficientStock()) {
@@ -105,12 +103,12 @@ public class InventoryServiceImpl implements InventoryService {
     decreaseStock(wh, prod, qty * unit.getConversionFactor());
   }
 
-  private Inventory getById(UUID id) {
+  private CurrentStock getById(UUID id) {
     return inventoryRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.INVENTORY_NOT_FOUND));
   }
 
-  private Inventory getByWarehouseProduct(Warehouse wh, Product prod) {
+  private CurrentStock getByWarehouseProduct(Warehouse wh, Product prod) {
     return inventoryRepository.findByWarehouseAndProduct(wh, prod)
         .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.INVENTORY_UNAVAILABLE));
   }
@@ -129,7 +127,7 @@ public class InventoryServiceImpl implements InventoryService {
 
   @Override
   public void allocateStock(Product prod, Warehouse wh, Double qty) {
-    Inventory inv = getByWarehouseProduct(wh, prod);
+    CurrentStock inv = getByWarehouseProduct(wh, prod);
     inv.decreaseQuantity(qty);
     inv.allocate(qty);
     inventoryRepository.save(inv);
@@ -142,7 +140,7 @@ public class InventoryServiceImpl implements InventoryService {
 
   @Override
   public void deallocateStock(Product prod, Warehouse wh, Double qty) {
-    Inventory inv = getByWarehouseProduct(wh, prod);
+    CurrentStock inv = getByWarehouseProduct(wh, prod);
     inv.increaseQuantity(qty);
     inv.deallocate(qty);
     inventoryRepository.save(inv);

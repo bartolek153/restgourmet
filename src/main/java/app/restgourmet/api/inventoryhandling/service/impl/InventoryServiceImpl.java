@@ -57,7 +57,7 @@ public class InventoryServiceImpl implements InventoryService {
 
   public boolean checkStockAvailability(Warehouse wh, Product prod, Double qty) {
     CurrentStock inv = getByWarehouseProduct(wh, prod);
-    return inv.getQuantity() > qty;
+    return inv.getQty() > qty;
   }
 
   public boolean checkStockAvailability(Warehouse wh, Product prod, Double qty, UnitMeasurement unit) {
@@ -72,7 +72,7 @@ public class InventoryServiceImpl implements InventoryService {
     inv.increaseQuantity(qty);
 
     // validate max qty rules
-    if (inv.getMaxQuantityAllowed() > 0 && inv.quantityExceeded()) {
+    if (inv.getMaxQty() > 0 && inv.quantityExceeded()) {
       throw new BadRequestException(ErrorMessages.INVENTORY_QUANTITY_EXCEEDED);
     }
 
@@ -89,11 +89,6 @@ public class InventoryServiceImpl implements InventoryService {
 
     if (inv.insufficientStock()) {
       throw new BadRequestException(ErrorMessages.INVENTORY_INSUFFICIENT);
-    }
-
-    if (inv.underThreshold()) {
-      // TODO: define action when stock reaches minimum configured quantity
-      // ErrorMessages.INVENTORY_UNDER_MINIMUM_THRESHOLD
     }
 
     inventoryRepository.save(inv);
@@ -123,31 +118,5 @@ public class InventoryServiceImpl implements InventoryService {
   public void moveStock(Product prod, Warehouse fromWh, Warehouse toWh, Double qty, UnitMeasurement unit) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'moveStock'");
-  }
-
-  @Override
-  public void allocateStock(Product prod, Warehouse wh, Double qty) {
-    CurrentStock inv = getByWarehouseProduct(wh, prod);
-    inv.decreaseQuantity(qty);
-    inv.allocate(qty);
-    inventoryRepository.save(inv);
-  }
-
-  @Override
-  public void allocateStock(Product prod, Warehouse wh, Double qty, UnitMeasurement unit) {
-    allocateStock(prod, wh, qty * unit.getConversionFactor());
-  }
-
-  @Override
-  public void deallocateStock(Product prod, Warehouse wh, Double qty) {
-    CurrentStock inv = getByWarehouseProduct(wh, prod);
-    inv.increaseQuantity(qty);
-    inv.deallocate(qty);
-    inventoryRepository.save(inv);
-  }
-
-  @Override
-  public void deallocateStock(Product prod, Warehouse wh, Double qty, UnitMeasurement unit) {
-    deallocateStock(prod, wh, qty * unit.getConversionFactor());
   }
 }

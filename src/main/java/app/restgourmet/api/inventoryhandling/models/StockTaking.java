@@ -3,9 +3,11 @@ package app.restgourmet.api.inventoryhandling.models;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import app.restgourmet.api.inventoryhandling.enums.StockTakingStatus;
 import app.restgourmet.api.shared.models.BaseEntity;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,12 +20,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "stock_takings")
-public class StockTaking extends BaseEntity {
+public class StockTaking extends BaseEntity {    
     private LocalDateTime startDate;
 
     private LocalDateTime endDate;
 
     private UserEntity createdBy;
 
+    private StockTakingStatus status;
+
+    private String observation;
+
+    @OneToMany
     private List<StockTakingItem> items;
 }

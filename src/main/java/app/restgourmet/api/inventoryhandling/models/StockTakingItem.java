@@ -4,8 +4,10 @@ import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.Warehouse;
 import app.restgourmet.api.shared.models.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,13 +25,20 @@ public class StockTakingItem extends BaseEntity {
     @NotNull
     private StockTaking stockTaking;
 
+    @ManyToOne
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
+    @ManyToOne
+    @JoinColumn(name = "warehouse_id", nullable = false)
     private Warehouse warehouse;
 
+    @Min(0)
     private Double countedQuantity;
 
+    @Min(0)
     private Double systemQuantity;
 
+    @Min(0)
     private Double difference;
 }

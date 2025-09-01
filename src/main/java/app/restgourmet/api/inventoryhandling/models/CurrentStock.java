@@ -32,19 +32,35 @@ public class CurrentStock extends BaseEntity {
   private Warehouse warehouse;
 
   @Min(0)
-  private Double quantity;
+  private Double qty;
 
   @Min(0)
-  private Double minQuantity;
+  private Double minQty;
 
   @ManyToOne
   @JoinColumn(name = "min_quantity_unit_id")
-  private UnitMeasurement minQuantityUnit;
+  private UnitMeasurement minQtyUnit;
 
   @Min(0)
-  private Double maxQuantity;
+  private Double maxQty;
 
   @ManyToOne
   @JoinColumn(name = "max_quantity_unit_id")
-  private UnitMeasurement maxQuantityUnit;
+  private UnitMeasurement maxQtyUnit;
+
+  public void increaseQuantity(Double val) {
+    this.qty = this.qty + val;
+  }
+
+  public void decreaseQuantity(Double val) {
+    this.qty = this.qty - val;
+  }
+
+  public boolean quantityExceeded() {
+    return this.qty > this.maxQty;
+  }
+
+  public boolean insufficientStock() {
+    return this.qty < this.minQty;
+  }
 }

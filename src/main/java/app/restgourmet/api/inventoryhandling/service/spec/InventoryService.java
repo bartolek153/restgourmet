@@ -34,12 +34,4 @@ public interface InventoryService {
   void moveStock(Product prod, Warehouse fromWh, Warehouse toWh, Double qty);
 
   void moveStock(Product prod, Warehouse fromWh, Warehouse toWh, Double qty, UnitMeasurement unit);
-
-  void allocateStock(Product prod, Warehouse wh, Double qty);
-
-  void allocateStock(Product prod, Warehouse wh, Double qty, UnitMeasurement unit);
-
-  void deallocateStock(Product prod, Warehouse wh, Double qty);
-
-  void deallocateStock(Product prod, Warehouse wh, Double qty, UnitMeasurement unit);
 }

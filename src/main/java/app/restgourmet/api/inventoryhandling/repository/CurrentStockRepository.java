@@ -13,11 +13,11 @@ import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.Warehouse;
 
 @Repository
-public interface InventoryRepository extends JpaRepository<CurrentStock, UUID>, JpaSpecificationExecutor<CurrentStock> {
-  boolean existsByWarehouseIdAndProductIdAndQuantityGreaterThan(UUID warehouseId, UUID productId, int quantity);
+public interface CurrentStockRepository extends JpaRepository<CurrentStock, UUID>, JpaSpecificationExecutor<CurrentStock> {
+  boolean existsByWarehouseIdAndProductIdAndQtyGreaterThan(UUID warehouseId, UUID productId, int qty);
 
   Optional<CurrentStock> findByWarehouseAndProduct(Warehouse wh, Product prod);
 
-  @Query("SELECT SUM(i.quantity) FROM Inventory i WHERE i.product.id = :productId")
+  @Query("SELECT SUM(i.qty) FROM CurrentStock i WHERE i.product.id = :productId")
   Double sumQuantityByProductId(UUID productId);
 }

@@ -10,7 +10,7 @@ import app.restgourmet.api.inventoryhandling.dto.stock.InventoryListFiltersDto;
 import app.restgourmet.api.inventoryhandling.models.CurrentStock;
 import jakarta.persistence.criteria.Predicate;
 
-public class InventorySpecification {
+public class CurrentStockSpecification {
   private static final String NAME = "name";
   private static final String WAREHOUSE = "warehouse";
   private static final String DESCRIPTION = "description";

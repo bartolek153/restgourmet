@@ -17,7 +17,7 @@ import app.restgourmet.api.utils.AppConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@RequestMapping("/api/stock/taking")
+@RequestMapping("/api/stock/takings")
 @Tag(name = "Stock Taking", description = "Stock takings endpoints")
 public class StockTakingController {
 
@@ -32,7 +32,7 @@ public class StockTakingController {
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,
-      @RequestParam(defaultValue = "street") final String sort,
+      @RequestParam(defaultValue = "startDate") final String sort,
       @ParameterObject final StockTakingListFiltersDto filters) {
     return ResponseEntity.ok(stockTakingService.list(CustomPageRequest.of(page, size, order, sort), filters));
   }

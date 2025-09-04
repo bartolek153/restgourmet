@@ -12,7 +12,7 @@ import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.models.Warehouse;
 
-public interface InventoryService {
+public interface CurrentStockService {
   PagedModel<InventoryListDto> list(PageRequest pagReq, InventoryListFiltersDto filters);
 
   InventoryDto getOne(UUID id);

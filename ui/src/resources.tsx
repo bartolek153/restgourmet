@@ -2,6 +2,7 @@ import { AiOutlineTable, AiOutlineUser, AiTwotoneDatabase } from "react-icons/ai
 import { FaUsers } from "react-icons/fa";
 import { FaClipboardUser } from "react-icons/fa6";
 import { LuBriefcaseBusiness } from "react-icons/lu";
+import { FaBoxes } from "react-icons/fa";
 import { MdOutlineShoppingCart } from "react-icons/md";
 import {
   COMMON_DATA_PARENT_MENU,
@@ -22,7 +23,7 @@ export const resources: ResourceProps[] = [
   { name: MASTER_DATA_PARENT_MENU, meta: { icon: <AiOutlineTable /> } },
   { name: PRODUCT_SUBMENU, meta: { parent: MASTER_DATA_PARENT_MENU } },
   { name: FINANCIALS_PARENT_MENU, meta: { icon: "" } },
-  { name: INVENTORY_HANDLING_PARENT_MENU, meta: { icon: "" } },
+  { name: INVENTORY_HANDLING_PARENT_MENU, meta: { icon: <FaBoxes/> } },
   { name: PROCUREMENT_PARENT_MENU, meta: { icon: <MdOutlineShoppingCart/> }},
   { name: USER_MANAGEMENT_PARENT_MENU, meta: { icon: <FaClipboardUser /> } },
   {
@@ -181,4 +182,15 @@ export const resources: ResourceProps[] = [
       canDelete: true,
     },
   },
+  {
+    name: "stock/takings",
+    list: "/stock/takings",
+    create: "/stock/takings/create",
+    edit: "/stock/takings/edit/:id",
+    meta: {
+      label: "Inventários",
+      parent: INVENTORY_HANDLING_PARENT_MENU,
+      canDelete: true
+    }
+  }
 ];

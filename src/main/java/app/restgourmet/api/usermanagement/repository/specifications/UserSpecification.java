@@ -1,5 +1,7 @@
 package app.restgourmet.api.usermanagement.repository.specifications;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.domain.Specification;
@@ -7,6 +9,7 @@ import org.springframework.util.StringUtils;
 
 import app.restgourmet.api.usermanagement.dto.user.UserListFiltersDto;
 import app.restgourmet.api.usermanagement.models.UserEntity;
+import jakarta.persistence.criteria.Predicate;
 
 public class UserSpecification {
   private static final String ENABLED = "enabled";
@@ -16,34 +19,35 @@ public class UserSpecification {
   private static final String NICKNAME = "nickname";
 
   public static Specification<UserEntity> filterBy(UserListFiltersDto filters) {
-    return Specification.where(qSearch(filters.getQ()))
-        .and(isEnabled(filters.getEnabled()));
-  }
-
-  private static Specification<UserEntity> isEnabled(String enabled) {
     return (root, query, cb) -> {
-      if (StringUtils.hasText(enabled) && ("true".equalsIgnoreCase(enabled) || "false".equalsIgnoreCase(enabled))) {
-        return cb.equal(root.get(ENABLED), Boolean.parseBoolean(enabled));
+      List<Predicate> predicates = new ArrayList<>();
+
+      if (StringUtils.hasText(filters.getQ())) {
+        try {
+          return cb.equal(root.get(ID), UUID.fromString(filters.getQ()));
+        } catch (IllegalArgumentException ex) {
+          String q = String.format("%%s%", filters.getQ().toLowerCase());
+
+          predicates.add(
+              cb.or(
+                  cb.like(cb.lower(root.get(NAME)), q),
+                  cb.like(root.get(EMAIL), q),
+                  cb.like(root.get(NICKNAME), q)));
+        }
       }
 
-      return cb.conjunction();
-    };
-  }
-
-  private static Specification<UserEntity> qSearch(String q) {
-    return (root, query, cb) -> {
-      if (!StringUtils.hasText(q))
-        return cb.conjunction();
-
-      try {
-        return cb.equal(root.get(ID), UUID.fromString(q));
-      } catch (IllegalArgumentException ex) {
+      if (StringUtils.hasText(filters.getEnabled())
+          && ("true".equalsIgnoreCase(filters.getEnabled()) || "false".equalsIgnoreCase(filters.getEnabled()))) {
+        predicates.add(
+            cb.equal(root.get(ENABLED), Boolean.parseBoolean(filters.getEnabled())));
       }
 
-      return cb.or(
-          cb.like(cb.lower(root.get(NAME)), "%" + q.toLowerCase() + "%"),
-          cb.like(root.get(EMAIL), "%" + q.toLowerCase() + "%"),
-          cb.like(root.get(NICKNAME), "%" + q.toLowerCase() + "%"));
+      if (filters.getIds() != null) {
+        predicates.add(
+            root.get(ID).in(filters.getIds()));
+      }
+
+      return cb.and(predicates.toArray(new Predicate[0]));
     };
   }
 }

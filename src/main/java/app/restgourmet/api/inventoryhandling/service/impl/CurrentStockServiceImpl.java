@@ -14,9 +14,9 @@ import app.restgourmet.api.inventoryhandling.dto.stock.InventoryListDto;
 import app.restgourmet.api.inventoryhandling.dto.stock.InventoryListFiltersDto;
 import app.restgourmet.api.inventoryhandling.mappers.CurrentStockMapper;
 import app.restgourmet.api.inventoryhandling.models.CurrentStock;
-import app.restgourmet.api.inventoryhandling.repository.InventoryRepository;
-import app.restgourmet.api.inventoryhandling.repository.specifications.InventorySpecification;
-import app.restgourmet.api.inventoryhandling.service.spec.InventoryService;
+import app.restgourmet.api.inventoryhandling.repository.CurrentStockRepository;
+import app.restgourmet.api.inventoryhandling.repository.specifications.CurrentStockSpecification;
+import app.restgourmet.api.inventoryhandling.service.spec.CurrentStockService;
 import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.models.Warehouse;
@@ -26,24 +26,24 @@ import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants.ErrorMessages;
 
 @Service
-public class InventoryServiceImpl implements InventoryService {
+public class CurrentStockServiceImpl implements CurrentStockService {
 
-  private final InventoryRepository inventoryRepository;
+  private final CurrentStockRepository currentStockRepository;
   private final UnitMeasurementRepository unitMeasurementRepository;
 
   @Autowired
   private CurrentStockMapper inventoryMapper;
 
-  public InventoryServiceImpl(
-      InventoryRepository inventoryRepository,
+  public CurrentStockServiceImpl(
+      CurrentStockRepository inventoryRepository,
       UnitMeasurementRepository unitMeasurementRepository) {
-    this.inventoryRepository = inventoryRepository;
+    this.currentStockRepository = inventoryRepository;
     this.unitMeasurementRepository = unitMeasurementRepository;
   }
 
   public PagedModel<InventoryListDto> list(PageRequest pagReq, InventoryListFiltersDto filters) {
-    Specification<CurrentStock> spec = InventorySpecification.filterBy(filters);
-    Page<CurrentStock> pg = inventoryRepository.findAll(spec, pagReq);
+    Specification<CurrentStock> spec = CurrentStockSpecification.filterBy(filters);
+    Page<CurrentStock> pg = currentStockRepository.findAll(spec, pagReq);
     return new PagedModel<>(pg.map(inventoryMapper::toListDto));
   }
 
@@ -52,7 +52,7 @@ public class InventoryServiceImpl implements InventoryService {
   }
 
   public boolean checkStockAvailability(Product prod, Double qty) {
-    return inventoryRepository.sumQuantityByProductId(prod.getId()) > qty;
+    return currentStockRepository.sumQuantityByProductId(prod.getId()) > qty;
   }
 
   public boolean checkStockAvailability(Warehouse wh, Product prod, Double qty) {
@@ -76,7 +76,7 @@ public class InventoryServiceImpl implements InventoryService {
       throw new BadRequestException(ErrorMessages.INVENTORY_QUANTITY_EXCEEDED);
     }
 
-    inventoryRepository.save(inv);
+    currentStockRepository.save(inv);
   }
 
   public void increaseStock(Warehouse wh, Product prod, Double qty, UnitMeasurement unit) {
@@ -91,7 +91,7 @@ public class InventoryServiceImpl implements InventoryService {
       throw new BadRequestException(ErrorMessages.INVENTORY_INSUFFICIENT);
     }
 
-    inventoryRepository.save(inv);
+    currentStockRepository.save(inv);
   }
 
   public void decreaseStock(Warehouse wh, Product prod, Double qty, UnitMeasurement unit) {
@@ -99,12 +99,12 @@ public class InventoryServiceImpl implements InventoryService {
   }
 
   private CurrentStock getById(UUID id) {
-    return inventoryRepository.findById(id)
+    return currentStockRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.INVENTORY_NOT_FOUND));
   }
 
   private CurrentStock getByWarehouseProduct(Warehouse wh, Product prod) {
-    return inventoryRepository.findByWarehouseAndProduct(wh, prod)
+    return currentStockRepository.findByWarehouseAndProduct(wh, prod)
         .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.INVENTORY_UNAVAILABLE));
   }
 

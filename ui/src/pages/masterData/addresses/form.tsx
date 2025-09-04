@@ -49,7 +49,7 @@ export const AddressForm: React.FC<AddressFormProps> = ({
   // Handle zip code changes
   const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTimeout(() => {
-      console.log("Fetching address...");
+      console.log("Buscando endereço...");
       fetchAddressFromZipCode(e.target.value);
     }, 1000);
     

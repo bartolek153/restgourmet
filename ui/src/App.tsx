@@ -125,6 +125,8 @@ function App() {
                   <Route path="stock">
                     <Route path="takings">
                       <Route index element={<StockTakingList />} />
+                      <Route path="create" />
+                      <Route path="edit/:id" />
                     </Route>
                   </Route>
 

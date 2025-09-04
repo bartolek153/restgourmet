@@ -12,6 +12,7 @@ import { BaseRecord, useMany } from "@refinedev/core";
 import { Form, Input, Space, Table } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
 import { AddressForm } from "./form";
+import { StockTakingCreateForm } from "./create";
 
 export const StockTakingList = () => {
   const { tableProps, searchFormProps } = useTable({
@@ -32,7 +33,9 @@ export const StockTakingList = () => {
     formProps: createFormProps,
     show: createModalShow,
   } = useModalForm({
+    resource: "stock/takings",
     action: "create",
+    redirect: "edit",
   });
 
   const {
@@ -116,6 +119,7 @@ export const StockTakingList = () => {
           />
         </Table>
       </List>
+      <StockTakingCreateForm modalProps={createModalProps} formProps={createFormProps} />
     </>
   );
 };

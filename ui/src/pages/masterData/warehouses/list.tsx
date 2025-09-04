@@ -73,30 +73,30 @@ export const WarehouseList = () => {
       >
         <Form {...searchFormProps} layout="vertical" onValuesChange={filterPageDelayed}>
           <Space wrap>
-            <Form.Item label="Search" name="q">
-              <Input placeholder="Description" prefix={<AiOutlineSearch />} allowClear />
+            <Form.Item label="Pesquisa" name="q">
+              <Input placeholder="Descrição" prefix={<AiOutlineSearch />} allowClear />
             </Form.Item>
-            <Form.Item label="Address" name="addressId">
+            <Form.Item label="Endereço" name="addressId">
               <Select allowClear {...selectProps} />
             </Form.Item>
           </Space>
         </Form>
         <Table {...tableProps} rowKey="id">
-          <Table.Column dataIndex={"name"} title="Name" />
+          <Table.Column dataIndex={"name"} title="Nome" />
           <Table.Column
             dataIndex={"addressId"}
-            title="Address"
+            title="Endereço"
             render={(value: any) => {
               if (isLoading) {
-                return <TextField value="Loading..." />;
+                return <TextField value="Carregando..." />;
               }
 
               return <TextField value={data?.find((item) => item.id === value)?.street} />;
             }}
           />
-          <Table.Column dataIndex={"conversionFactor"} title="Conversion Factor" />
+          <Table.Column dataIndex={"status"} title="Status" />
           <Table.Column
-            title={"Actions"}
+            title={"Ações"}
             dataIndex="actions"
             render={(_, record: BaseRecord) => (
               <Space>

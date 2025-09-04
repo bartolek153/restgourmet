@@ -16,10 +16,10 @@ export const WarehouseForm: React.FC<WarehouseFormProps> = ({
   });
 
   return (
-    <Modal {...createModalProps}>
+    <Modal {...createModalProps} title="Criar armazém">
       <Form {...createFormProps} layout="vertical">
         <Form.Item
-          label="Name"
+          label="Nome"
           name="name"
           rules={[
             {
@@ -29,7 +29,7 @@ export const WarehouseForm: React.FC<WarehouseFormProps> = ({
         >
           <Input />
         </Form.Item>
-        <Form.Item label="Address" name="addressId">
+        <Form.Item label="Endereço" name="addressId">
           <Select {...selectProps} />
         </Form.Item>
       </Form>

@@ -12,7 +12,19 @@ import org.springframework.transaction.annotation.Transactional;
 import app.restgourmet.api.commondata.models.BaseUnit;
 import app.restgourmet.api.commondata.repository.BaseUnitRepository;
 import app.restgourmet.api.commondata.service.impl.GlobalParametersServiceImpl;
+import app.restgourmet.api.masterdata.enums.ProductOrigin;
+import app.restgourmet.api.masterdata.enums.ProductStatus;
+import app.restgourmet.api.masterdata.enums.ProductType;
+import app.restgourmet.api.masterdata.enums.WarehouseStatus;
+import app.restgourmet.api.masterdata.models.Product;
+import app.restgourmet.api.masterdata.models.ProductCategory;
+import app.restgourmet.api.masterdata.models.ProductFamily;
+import app.restgourmet.api.masterdata.models.ProductGroup;
+import app.restgourmet.api.masterdata.models.UnitMeasurement;
+import app.restgourmet.api.masterdata.models.Warehouse;
+import app.restgourmet.api.masterdata.repository.ProductRepository;
 import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
+import app.restgourmet.api.masterdata.repository.WarehouseRepository;
 import app.restgourmet.api.shared.models.parameters.GlobalParameters;
 import app.restgourmet.api.shared.service.impl.InventoryParameterServiceImpl;
 import app.restgourmet.api.usermanagement.enums.PermissionCategory;
@@ -30,9 +42,14 @@ public class DataLoader implements CommandLineRunner {
 
   private static final Logger logger = LoggerFactory.getLogger(DataLoader.class);
   private final InventoryParameterServiceImpl inventoryParameterServiceImpl;
+
   private final BaseUnitRepository baseUnitRepository;
   private final PermissionRepository permissionRepository;
   private final UserRepository userRepository;
+  private final ProductRepository productRepository;
+  private final UnitMeasurementRepository unitMeasurementRepository;
+  private final WarehouseRepository warehouseRepository;
+
   private final PasswordEncoder passwordEncoder;
 
   public DataLoader(
@@ -41,6 +58,8 @@ public class DataLoader implements CommandLineRunner {
       PasswordEncoder passwordEncoder,
       UnitMeasurementRepository unitMeasurementRepository,
       UserRepository userRepository,
+      ProductRepository productRepository,
+      WarehouseRepository warehouseRepository,
       InventoryParameterServiceImpl inventoryParameterServiceImpl,
       GlobalParametersServiceImpl globalParametersServiceImpl) {
     this.baseUnitRepository = baseUnitRepository;
@@ -49,6 +68,9 @@ public class DataLoader implements CommandLineRunner {
     this.userRepository = userRepository;
     this.inventoryParameterServiceImpl = inventoryParameterServiceImpl;
     this.globalParametersServiceImpl = globalParametersServiceImpl;
+    this.productRepository = productRepository;
+    this.unitMeasurementRepository = unitMeasurementRepository;
+    this.warehouseRepository = warehouseRepository;
   }
 
   @Override
@@ -94,11 +116,41 @@ public class DataLoader implements CommandLineRunner {
 
     userRepository.save(admin);
 
-    baseUnitRepository.saveAll(
+    var bul = baseUnitRepository.saveAll(
         List.of(
+            new BaseUnit("Unit", "un"),
             new BaseUnit("Kilogram", "kg"),
             new BaseUnit("Liter", "L"),
             new BaseUnit("Meter", "m")));
+
+    var um = unitMeasurementRepository.save(
+        new UnitMeasurement(
+            "Dúzia",
+            "DZ",
+            bul.get(0),
+            10.0));
+
+    warehouseRepository.save(
+        new Warehouse("ALMOXARIFADO", null, WarehouseStatus.ACTIVE));
+
+    
+
+    productRepository.save(
+        new Product(
+            "001",
+            "MAÇÃ",
+            null,
+            // new ProductGroup("FRUTAS",
+            //     new ProductFamily("PERECÍVEIS",
+            //         new ProductCategory("ALIMENTOS"))),
+            ProductOrigin.SUPPLIED,
+            ProductStatus.ACTIVE,
+            um,
+            um,
+            5.0,
+            false,
+            ProductType.INVENTORY_PRODUCT,
+            null));
 
     // initialize parameters
     globalParametersServiceImpl.create(

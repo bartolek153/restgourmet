@@ -40,7 +40,7 @@ public class ProductController {
   }
 
   @GetMapping
-  public ResponseEntity<PagedModel<ProductListDto>> listFamilies(
+  public ResponseEntity<PagedModel<ProductListDto>> listProducts(
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,

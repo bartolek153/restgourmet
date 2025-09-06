@@ -19,7 +19,6 @@ import app.restgourmet.api.masterdata.repository.AddressRepository;
 import app.restgourmet.api.masterdata.repository.WarehouseRepository;
 import app.restgourmet.api.masterdata.repository.specifications.WarehouseSpec;
 import app.restgourmet.api.masterdata.service.spec.WarehouseService;
-import app.restgourmet.api.shared.exceptions.BadRequestException;
 import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants;
 
@@ -57,11 +56,14 @@ public class WarehouseServiceImpl implements WarehouseService {
   public UUID create(WarehouseDto dto) {
     Warehouse wh = warehouseMapper.toEntity(dto);
 
-    if (!addressRepository.existsById(dto.getAddressId())) {
-      throw new ResourceNotFoundException(AppConstants.ErrorMessages.ADDRESS_NOT_FOUND);
+    if (dto.getAddressId() != null) {
+      if (!addressRepository.existsById(dto.getAddressId())) {
+        throw new ResourceNotFoundException(AppConstants.ErrorMessages.ADDRESS_NOT_FOUND);
+      }
+
+      wh.setAddress(addressRepository.getReferenceById(dto.getAddressId()));
     }
 
-    wh.setAddress(addressRepository.getReferenceById(dto.getAddressId()));
     wh.setStatus(WarehouseStatus.ACTIVE);
 
     wh = warehouseRepository.save(wh);
@@ -83,13 +85,6 @@ public class WarehouseServiceImpl implements WarehouseService {
     warehouseRepository.save(wh);
   }
 
-  /*
-   * Delete a warehouse.
-   * If the warehouse has pending orders, it will be marked as inactive instead of
-   * being deleted.
-   * If the warehouse is not found, a ResourceNotFoundException will be thrown.
-   * If the warehouse has pending orders, a BadRequestException will be thrown.
-   */
   @Override
   public void delete(UUID id) {
     if (!warehouseRepository.existsById(id)) {

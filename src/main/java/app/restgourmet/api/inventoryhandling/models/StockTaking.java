@@ -4,9 +4,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import app.restgourmet.api.inventoryhandling.enums.StockTakingStatus;
+import app.restgourmet.api.masterdata.models.Warehouse;
 import app.restgourmet.api.shared.models.BaseEntity;
 import app.restgourmet.api.usermanagement.models.UserEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -20,17 +23,25 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table(name = "stock_takings")
-public class StockTaking extends BaseEntity {    
-    private LocalDateTime startDate;
+public class StockTaking extends BaseEntity {
+  private LocalDateTime startDate;
 
-    private LocalDateTime endDate;
+  private LocalDateTime endDate;
 
-    private UserEntity createdBy;
+  private UserEntity createdBy;
 
-    private StockTakingStatus status;
+  private StockTakingStatus status;
 
-    private String observation;
+  @ManyToOne
+  @JoinColumn(name = "warehouse_id", nullable = false)
+  private Warehouse warehouse;
 
-    @OneToMany
-    private List<StockTakingItem> items;
+  private String observation;
+
+  @OneToMany
+  private List<StockTakingItem> items;
+
+  public void addItem(StockTakingItem item) {
+    this.items.add(item);
+  }  
 }

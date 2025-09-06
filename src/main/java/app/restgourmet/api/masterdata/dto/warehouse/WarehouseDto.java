@@ -9,7 +9,8 @@ import lombok.Data;
 @Data
 public class WarehouseDto {
   @NotNull private String name;
-  @NotNull private UUID addressId;
+  
+  private UUID addressId;
   
   private WarehouseStatus status;
 }

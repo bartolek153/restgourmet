@@ -22,7 +22,7 @@ public class Warehouse extends BaseEntity {
   private String name;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "location_id", nullable = false)
+  @JoinColumn(name = "address_id")
   private Address address;
 
   private WarehouseStatus status;

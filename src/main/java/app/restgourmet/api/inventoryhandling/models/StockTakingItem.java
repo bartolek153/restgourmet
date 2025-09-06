@@ -1,7 +1,6 @@
 package app.restgourmet.api.inventoryhandling.models;
 
 import app.restgourmet.api.masterdata.models.Product;
-import app.restgourmet.api.masterdata.models.Warehouse;
 import app.restgourmet.api.shared.models.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -21,24 +20,22 @@ import lombok.Setter;
 @Entity
 @Table(name = "stock_taking_items")
 public class StockTakingItem extends BaseEntity {
-    @ManyToOne
-    @NotNull
-    private StockTaking stockTaking;
+  @NotNull
+  @ManyToOne
+  @JoinColumn(name = "stock_taking_id")
+  private StockTaking stockTaking;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id", nullable = false)
-    private Product product;
+  @NotNull
+  @ManyToOne
+  @JoinColumn(name = "product_id", nullable = false)
+  private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "warehouse_id", nullable = false)
-    private Warehouse warehouse;
+  @Min(0)
+  private Double countedQuantity;
 
-    @Min(0)
-    private Double countedQuantity;
+  @Min(0)
+  private Double systemQuantity;
 
-    @Min(0)
-    private Double systemQuantity;
-
-    @Min(0)
-    private Double difference;
+  @Min(0)
+  private Double difference;
 }

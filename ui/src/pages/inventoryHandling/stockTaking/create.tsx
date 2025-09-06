@@ -1,9 +1,11 @@
-import { Modal, Form, ModalProps, FormProps, Select, DatePicker, Button, Space, InputNumber, Table, Col, Row } from "antd";
+import { Modal, Form, ModalProps, FormProps, Select, DatePicker, Button, Space, InputNumber, Table, Col, Row, Input } from "antd";
 import { useSelect } from "@refinedev/antd";
 import { useState } from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { PaymentMethod } from "../../../types/sales";
 import dayjs from "dayjs";
+
+const { TextArea } = Input;
 
 interface SalesOrderFormProps {
   modalProps: ModalProps;
@@ -27,7 +29,7 @@ export const StockTakingCreateForm: React.FC<SalesOrderFormProps> = ({
 
   const { selectProps: productSelectProps } = useSelect({
     resource: "products",
-    optionLabel: "name",
+    optionLabel: "description",
     optionValue: "id",
     pagination: {
       mode: "server",
@@ -37,13 +39,7 @@ export const StockTakingCreateForm: React.FC<SalesOrderFormProps> = ({
   return (
     <Modal {...modalProps} width={800} title="Criar inventário">
       <Form {...formProps} layout="vertical" >
-        <Form.Item
-          label="Data de início"
-          name="startDate"
-          initialValue={dayjs(new Date())} 
-        >
-          <DatePicker format="DD/MM/YYYY" disabled />
-        </Form.Item>
+        <DatePicker defaultValue={dayjs(new Date())} format="DD/MM/YYYY" disabled style={{ marginBottom: 24 }} />
         <Form.Item
           label="Armazém"
           name="warehouseId"
@@ -62,6 +58,11 @@ export const StockTakingCreateForm: React.FC<SalesOrderFormProps> = ({
             optionFilterProp="label"
           />
         </Form.Item>
+
+        <Form.Item label="Observação" name={"observation"}>
+          <TextArea rows={4} />
+        </Form.Item>
+
         <Form.List name="items">
           {(fields, { add, remove }) => (
             <>

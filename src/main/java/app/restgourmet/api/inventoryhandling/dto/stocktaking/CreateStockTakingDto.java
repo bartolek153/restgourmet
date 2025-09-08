@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class CreateStockTakingDto {
   @NotNull private UUID warehouseId;
-  @NotNull private String observation;
   @NotNull private List<StockTakingItemDto> items;
+  
+  private String observation;
 }

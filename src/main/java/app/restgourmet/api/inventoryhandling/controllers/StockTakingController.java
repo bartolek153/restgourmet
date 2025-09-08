@@ -9,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.CreateStockTakingDto;
+import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListFiltersDto;
 import app.restgourmet.api.inventoryhandling.service.spec.StockTakingService;
@@ -47,6 +50,11 @@ public class StockTakingController {
     return ResponseEntity.ok(stockTakingService.list(CustomPageRequest.of(page, size, order, sort), filters));
   }
 
+  @GetMapping("/{id}")
+  public ResponseEntity<StockTakingDto> getTaking(@PathVariable UUID id) {
+    return ResponseEntity.ok(stockTakingService.getOne(id));
+  }
+
   @PostMapping
   public ResponseEntity<UUID> createTaking(@RequestBody @Valid CreateStockTakingDto dto) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -54,5 +62,16 @@ public class StockTakingController {
     
     UUID id = stockTakingService.create(dto, ud.getId());
     return ResponseEntity.status(HttpStatus.CREATED).body(id);
+  }
+
+  @GetMapping("/{id}/line/{itemId}")
+  public ResponseEntity<UUID> getItem(@PathVariable UUID id) {
+    return ResponseEntity.ok(id);
+  }
+
+  @DeleteMapping("/{id}")
+  public ResponseEntity<?> deleteTaking(@PathVariable UUID id) {
+    stockTakingService.delete(id);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }

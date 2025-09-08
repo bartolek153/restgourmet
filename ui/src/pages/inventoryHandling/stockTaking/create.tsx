@@ -1,23 +1,16 @@
 import { Modal, Form, ModalProps, FormProps, Select, DatePicker, Button, Space, InputNumber, Table, Col, Row, Input } from "antd";
 import { useSelect } from "@refinedev/antd";
-import { useState } from "react";
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { PaymentMethod } from "../../../types/sales";
 import dayjs from "dayjs";
 
 const { TextArea } = Input;
 
-interface SalesOrderFormProps {
+interface StockTakingCreateFormProps {
   modalProps: ModalProps;
   formProps: FormProps;
 }
 
-export const StockTakingCreateForm: React.FC<SalesOrderFormProps> = ({
-  modalProps,
-  formProps,
-}) => {
-  const [selectedItems, setSelectedItems] = useState<any[]>([]);
-
+export const StockTakingCreateForm: React.FC<StockTakingCreateFormProps> = ({ modalProps, formProps }) => {
   const { selectProps: warehouseSelectProps } = useSelect({
     resource: "warehouses",
     optionLabel: "name",
@@ -38,8 +31,13 @@ export const StockTakingCreateForm: React.FC<SalesOrderFormProps> = ({
 
   return (
     <Modal {...modalProps} width={800} title="Criar inventário">
-      <Form {...formProps} layout="vertical" >
-        <DatePicker defaultValue={dayjs(new Date())} format="DD/MM/YYYY" disabled style={{ marginBottom: 24 }} />
+      <Form {...formProps} layout="vertical">
+        <DatePicker
+          defaultValue={dayjs(new Date())}
+          format="DD/MM/YYYY"
+          disabled
+          style={{ marginBottom: 24 }}
+        />
         <Form.Item
           label="Armazém"
           name="warehouseId"
@@ -74,10 +72,7 @@ export const StockTakingCreateForm: React.FC<SalesOrderFormProps> = ({
                       name={[name, "productId"]}
                       rules={[{ required: true, message: "Produto é obrigatório" }]}
                     >
-                      <Select
-                        {...productSelectProps}
-                        placeholder="Selecionar produto"
-                      />
+                      <Select {...productSelectProps} placeholder="Selecionar produto" />
                     </Form.Item>
                   </Col>
                   <Col>

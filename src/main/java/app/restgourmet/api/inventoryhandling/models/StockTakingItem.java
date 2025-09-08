@@ -20,7 +20,6 @@ import lombok.Setter;
 @Entity
 @Table(name = "stock_taking_items")
 public class StockTakingItem extends BaseEntity {
-  @NotNull
   @ManyToOne
   @JoinColumn(name = "stock_taking_id")
   private StockTaking stockTaking;

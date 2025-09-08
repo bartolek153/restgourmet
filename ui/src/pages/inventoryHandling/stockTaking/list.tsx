@@ -1,7 +1,6 @@
 import {
   DeleteButton,
   EditButton,
-  FilterDropdown,
   List,
   TextField,
   useModalForm,
@@ -9,9 +8,8 @@ import {
   useTable,
 } from "@refinedev/antd";
 import { BaseRecord, useMany } from "@refinedev/core";
-import { Form, Input, Space, Table } from "antd";
+import { Form, Input, Space, Table, Tag } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
-import { AddressForm } from "./form";
 import { StockTakingCreateForm } from "./create";
 
 export const StockTakingList = () => {
@@ -58,6 +56,28 @@ export const StockTakingList = () => {
     ids: userIds,
   });
 
+  const getStatusTag = (status: string) => {
+    let color;
+    let text;
+
+    switch (status) {
+      case "OPEN":
+        color = "orange";
+        text = "Criado";
+        break;
+      case "CLOSED":
+        color = "green";
+        text = "Fechado";
+        break;
+      case "CANCELED":
+        color = "gray";
+        text = "Cancelado";
+        break;
+    }
+
+    return <Tag color={color}>{text}</Tag>;
+  };
+
   return (
     <>
       <List
@@ -86,33 +106,38 @@ export const StockTakingList = () => {
           }}
           showSorterTooltip={true}
         >
-          <Table.Column dataIndex="startDate" title={"Data inicial"} sorter={true} />
+          <Table.Column
+            dataIndex="startDate"
+            title={"Data inicial"}
+            sorter={true}
+            render={(text) => new Date(text).toLocaleString()}
+          />
           <Table.Column dataIndex="endDate" title={"Data final"} sorter={true} />
-          <Table.Column dataIndex="createdById" title={"Criado por"} sorter={true} />
           <Table.Column
-                          dataIndex="createdById"
-                          sorter={true}
-                          title={"Criado por"}
-                          render={(value) => {
-                            if (isLoading) {
-                              return <TextField value="Loading..." />;
-                            }
-          
-                            return <TextField value={data?.find((item) => item.id === value)?.name} />;
-                          }}
-                        />
-          <Table.Column dataIndex="status" title={"Status"} sorter={true} />
+            dataIndex="createdById"
+            sorter={true}
+            title={"Criado por"}
+            render={(value) => {
+              if (isLoading) {
+                return <TextField value="Loading..." />;
+              }
+
+              return <TextField value={data?.find((item) => item.id === value)?.name} />;
+            }}
+          />
           <Table.Column
-            title={"Actions"}
+            dataIndex="status"
+            title={"Status"}
+            sorter={true}
+            render={(val) => getStatusTag(val)}
+          />
+          <Table.Column dataIndex="observation" title="Observação" />
+          <Table.Column
+            title={"Ações"}
             dataIndex="actions"
             render={(_, record: BaseRecord) => (
               <Space>
-                <EditButton
-                  hideText
-                  size="small"
-                  recordItemId={record.id}
-                  onClick={() => editModalShow(record.id)}
-                />
+                <EditButton hideText size="small" recordItemId={record.id} />
                 <DeleteButton hideText size="small" recordItemId={record.id} />
               </Space>
             )}

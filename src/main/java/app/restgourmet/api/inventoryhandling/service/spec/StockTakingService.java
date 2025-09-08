@@ -6,11 +6,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PagedModel;
 
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.CreateStockTakingDto;
+import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListFiltersDto;
 
 public interface StockTakingService {
   PagedModel<StockTakingListDto> list(PageRequest pageReq, StockTakingListFiltersDto filters);
 
+  StockTakingDto getOne(UUID id);
+
   UUID create(CreateStockTakingDto dto, UUID userId);
+
+  void edit(UUID id, StockTakingDto dto);
+
+  void delete(UUID id);
 }

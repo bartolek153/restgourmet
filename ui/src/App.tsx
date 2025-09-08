@@ -25,7 +25,6 @@ import { BaseUnitList } from "./pages/commonData/baseUnits";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/authentication/login";
 import { AddressList } from "./pages/masterData/addresses";
-import { BusinessPartnerEdit, BusinessPartnerList } from "./pages/masterData/businessPartners";
 import { ProductCategoryList } from "./pages/masterData/productCategories";
 import { ProductFamilyList } from "./pages/masterData/productFamilies";
 import { ProductGroupList } from "./pages/masterData/productGroups";
@@ -43,7 +42,7 @@ import { PurchaseOrderList } from "./pages/procurement/orders/list";
 import { PurchaseOrderEdit } from "./pages/procurement/orders/edit";
 import "./i18n";
 import { useTranslation } from "react-i18next";
-import { StockTakingList } from "./pages/inventoryHandling/stockTaking";
+import { StockTakingList, StockTakingEdit } from "./pages/inventoryHandling/stockTaking";
 
 
 function App() {
@@ -126,7 +125,7 @@ function App() {
                     <Route path="takings">
                       <Route index element={<StockTakingList />} />
                       <Route path="create" />
-                      <Route path="edit/:id" />
+                      <Route path="edit/:id" element={<StockTakingEdit />} />
                     </Route>
                   </Route>
 

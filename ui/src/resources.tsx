@@ -192,5 +192,9 @@ export const resources: ResourceProps[] = [
       parent: INVENTORY_HANDLING_PARENT_MENU,
       canDelete: true
     }
+  },
+  {
+    name: "stock/takings/items",
+    edit: "/stock/takings/:stId/items/:id"
   }
 ];

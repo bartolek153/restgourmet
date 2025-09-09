@@ -64,11 +64,6 @@ public class StockTakingController {
     return ResponseEntity.status(HttpStatus.CREATED).body(id);
   }
 
-  @GetMapping("/{id}/line/{itemId}")
-  public ResponseEntity<UUID> getItem(@PathVariable UUID id) {
-    return ResponseEntity.ok(id);
-  }
-
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteTaking(@PathVariable UUID id) {
     stockTakingService.delete(id);

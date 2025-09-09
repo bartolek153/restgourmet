@@ -2,6 +2,7 @@
 package app.restgourmet.api.inventoryhandling.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,7 @@ import app.restgourmet.api.inventoryhandling.enums.StockTakingStatus;
 import app.restgourmet.api.inventoryhandling.mappers.StockTakingMapper;
 import app.restgourmet.api.inventoryhandling.models.StockTaking;
 import app.restgourmet.api.inventoryhandling.models.StockTakingItem;
+import app.restgourmet.api.inventoryhandling.repository.StockTakingItemRepository;
 import app.restgourmet.api.inventoryhandling.repository.StockTakingRepository;
 import app.restgourmet.api.inventoryhandling.repository.specifications.StockTakingSpecification;
 import app.restgourmet.api.inventoryhandling.service.spec.StockTakingService;
@@ -36,6 +38,7 @@ import jakarta.transaction.Transactional;
 public class StockTakingServiceImpl implements StockTakingService {
 
   private final StockTakingRepository stockTakingRepository;
+  private final StockTakingItemRepository stockTakingItemRepository;
   private final UserRepository userRepository;
   private final WarehouseRepository warehouseRepository;
   private final ProductRepository productRepository;
@@ -45,10 +48,12 @@ public class StockTakingServiceImpl implements StockTakingService {
 
   public StockTakingServiceImpl(
       StockTakingRepository stockTakingRepository,
+      StockTakingItemRepository stockTakingItemRepository,
       UserRepository userRepository,
       WarehouseRepository warehouseRepository,
       ProductRepository productRepository) {
     this.stockTakingRepository = stockTakingRepository;
+    this.stockTakingItemRepository = stockTakingItemRepository;
     this.userRepository = userRepository;
     this.warehouseRepository = warehouseRepository;
     this.productRepository = productRepository;
@@ -65,6 +70,14 @@ public class StockTakingServiceImpl implements StockTakingService {
   public StockTakingDto getOne(UUID id) {
     StockTaking st = getById(id);
     return stockTakingMapper.toDto(st);
+  }
+
+  public List<StockTakingItemDto> getItems(UUID id) {
+    List<StockTakingItem> items = stockTakingItemRepository.findByStockTakingId(id);
+    return items
+        .stream()
+        .map(stockTakingMapper::toItemDtoList)
+        .toList();
   }
 
   @Transactional

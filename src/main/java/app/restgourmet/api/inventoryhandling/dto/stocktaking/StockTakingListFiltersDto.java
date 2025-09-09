@@ -8,9 +8,9 @@ import lombok.Data;
 
 @Data
 public class StockTakingListFiltersDto {
-    private String q;
-    private LocalDateTime startDate;
-    private LocalDateTime endDate;
-    private UUID createdById;
-    private StockTakingStatus status;
+  private String q;
+  private LocalDateTime startDate;
+  private LocalDateTime endDate;
+  private UUID createdById;
+  private StockTakingStatus status;
 }

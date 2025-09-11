@@ -20,6 +20,9 @@ public interface StockTakingMapper {
   @Mapping(target = "createdById", source = "createdBy.id")
   StockTakingListDto toListDto(StockTaking ent);
 
+  @Mapping(target = "items", source = "items", qualifiedByName = "mapItems")
+  @Mapping(target = "createdBy", source = "createdBy.name")
+  @Mapping(target = "warehouseId", source = "warehouse.id")
   StockTakingDto toDto(StockTaking ent);
 
   StockTakingItemDto toItemDtoList(StockTakingItem ent);
@@ -27,20 +30,20 @@ public interface StockTakingMapper {
   @Mapping(target = "items", ignore = true)
   StockTaking createDtoToEntity(CreateStockTakingDto dto);
 
-  // @Named("mapItems")
-  // static List<StockTakingItemDto> mapItems(List<StockTakingItem> items) {
-  //   if (items != null) {
-  //     List<StockTakingItemDto> res = new ArrayList<>();
-  //     for (var i : items) {
-  //       res.add(new StockTakingItemDto(
-  //           i.getId(),
-  //           i.getProduct().getId(),
-  //           i.getCountedQuantity(),
-  //           i.getSystemQuantity(),
-  //           i.getDifference()));
-  //     }
-  //     return res;
-  //   }
-  //   return new ArrayList<>();
-  // }
+  @Named("mapItems")
+  static List<StockTakingItemDto> mapItems(List<StockTakingItem> items) {
+    if (items != null) {
+      List<StockTakingItemDto> res = new ArrayList<>();
+      for (var i : items) {
+        res.add(new StockTakingItemDto(
+            i.getId(),
+            i.getProduct().getId(),
+            i.getCountedQuantity(),
+            i.getSystemQuantity(),
+            i.getDifference()));
+      }
+      return res;
+    }
+    return new ArrayList<>();
+  }
 }

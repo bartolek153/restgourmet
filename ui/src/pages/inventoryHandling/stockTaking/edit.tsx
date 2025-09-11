@@ -1,101 +1,152 @@
-import { Edit, useForm, useEditableTable, SaveButton } from "@refinedev/antd";
-import { Form, Input, DatePicker, Table } from "antd";
+import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { Edit, useForm, useEditableTable, SaveButton, useSelect } from "@refinedev/antd";
+import { useMany } from "@refinedev/core";
+import { Form, Input, DatePicker, Table, Space, Select, Button, InputNumber, Divider, Descriptions, Tag } from "antd";
 import React, { useEffect, useState } from "react";
 
+const { TextArea } = Input;
+
 export const StockTakingEdit = () => {
+  const [items, setItems] = useState([]);
+  const [headerInfo, setHeaderInfo] = useState<any[]>([]);
+  const [userData, setUserData] = useState();
+
   const { formProps: formPropsEdit, saveButtonProps: saveButtonPropsEdit, query } = useForm();
   const { data, isLoading } = query;
 
-  // useEditableTable para o grid de items
-  const {
-    tableProps,
-    form: tableForm,
-    saveButtonProps,
-  } = useEditableTable({
-    resource: "stockTakingItems",
-    queryOptions: {
-      enabled: !!data?.data?.id,
+  const getStatusTag = (status: string) => {
+    let color;
+    let text;
+
+    switch (status) {
+      case "OPEN":
+        color = "orange";
+        text = "Criado";
+        break;
+      case "CLOSED":
+        color = "green";
+        text = "Fechado";
+        break;
+      case "CANCELED":
+        color = "gray";
+        text = "Cancelado";
+        break;
+    }
+
+    return <Tag color={color}>{text}</Tag>;
+  };
+
+  const { selectProps: productSelectProps } = useSelect({
+    resource: "products",
+    optionLabel: "description",
+    optionValue: "id",
+    pagination: {
+      mode: "server",
     },
-    initialSorter: [{ field: "id", order: "asc" }],
-    meta: {
-      stockTakingId: data?.data?.id,
+  });
+
+  const { selectProps: warehouseSelectProps } = useSelect({
+    resource: "warehouses",
+    optionLabel: "name",
+    optionValue: "id",
+    pagination: {
+      mode: "client",
     },
   });
 
   useEffect(() => {
     if (!isLoading && data?.data) {
-      tableForm.setFieldsValue({
-        items: data.data.items || [],
-      });
+      const st = data.data;
+
+      setHeaderInfo([
+        {
+          key: "1",
+          label: "Data de início",
+          children: new Date(st.startDate).toLocaleString()
+        },
+        {
+          key: "2",
+          label: "Data final",
+          children: new Date(st.endDate).toLocaleString()
+        },
+        {
+          key: "3",
+          label: "Criado por",
+          children: st.createdBy
+        },
+        {
+          key: "4",
+          label: "Status",
+          children: getStatusTag(st.status)
+        }
+      ])
+
+      setItems(data.data.items);
     }
   }, [data, isLoading]);
 
   return (
     <Edit saveButtonProps={saveButtonPropsEdit} isLoading={isLoading} title="Editar inventário">
       <Form {...formPropsEdit} layout="vertical">
-        <Form.Item label="Data de ínício" name="startDate">
-          <DatePicker />
+
+        <Space align="center" style={{ marginBottom: 20, width: "100%", justifyContent: "flex-end" }}>
+          <Button type="primary">Processar</Button>
+        </Space>
+
+        <Descriptions bordered column={4} items={headerInfo} layout="vertical" style={{ marginBottom: 30 }} />
+
+        <Form.Item
+          label="Armazém"
+          name="warehouseId"
+          rules={[{ required: true, message: "Armazém é obrigatório" }]}
+        >
+          <Select {...warehouseSelectProps} allowClear />
         </Form.Item>
-        <Form.Item label="Data final" name="endDate">
-          <DatePicker />
-        </Form.Item>
-        <Form.Item label="Criado por" name="createdById">
-          <Input />
-        </Form.Item>
-        <Form.Item label="Armazém" name="warehouseId">
-          <Input />
-        </Form.Item>
-        <Form.Item label="Status" name="status">
-          <Input />
-        </Form.Item>
+
         <Form.Item label="Observação" name="observation">
-          <Input />
+          <TextArea rows={3} />
         </Form.Item>
 
-        {/* Grid editável */}
-        <Form form={tableForm} component={false}>
-          <Table
-            {...tableProps}
-            rowKey="id"
-            bordered
-            pagination={false}
-            components={{
-              body: {
-                cell: tableProps.components?.body?.cell,
-              },
-            }}
-            columns={[
-              {
-                title: "Produto",
-                dataIndex: "productName",
-                editable: true,
-              },
-              {
-                title: "Quantidade",
-                dataIndex: "quantity",
-                editable: true,
-              },
-              {
-                title: "Preço",
-                dataIndex: "price",
-                editable: true,
-              },
-            ]}
-          />
-        </Form>
+        <Divider orientation="left">Itens</Divider>
+        <Form.List name="items">
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
 
-        {/* Botão para salvar header + grid */}
-        <SaveButton
-          {...saveButtonPropsEdit}
-          onClick={async () => {
-            // Salva header
-            await saveButtonPropsEdit?.onClick?.();
+                  <Form.Item
+                    {...restField}
+                    name={[name, "productId"]}
+                    rules={[{ required: true, message: "Produto é obrigatório" }]}
+                  >
+                    <Select {...productSelectProps} placeholder="Selecionar produto" allowClear />
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'systemQuantity']}
+                  >
+                    <InputNumber readOnly placeholder="Atual" />
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'countedQuantity']}
+                  >
+                    <InputNumber
+                      placeholder="Contagem"
+                    />
+                  </Form.Item>
+                  <MinusCircleOutlined onClick={() => remove(name)} />
+                </Space>
+              ))}
+              <Form.Item>
+                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                  Adicionar item
+                </Button>
+              </Form.Item>
+            </>
+          )}
+        </Form.List>
 
-            // Salva grid
-            await saveButtonProps?.onClick?.();
-          }}
-          style={{ marginTop: 16 }}
-        />
       </Form>
     </Edit>
   );

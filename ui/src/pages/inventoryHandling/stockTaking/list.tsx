@@ -45,17 +45,6 @@ export const StockTakingList = () => {
     warnWhenUnsavedChanges: true,
   });
 
-  const { selectProps: userSelectProps } = useSelect({
-    resource: "users",
-    optionLabel: "name",
-  });
-
-  const userIds: any = tableProps?.dataSource?.map((record: any) => record.createdById);
-  const { data, isLoading } = useMany({
-    resource: "users",
-    ids: userIds,
-  });
-
   const getStatusTag = (status: string) => {
     let color;
     let text;
@@ -114,16 +103,9 @@ export const StockTakingList = () => {
           />
           <Table.Column dataIndex="endDate" title={"Data final"} sorter={true} />
           <Table.Column
-            dataIndex="createdById"
+            dataIndex={["createdBy", "name"]}
             sorter={true}
             title={"Criado por"}
-            render={(value) => {
-              if (isLoading) {
-                return <TextField value="Loading..." />;
-              }
-
-              return <TextField value={data?.find((item) => item.id === value)?.name} />;
-            }}
           />
           <Table.Column
             dataIndex="status"

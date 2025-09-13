@@ -6,9 +6,11 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.Named;
 
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.CreateStockTakingDto;
+import app.restgourmet.api.inventoryhandling.dto.stocktaking.EditStockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingItemDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListDto;
@@ -17,11 +19,13 @@ import app.restgourmet.api.inventoryhandling.models.StockTakingItem;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface StockTakingMapper {
-  @Mapping(target = "createdById", source = "createdBy.id")
+  @Mapping(target = "createdBy.id", source = "createdBy.id")
+  @Mapping(target = "createdBy.name", source = "createdBy.name")
   StockTakingListDto toListDto(StockTaking ent);
 
   @Mapping(target = "items", source = "items", qualifiedByName = "mapItems")
-  @Mapping(target = "createdBy", source = "createdBy.name")
+  @Mapping(target = "createdBy.id", source = "createdBy.id")
+  @Mapping(target = "createdBy.name", source = "createdBy.name")
   @Mapping(target = "warehouseId", source = "warehouse.id")
   StockTakingDto toDto(StockTaking ent);
 
@@ -29,6 +33,13 @@ public interface StockTakingMapper {
 
   @Mapping(target = "items", ignore = true)
   StockTaking createDtoToEntity(CreateStockTakingDto dto);
+
+  @Mapping(target = "items", ignore = true)
+  @Mapping(target = "createdBy", ignore = true)
+  @Mapping(target = "warehouse", ignore = true)
+  void updateEntityHeader(EditStockTakingDto dto, @MappingTarget StockTaking ent);
+
+  void updateEntityItem(StockTakingItemDto dto, @MappingTarget StockTakingItem ent);
 
   @Named("mapItems")
   static List<StockTakingItemDto> mapItems(List<StockTakingItem> items) {

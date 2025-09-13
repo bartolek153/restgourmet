@@ -36,7 +36,7 @@ export const StockTakingEdit = () => {
     return <Tag color={color}>{text}</Tag>;
   };
 
-  const { selectProps: productSelectProps } = useSelect({
+  const { selectProps: productSelectProps, query: pdQuery } = useSelect({
     resource: "products",
     optionLabel: "description",
     optionValue: "id",
@@ -44,8 +44,9 @@ export const StockTakingEdit = () => {
       mode: "server",
     },
   });
+  const { isLoading: pdIsLoading } = pdQuery;
 
-  const { selectProps: warehouseSelectProps } = useSelect({
+  const { selectProps: warehouseSelectProps, query: whQuery } = useSelect({
     resource: "warehouses",
     optionLabel: "name",
     optionValue: "id",
@@ -53,6 +54,7 @@ export const StockTakingEdit = () => {
       mode: "client",
     },
   });
+  const { isLoading: whIsLoading } = whQuery;
 
   useEffect(() => {
     if (!isLoading && data?.data) {
@@ -67,12 +69,12 @@ export const StockTakingEdit = () => {
         {
           key: "2",
           label: "Data final",
-          children: new Date(st.endDate).toLocaleString()
+          children: st.endDate ? new Date(st.endDate).toLocaleString() : null
         },
         {
           key: "3",
           label: "Criado por",
-          children: st.createdBy
+          children: st.createdBy.name
         },
         {
           key: "4",
@@ -86,12 +88,11 @@ export const StockTakingEdit = () => {
   }, [data, isLoading]);
 
   return (
-    <Edit saveButtonProps={saveButtonPropsEdit} isLoading={isLoading} title="Editar inventário">
+    <Edit saveButtonProps={saveButtonPropsEdit} isLoading={isLoading || pdIsLoading || whIsLoading} title="Editar inventário">
       <Form {...formPropsEdit} layout="vertical">
 
-        <Space align="center" style={{ marginBottom: 20, width: "100%", justifyContent: "flex-end" }}>
-          <Button type="primary">Processar</Button>
-        </Space>
+        {/* <Space align="center" style={{ marginBottom: 20, width: "100%", justifyContent: "flex-end" }}>
+        </Space> */}
 
         <Descriptions bordered column={4} items={headerInfo} layout="vertical" style={{ marginBottom: 30 }} />
 
@@ -107,7 +108,10 @@ export const StockTakingEdit = () => {
           <TextArea rows={3} />
         </Form.Item>
 
+        <Button type="primary">Processar</Button>
+        
         <Divider orientation="left">Itens</Divider>
+
         <Form.List name="items">
           {(fields, { add, remove }) => (
             <>
@@ -146,7 +150,6 @@ export const StockTakingEdit = () => {
             </>
           )}
         </Form.List>
-
       </Form>
     </Edit>
   );

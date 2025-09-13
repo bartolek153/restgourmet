@@ -2,7 +2,9 @@
 package app.restgourmet.api.inventoryhandling.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.CreateStockTakingDto;
+import app.restgourmet.api.inventoryhandling.dto.stocktaking.EditStockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingItemDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListDto;
@@ -24,6 +27,7 @@ import app.restgourmet.api.inventoryhandling.models.StockTakingItem;
 import app.restgourmet.api.inventoryhandling.repository.StockTakingItemRepository;
 import app.restgourmet.api.inventoryhandling.repository.StockTakingRepository;
 import app.restgourmet.api.inventoryhandling.repository.specifications.StockTakingSpecification;
+import app.restgourmet.api.inventoryhandling.service.spec.CurrentStockService;
 import app.restgourmet.api.inventoryhandling.service.spec.StockTakingService;
 import app.restgourmet.api.masterdata.repository.ProductRepository;
 import app.restgourmet.api.masterdata.repository.WarehouseRepository;
@@ -37,6 +41,7 @@ import jakarta.transaction.Transactional;
 @Service
 public class StockTakingServiceImpl implements StockTakingService {
 
+  private final CurrentStockService currentStockService;
   private final StockTakingRepository stockTakingRepository;
   private final StockTakingItemRepository stockTakingItemRepository;
   private final UserRepository userRepository;
@@ -51,7 +56,9 @@ public class StockTakingServiceImpl implements StockTakingService {
       StockTakingItemRepository stockTakingItemRepository,
       UserRepository userRepository,
       WarehouseRepository warehouseRepository,
-      ProductRepository productRepository) {
+      ProductRepository productRepository,
+      CurrentStockService currentStockService) {
+    this.currentStockService = currentStockService;
     this.stockTakingRepository = stockTakingRepository;
     this.stockTakingItemRepository = stockTakingItemRepository;
     this.userRepository = userRepository;
@@ -109,8 +116,42 @@ public class StockTakingServiceImpl implements StockTakingService {
   }
 
   @Transactional
-  public void edit(UUID id, StockTakingDto dto) {
-    
+  public void edit(UUID id, EditStockTakingDto dto) {
+    StockTaking st = getById(id);
+    stockTakingMapper.updateEntityHeader(dto, st);
+
+    Set<StockTakingItem> children = new HashSet<>();
+
+    if (!warehouseRepository.existsById(dto.getWarehouseId())) {
+      throw new ResourceNotFoundException(ErrorMessages.WAREHOUSE_NOT_FOUND);
+    }
+
+    st.setWarehouse(warehouseRepository.getReferenceById(dto.getWarehouseId()));
+
+    for (StockTakingItemDto itemDto : dto.getItems()) {
+      StockTakingItem itemEnt;
+
+      if (itemDto.getId() == null) {
+        // CREATE MODE: create new child
+        itemEnt = new StockTakingItem();
+        itemEnt.setStockTaking(st);
+      } else {
+        // UPDATE MODE : fetch by id
+        itemEnt = getItemById(itemDto.getId());
+      }
+      stockTakingMapper.updateEntityItem(itemDto, itemEnt);
+
+      if (!productRepository.existsById(itemDto.getProductId())) {
+        throw new ResourceNotFoundException(ErrorMessages.PRODUCT_NOT_FOUND);
+      }
+
+      itemEnt.setProduct(productRepository.getReferenceById(itemDto.getProductId()));
+
+      children.add(itemEnt);
+    }
+    st.getItems().clear();
+    st.getItems().addAll(children);
+    stockTakingRepository.save(st);
   }
 
   @Transactional
@@ -124,8 +165,28 @@ public class StockTakingServiceImpl implements StockTakingService {
     stockTakingRepository.delete(st);
   }
 
+  @Transactional
+  public void process(UUID id) {
+    StockTaking st = getById(id);
+
+    for (StockTakingItem item : st.getItems()) {
+      currentStockService.adjustStock(
+          st.getWarehouse(), 
+          item.getProduct(), 
+          item.getCountedQuantity());
+    }
+
+    st.setStatus(StockTakingStatus.CLOSED);
+    stockTakingRepository.save(st);
+  }
+
   private StockTaking getById(UUID id) {
     return stockTakingRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(AppConstants.ErrorMessages.STOCK_TAKING_NOT_FOUND));
+  }
+
+  private StockTakingItem getItemById(UUID id) {
+    return stockTakingItemRepository.findById(id)
+        .orElseThrow(() -> new ResourceNotFoundException(AppConstants.ErrorMessages.STOCK_TAKING_ITEM_NOT_FOUND));
   }
 }

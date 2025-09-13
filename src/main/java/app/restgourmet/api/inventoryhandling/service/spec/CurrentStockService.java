@@ -23,6 +23,8 @@ public interface CurrentStockService {
 
   boolean checkStockAvailability(Warehouse wh, Product prod, Double qty, UnitMeasurement unit);
 
+  void adjustStock(Warehouse wh, Product prod, Double qty);
+
   void increaseStock(Warehouse wh, Product prod, Double qty);
 
   void increaseStock(Warehouse wh, Product prod, Double qty, UnitMeasurement unit);

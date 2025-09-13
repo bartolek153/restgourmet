@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.CreateStockTakingDto;
+import app.restgourmet.api.inventoryhandling.dto.stocktaking.EditStockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListFiltersDto;
@@ -64,9 +66,21 @@ public class StockTakingController {
     return ResponseEntity.status(HttpStatus.CREATED).body(id);
   }
 
+  @PutMapping("/{id}")
+  public ResponseEntity<?> updateTaking(@PathVariable UUID id, @RequestBody @Valid EditStockTakingDto dto) {
+    stockTakingService.edit(id, dto);
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
   @DeleteMapping("/{id}")
   public ResponseEntity<?> deleteTaking(@PathVariable UUID id) {
     stockTakingService.delete(id);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+  }
+
+  @PostMapping("/{id}/process")
+  public ResponseEntity<?> processTaking(@PathVariable UUID id) {
+    stockTakingService.process(id);
+    return ResponseEntity.status(HttpStatus.OK).build();
   }
 }

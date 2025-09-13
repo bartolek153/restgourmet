@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.UUID;
 
 import app.restgourmet.api.inventoryhandling.enums.StockTakingStatus;
+import app.restgourmet.api.shared.dto.CreatedByDataDto;
 import lombok.Data;
 
 @Data
 public class StockTakingDto {
   private LocalDateTime startDate;
   private LocalDateTime endDate;
-  private UUID createdById;
-  private String createdBy;
+  private CreatedByDataDto createdBy;
   private UUID warehouseId;
   private StockTakingStatus status;
   private String observation;

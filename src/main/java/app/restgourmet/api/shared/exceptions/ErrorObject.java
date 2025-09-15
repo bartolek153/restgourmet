@@ -16,7 +16,7 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 public class ErrorObject {
   private String message;
   private String details;
-  private Map<String, List<String>> errors;
+  private Map<String, List<Object>> errors;
 
   @Builder.Default
   private Date timestamp = new Date();

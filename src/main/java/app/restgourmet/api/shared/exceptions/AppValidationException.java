@@ -9,22 +9,24 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class AppValidationException extends RuntimeException {
-  Map<String, List<String>> errors;
+  Map<String, List<Object>> errors  = new HashMap<>();
 
   public AppValidationException() {
     super();
-    errors = new HashMap<>();
   }
 
   public AppValidationException(String message) {
     super(message);
-    errors = new HashMap<>();
   }
 
   public AppValidationException(String field, String message) {
     super();
-    errors = new HashMap<>();
     errors.put(field, List.of(message));
+  }
+
+  public AppValidationException(String field, Map<String, String> errorMap ) {
+    super();
+    errors.put(field, List.of(errorMap));
   }
 
   public void addError(String field, String message) {
@@ -35,7 +37,7 @@ public class AppValidationException extends RuntimeException {
     }
   }
 
-  public Map<String, List<String>> getErrors() {
+  public Map<String, List<Object>> getErrors() {
     return errors;
   }
 }

@@ -42,7 +42,7 @@ public class Product extends AuditableEntity {
   @NotNull
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "inventory_unit_id", nullable = false)
-  private UnitMeasurement inventoryUnit;
+  private UnitMeasurement stockUnit;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "purchase_unit_id")

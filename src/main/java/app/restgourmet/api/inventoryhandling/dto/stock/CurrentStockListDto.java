@@ -3,6 +3,6 @@ package app.restgourmet.api.inventoryhandling.dto.stock;
 import lombok.Data;
 
 @Data
-public class InventoryDto {
+public class CurrentStockListDto {
   
 }

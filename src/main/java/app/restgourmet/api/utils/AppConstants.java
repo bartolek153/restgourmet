@@ -36,10 +36,10 @@ public final class AppConstants {
     public static final String EXTERNAL_SERVICE_ERROR = "External service error";
     public static final String EXTERNAL_DATABASE_ERROR = "A database error occurred while processing the request. Please, try again later.";
 
-    public static final String INVENTORY_INSUFFICIENT = "Insufficient inventory available to fulfill the request.";
-    public static final String INVENTORY_NOT_FOUND = "Inventory record not found.";
-    public static final String INVENTORY_QUANTITY_EXCEEDED = "Requested quantity exceeds available inventory.";
-    public static final String INVENTORY_UNAVAILABLE = "Inventory is currently unavailable.";
+    public static final String STOCK_INSUFFICIENT = "Insufficient inventory available to fulfill the request.";
+    public static final String STOCK_NOT_FOUND = "Inventory record not found.";
+    public static final String STOCK_QUANTITY_EXCEEDED = "Requested quantity exceeds available inventory.";
+    public static final String STOCK_UNAVAILABLE = "Inventory is currently unavailable.";
     
     public static final String PARAMETER_NOT_FOUND = "Parameter not found.";
 

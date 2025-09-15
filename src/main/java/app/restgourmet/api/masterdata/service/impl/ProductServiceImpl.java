@@ -63,7 +63,7 @@ public class ProductServiceImpl implements ProductService {
   @Transactional
   public UUID create(CreateProductDto dto) {
     Product product = productMapper.createDtoToEntity(dto);
-    validateInput(product, dto.getGroupId(), dto.getInventoryUnitId(), dto.getPurchaseUnitId());
+    validateInput(product, dto.getGroupId(), dto.getStockUnitId(), dto.getPurchaseUnitId());
 
     product.setStatus(ProductStatus.ACTIVE);
 
@@ -83,7 +83,7 @@ public class ProductServiceImpl implements ProductService {
   @Transactional
   public void edit(UUID id, EditProductDto dto) {
     Product product = getById(id);
-    validateInput(product, dto.getGroupId(), dto.getInventoryUnitId(), dto.getPurchaseUnitId());
+    validateInput(product, dto.getGroupId(), dto.getStockUnitId(), dto.getPurchaseUnitId());
 
     if (dto.getSku() != null && !dto.getSku().equals(product.getSku())) {
       if (productRepository.existsBySku(dto.getSku())) {
@@ -114,7 +114,7 @@ public class ProductServiceImpl implements ProductService {
     if (!unitMeasurementRepository.existsById(inventoryUnitId)) {
       throw new ResourceNotFoundException(AppConstants.ErrorMessages.UNIT_MEASUREMENT_NOT_FOUND);
     }
-    prod.setInventoryUnit(unitMeasurementRepository.getReferenceById(inventoryUnitId));
+    prod.setStockUnit(unitMeasurementRepository.getReferenceById(inventoryUnitId));
 
     // optional
     if (groupId != null) {

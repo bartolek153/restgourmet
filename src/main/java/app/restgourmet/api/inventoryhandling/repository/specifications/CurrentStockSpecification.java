@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import app.restgourmet.api.inventoryhandling.dto.stock.InventoryListFiltersDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListFiltersDto;
 import app.restgourmet.api.inventoryhandling.models.CurrentStock;
 import jakarta.persistence.criteria.Predicate;
 
@@ -17,7 +17,7 @@ public class CurrentStockSpecification {
   private static final String PRODUCT = "product";
   private static final String QUANTITY = "quantity";
 
-  public static Specification<CurrentStock> filterBy(InventoryListFiltersDto filters) {
+  public static Specification<CurrentStock> filterBy(CurrentStockListFiltersDto filters) {
     return (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<>();
 

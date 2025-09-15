@@ -37,4 +37,6 @@ public class StockTakingItem extends BaseEntity {
 
   @Min(0)
   private Double difference;
+
+  private boolean processed;
 }

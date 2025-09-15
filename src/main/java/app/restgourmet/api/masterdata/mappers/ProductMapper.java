@@ -15,7 +15,7 @@ import app.restgourmet.api.masterdata.models.Product;
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
 public interface ProductMapper {
   @Mapping(target = "groupId", source = "group.id")
-  @Mapping(target = "inventoryUnitId", source = "inventoryUnit.id")
+  @Mapping(target = "stockUnitId", source = "stockUnit.id")
   @Mapping(target = "purchaseUnitId", source = "purchaseUnit.id")
   ProductDto toDto(Product entity);
 

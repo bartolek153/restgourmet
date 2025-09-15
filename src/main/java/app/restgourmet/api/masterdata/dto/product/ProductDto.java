@@ -12,7 +12,7 @@ public class ProductDto {
   private ProductStatus status;
   private UUID groupId;
   private String origin;
-  private UUID inventoryUnitId;
+  private UUID stockUnitId;
   private UUID purchaseUnitId;
   private Double price;
 }

@@ -69,7 +69,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(ConstraintViolationException.class)
   public ResponseEntity<ErrorObject> handleConstraintViolation(ConstraintViolationException e) {
     // Group errors by field and collect messages
-    Map<String, List<String>> errors = e.getConstraintViolations()
+    Map<String, List<Object>> errors = e.getConstraintViolations()
         .stream()
         .collect(Collectors.groupingBy(
             violation -> violation.getPropertyPath().toString(), // Field name
@@ -100,7 +100,7 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ErrorObject> handleValidationExceptions(MethodArgumentNotValidException ex) {
-    Map<String, List<String>> errors = ex.getBindingResult().getFieldErrors()
+    Map<String, List<Object>> errors = ex.getBindingResult().getFieldErrors()
         .stream()
         .collect(Collectors.groupingBy(
             FieldError::getField, // Get field name

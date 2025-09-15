@@ -113,7 +113,7 @@ export const StockTakingEdit = () => {
         <Divider orientation="left">Itens</Divider>
 
         <Form.List name="items">
-          {(fields, { add, remove }) => (
+          {(fields, { add, remove }, { errors }) => (
             <>
               {fields.map(({ key, name, ...restField }) => (
                 <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
@@ -146,6 +146,7 @@ export const StockTakingEdit = () => {
                 <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
                   Adicionar item
                 </Button>
+                <Form.ErrorList errors={errors} />
               </Form.Item>
             </>
           )}

@@ -170,10 +170,16 @@ public class StockTakingServiceImpl implements StockTakingService {
     StockTaking st = getById(id);
 
     for (StockTakingItem item : st.getItems()) {
-      currentStockService.adjustStock(
-          st.getWarehouse(), 
-          item.getProduct(), 
-          item.getCountedQuantity());
+      try {
+        currentStockService.adjustStock(
+            st.getWarehouse(), 
+            item.getProduct(), 
+            item.getCountedQuantity());
+  
+        item.setProcessed(true);
+      } catch (Exception e) {
+        
+      }
     }
 
     st.setStatus(StockTakingStatus.CLOSED);

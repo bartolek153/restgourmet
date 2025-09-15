@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class EditProductDto {
   @NotNull private String description;
-  @NotNull private UUID inventoryUnitId;
+  @NotNull private UUID stockUnitId;
   @NotNull private String origin;
   @NotNull private ProductStatus status;
   

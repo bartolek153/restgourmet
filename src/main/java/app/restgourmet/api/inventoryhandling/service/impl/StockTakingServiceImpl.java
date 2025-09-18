@@ -20,7 +20,9 @@ import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingItemDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListFiltersDto;
+import app.restgourmet.api.inventoryhandling.enums.StockTakingItemStatus;
 import app.restgourmet.api.inventoryhandling.enums.StockTakingStatus;
+import app.restgourmet.api.inventoryhandling.exceptions.QuantityExceededException;
 import app.restgourmet.api.inventoryhandling.mappers.StockTakingMapper;
 import app.restgourmet.api.inventoryhandling.models.StockTaking;
 import app.restgourmet.api.inventoryhandling.models.StockTakingItem;
@@ -75,7 +77,7 @@ public class StockTakingServiceImpl implements StockTakingService {
   }
 
   public StockTakingDto getOne(UUID id) {
-    StockTaking st = getById(id);
+    StockTaking st = getById(id); // TODO: if line status is pending, show current stock qty
     return stockTakingMapper.toDto(st);
   }
 
@@ -102,6 +104,7 @@ public class StockTakingServiceImpl implements StockTakingService {
 
       StockTakingItem sti = new StockTakingItem();
       sti.setProduct(productRepository.getReferenceById(item.getProductId()));
+      sti.setStatus(StockTakingItemStatus.PENDING);
       sti.setStockTaking(st);
 
       st.addItem(sti);
@@ -168,21 +171,44 @@ public class StockTakingServiceImpl implements StockTakingService {
   @Transactional
   public void process(UUID id) {
     StockTaking st = getById(id);
+    boolean hasErrors = false;
 
-    for (StockTakingItem item : st.getItems()) {
+    if (st.getStatus() == StockTakingStatus.CLOSED) {
+      throw new BadRequestException(ErrorMessages.STOCK_TAKING_ALREADY_CLOSED);
+    }
+
+    for (StockTakingItem item : stockTakingItemRepository.findByIdAndStatus(st.getId(), StockTakingItemStatus.PENDING)) {
       try {
         currentStockService.adjustStock(
-            st.getWarehouse(), 
-            item.getProduct(), 
+            st.getWarehouse(),
+            item.getProduct(),
             item.getCountedQuantity());
-  
-        item.setProcessed(true);
+
+        item.setError(false);
+        item.setStatus(StockTakingItemStatus.PROCESSED);
+        // TODO: salvar estoque atual em systemQuantity antes de processar
+
+        // TODO: create stock transaction
+      } catch (QuantityExceededException e) {
+        if (!hasErrors)
+          hasErrors = true;
+
+        item.setError(true);
+        item.setMessage(e.getMessage());
       } catch (Exception e) {
-        
+        if (!hasErrors)
+          hasErrors = true;
+
+        item.setError(true);
+        item.setMessage(
+            String.format(ErrorMessages.SHARED_ITEM_HAS_ERRORS, e.getMessage()));
       }
     }
 
-    st.setStatus(StockTakingStatus.CLOSED);
+    if (!hasErrors) {
+      st.setStatus(StockTakingStatus.CLOSED);
+    }
+
     stockTakingRepository.save(st);
   }
 

@@ -1,5 +1,7 @@
 package app.restgourmet.api.masterdata.models;
 
+import org.springframework.util.StringUtils;
+
 import app.restgourmet.api.commondata.models.BaseUnit;
 import app.restgourmet.api.shared.models.BaseEntity;
 import jakarta.persistence.Column;
@@ -34,4 +36,8 @@ public class UnitMeasurement extends BaseEntity {
 
   @Column
   private Double conversionFactor;
+
+  public String toString() {
+    return StringUtils.hasText(shortDescription) ? shortDescription + " - " : "" + description;
+  }
 }

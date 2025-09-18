@@ -1,5 +1,6 @@
 package app.restgourmet.api.inventoryhandling.models;
 
+import app.restgourmet.api.inventoryhandling.enums.StockTakingItemStatus;
 import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.shared.models.BaseEntity;
 import jakarta.persistence.Entity;
@@ -29,6 +30,9 @@ public class StockTakingItem extends BaseEntity {
   @JoinColumn(name = "product_id", nullable = false)
   private Product product;
 
+  @NotNull
+  private StockTakingItemStatus status;
+
   @Min(0)
   private Double countedQuantity;
 
@@ -38,5 +42,7 @@ public class StockTakingItem extends BaseEntity {
   @Min(0)
   private Double difference;
 
-  private boolean processed;
+  private boolean error;
+
+  private String message;
 }

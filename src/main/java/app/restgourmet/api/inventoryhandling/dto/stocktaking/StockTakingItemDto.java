@@ -2,6 +2,7 @@ package app.restgourmet.api.inventoryhandling.dto.stocktaking;
 
 import java.util.UUID;
 
+import app.restgourmet.api.inventoryhandling.enums.StockTakingItemStatus;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,8 @@ public class StockTakingItemDto {
   @NotNull
   private UUID productId;
 
+  private StockTakingItemStatus status;
+
   @Min(0)
   private Double countedQuantity;
 
@@ -23,4 +26,8 @@ public class StockTakingItemDto {
 
   @Min(0)
   private Double difference;
+
+  private boolean hasError;
+
+  private String message;
 }

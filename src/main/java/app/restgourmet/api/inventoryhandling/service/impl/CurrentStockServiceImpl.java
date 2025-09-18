@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockDto;
 import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListDto;
 import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListFiltersDto;
+import app.restgourmet.api.inventoryhandling.exceptions.QuantityExceededException;
 import app.restgourmet.api.inventoryhandling.mappers.CurrentStockMapper;
 import app.restgourmet.api.inventoryhandling.models.CurrentStock;
 import app.restgourmet.api.inventoryhandling.repository.CurrentStockRepository;
@@ -70,7 +71,7 @@ public class CurrentStockServiceImpl implements CurrentStockService {
 
     // validate max qty rules
     if (stk.getMaxQty() > 0 && stk.quantityExceeded()) {
-      throw new BadRequestException(ErrorMessages.STOCK_QUANTITY_EXCEEDED);
+      throw new QuantityExceededException(qty, prod.getStockUnit(), stk.getMaxQty(), stk.getMaxQtyUnit());
     }
 
     currentStockRepository.save(stk);
@@ -82,7 +83,7 @@ public class CurrentStockServiceImpl implements CurrentStockService {
 
     // validate max qty rules
     if (stk.getMaxQty() > 0 && stk.quantityExceeded()) {
-      throw new BadRequestException(ErrorMessages.STOCK_QUANTITY_EXCEEDED);
+      throw new QuantityExceededException(qty, prod.getStockUnit(), stk.getMaxQty(), stk.getMaxQtyUnit());
     }
 
     currentStockRepository.save(stk);

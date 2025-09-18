@@ -5,8 +5,11 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import app.restgourmet.api.inventoryhandling.enums.StockTakingItemStatus;
 import app.restgourmet.api.inventoryhandling.models.StockTakingItem;
 
 public interface StockTakingItemRepository extends JpaRepository<StockTakingItem, UUID> {
   List<StockTakingItem> findByStockTakingId(UUID id);
+
+  List<StockTakingItem> findByIdAndStatus(UUID id, StockTakingItemStatus status);
 }

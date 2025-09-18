@@ -74,12 +74,16 @@ public final class AppConstants {
 
     public static final String SECRET_INVALID = "The provided secret is invalid or unavailable";
 
+    public static final String SHARED_ITEM_HAS_ERRORS = "Item has errors: %s";
+    
     public static final String STOCK_TAKING_NOT_FOUND = "Stock taking not found";
     public static final String STOCK_TAKING_ITEM_NOT_FOUND = "Stock taking item not found";
     public static final String STOCK_TAKING_ALREADY_CLOSED = "Cannot delete closed stock taking";
+    public static final String STOCK_TAKING_LINE_ALREADY_PROCESSED = "Reprocess stock taking item is forbidden";
+    public static final String STOCK_TAKING_PROCESS_ERROR = "Could not process stock taking successfully. Check errors";
     
     public static final String STORAGE_UPLOAD_ERROR = "An error occurred when uploading the picture";
-
+    
     public static final String UNIT_MEASUREMENT_BAD_CONVERSION = "Invalid or unsupported unit of measurement conversion.";
     public static final String UNIT_MEASUREMENT_NOT_FOUND = "Unit of measurement not found";
 

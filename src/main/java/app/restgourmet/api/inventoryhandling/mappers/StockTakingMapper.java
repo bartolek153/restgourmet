@@ -49,9 +49,12 @@ public interface StockTakingMapper {
         res.add(new StockTakingItemDto(
             i.getId(),
             i.getProduct().getId(),
+            i.getStatus(),
             i.getCountedQuantity(),
             i.getSystemQuantity(),
-            i.getDifference()));
+            i.getDifference(),
+            i.isError(),
+            i.getMessage()));
       }
       return res;
     }

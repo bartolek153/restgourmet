@@ -17,7 +17,7 @@ export const ProductCreate = () => {
   return (
     <Create saveButtonProps={saveButtonProps}>
       <Form {...formProps} layout="vertical" wrapperCol={{ span: 6 }} autoComplete="off">
-        <Form.Item label="Description" name="description" rules={[{ required: true }]}>
+        <Form.Item label="Descrição" name="description" rules={[{ required: true }]}>
           <Input />
         </Form.Item>
 
@@ -25,28 +25,28 @@ export const ProductCreate = () => {
           <Input />
         </Form.Item>
 
-        <Form.Item label="Price" name="price">
+        <Form.Item label="Preço" name="price">
           <Input type="number" />
         </Form.Item>
 
-        <Form.Item label="Origin" name="origin" rules={[{ required: true }]}>
+        <Form.Item label="Origem" name="origin" rules={[{ required: true }]}>
           <Select>
-            <Select.Option value="PRODUCED">Produced</Select.Option>
-            <Select.Option value="SUPPLIED">Supplied</Select.Option>
-            <Select.Option value="IMPORTED">Imported</Select.Option>
-            <Select.Option value="OTHER">Other</Select.Option>
+            <Select.Option value="PRODUCED">Produzido</Select.Option>
+            <Select.Option value="SUPPLIED">Fornecido</Select.Option>
+            <Select.Option value="IMPORTED">Importado</Select.Option>
+            <Select.Option value="OTHER">Outro</Select.Option>
           </Select>
         </Form.Item>
 
-        <Form.Item label="Inventory Unit" name="inventoryUnitId" rules={[{ required: true }]}>
+        <Form.Item label="Unidade de Estoque" name="stockUnitId" rules={[{ required: true }]}>
           <Select {...invUnSelectProps} allowClear />
         </Form.Item>
 
-        <Form.Item label="Purchase Unit" name="purchaseUnitId">
+        <Form.Item label="Unidade de Compra" name="purchaseUnitId">
           <Select {...invUnSelectProps} allowClear />
         </Form.Item>
 
-        <Form.Item label="Group" name="groupId">
+        <Form.Item label="Grupo" name="groupId">
           <Select {...groupSelectProps} allowClear />
         </Form.Item>
       </Form>

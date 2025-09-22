@@ -35,11 +35,6 @@ public final class AppConstants {
 
     public static final String EXTERNAL_SERVICE_ERROR = "External service error";
     public static final String EXTERNAL_DATABASE_ERROR = "A database error occurred while processing the request. Please, try again later.";
-
-    public static final String STOCK_INSUFFICIENT = "Insufficient inventory available to fulfill the request.";
-    public static final String STOCK_NOT_FOUND = "Inventory record not found.";
-    public static final String STOCK_QUANTITY_EXCEEDED = "Requested quantity exceeds available inventory.";
-    public static final String STOCK_UNAVAILABLE = "Inventory is currently unavailable.";
     
     public static final String PARAMETER_NOT_FOUND = "Parameter not found.";
 
@@ -75,10 +70,16 @@ public final class AppConstants {
     public static final String SECRET_INVALID = "The provided secret is invalid or unavailable";
 
     public static final String SHARED_ITEM_HAS_ERRORS = "Item has errors: %s";
+
+    public static final String STOCK_INSUFFICIENT = "Insufficient inventory available to fulfill the request.";
+    public static final String STOCK_NOT_FOUND = "Inventory record not found.";
+    public static final String STOCK_QUANTITY_EXCEEDED = "Requested quantity exceeds available inventory.";
+    public static final String STOCK_UNAVAILABLE = "Inventory is currently unavailable.";
     
     public static final String STOCK_TAKING_NOT_FOUND = "Stock taking not found";
     public static final String STOCK_TAKING_ITEM_NOT_FOUND = "Stock taking item not found";
-    public static final String STOCK_TAKING_ALREADY_CLOSED = "Cannot delete closed stock taking";
+    public static final String STOCK_TAKING_DELETE_ALREADY_CLOSED = "Cannot delete closed stock taking";
+    public static final String STOCK_TAKING_ADD_NOT_OPEN = "Current status doesn't allow adding more items";
     public static final String STOCK_TAKING_LINE_ALREADY_PROCESSED = "Reprocess stock taking item is forbidden";
     public static final String STOCK_TAKING_PROCESS_ERROR = "Could not process stock taking successfully. Check errors";
     

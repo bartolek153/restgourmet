@@ -1,18 +1,55 @@
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
-import { Edit, useForm, useEditableTable, SaveButton, useSelect } from "@refinedev/antd";
-import { useMany } from "@refinedev/core";
-import { Form, Input, DatePicker, Table, Space, Select, Button, InputNumber, Divider, Descriptions, Tag } from "antd";
-import React, { useEffect, useState } from "react";
+import { Edit, useForm, useSelect } from "@refinedev/antd";
+import { useApiUrl, useCustom, useNotification, useResourceParams } from "@refinedev/core";
+import {
+  Button,
+  Descriptions,
+  Divider,
+  Form,
+  Input,
+  InputNumber,
+  Popconfirm,
+  Popover,
+  Select,
+  Space,
+  Tag,
+} from "antd";
+import { useEffect, useState } from "react";
+import { CiWarning } from "react-icons/ci";
 
 const { TextArea } = Input;
 
 export const StockTakingEdit = () => {
   const [items, setItems] = useState([]);
   const [headerInfo, setHeaderInfo] = useState<any[]>([]);
-  const [userData, setUserData] = useState();
+  const [processIsLoading, setProcessIsLoading] = useState(false);
+  const [processNeedConfirm, setProcessNeedConfirm] = useState(false);
+  const [stockTakingOpen, setStockTakingOpen] = useState(false);
 
-  const { formProps: formPropsEdit, saveButtonProps: saveButtonPropsEdit, query } = useForm();
+  const { open } = useNotification();
+
+  const {
+    formProps: formPropsEdit,
+    saveButtonProps: saveButtonPropsEdit,
+    form,
+    query,
+    onFinish,
+  } = useForm({ redirect: "edit" });
   const { data, isLoading } = query;
+
+  const rowIsProcessed = (name: any) => {
+    const rowValue = form?.getFieldsValue(["items", name, "status"]);
+    if (rowValue.status === "PROCESSED") return true;
+    return false;
+  };
+
+  const rowHasError = (name: any) => {
+    const rowValue = form?.getFieldsValue(["items", name, "error", "message"]);
+    return {
+      hasError: rowValue.error,
+      message: rowValue.message,
+    };
+  };
 
   const getStatusTag = (status: string) => {
     let color;
@@ -22,6 +59,10 @@ export const StockTakingEdit = () => {
       case "OPEN":
         color = "orange";
         text = "Criado";
+        break;
+      case "PARTIALLY_PROCESSED":
+        color = "red";
+        text = "Parcialmente processado";
         break;
       case "CLOSED":
         color = "green";
@@ -56,45 +97,117 @@ export const StockTakingEdit = () => {
   });
   const { isLoading: whIsLoading } = whQuery;
 
+  const validateItemsFilled = async () => {
+    try {
+      const values = await form.validateFields(); // validate
+      await onFinish(values); // refine will call update() for you
+    } catch (error) {
+      // console.error("Validation failed:", error);
+      return;
+    }
+
+    // validate if all items are filled with counted quantity.
+    let unfilled = 0;
+    const fvs = form?.getFieldsValue(true);
+    console.log(fvs.items);
+
+    fvs.items.forEach((element) => {
+      if (element.countedQuantity === null) {
+        unfilled++;
+      }
+    });
+
+    if (unfilled === items.length) {
+      // should fill at least one
+      open?.({
+        type: "error",
+        message: "Preencha a contagem de um item, ao menos, antes de processar inventário.",
+        description: "Contagem não preenchida",
+      });
+      return;
+    }
+
+    if (unfilled !== 0) {
+      setProcessNeedConfirm(true);
+    }
+  };
+
+  const cancelProcess = () => {
+    setProcessNeedConfirm(false);
+  };
+
+  const apiUrl = useApiUrl();
+  const { resource, id } = useResourceParams();
+
+  const confirmProcess = () => {
+    const { isLoading: prcIsLdn } = useCustom({
+      url: `${apiUrl}/${resource}/${id}/process`,
+      method: "post",
+    });
+    setProcessIsLoading(prcIsLdn);
+  };
+
+  const handleOpenProcessChange = (newOpen: boolean) => {
+    if (!newOpen) {
+      setProcessNeedConfirm(newOpen);
+    }
+
+    if (processNeedConfirm) {
+      confirmProcess();
+    } else {
+      setProcessNeedConfirm(false);
+    }
+  };
+
   useEffect(() => {
     if (!isLoading && data?.data) {
       const st = data.data;
+
+      if (st.status === "OPEN") {
+        setStockTakingOpen(true);
+      }
 
       setHeaderInfo([
         {
           key: "1",
           label: "Data de início",
-          children: new Date(st.startDate).toLocaleString()
+          children: new Date(st.startDate).toLocaleString(),
         },
         {
           key: "2",
           label: "Data final",
-          children: st.endDate ? new Date(st.endDate).toLocaleString() : null
+          children: st.endDate ? new Date(st.endDate).toLocaleString() : null,
         },
         {
           key: "3",
           label: "Criado por",
-          children: st.createdBy.name
+          children: st.createdBy.name,
         },
         {
           key: "4",
           label: "Status",
-          children: getStatusTag(st.status)
-        }
-      ])
+          children: getStatusTag(st.status),
+        },
+      ]);
 
       setItems(data.data.items);
     }
   }, [data, isLoading]);
 
   return (
-    <Edit saveButtonProps={saveButtonPropsEdit} isLoading={isLoading || pdIsLoading || whIsLoading} title="Editar inventário">
+    <Edit
+      saveButtonProps={saveButtonPropsEdit}
+      isLoading={isLoading || pdIsLoading || whIsLoading || processIsLoading}
+      title="Editar inventário"
+    >
       <Form {...formPropsEdit} layout="vertical">
-
-        {/* <Space align="center" style={{ marginBottom: 20, width: "100%", justifyContent: "flex-end" }}>
-        </Space> */}
-
-        <Descriptions bordered column={4} items={headerInfo} layout="vertical" style={{ marginBottom: 30 }} />
+        <Descriptions
+          bordered
+          column={4}
+          items={headerInfo}
+          layout="vertical"
+          style={{ marginBottom: 30 }}
+        />
 
         <Form.Item
           label="Armazém"
@@ -108,45 +221,69 @@ export const StockTakingEdit = () => {
           <TextArea rows={3} />
         </Form.Item>
 
-        <Button type="primary">Processar</Button>
-        
+        <Popconfirm
+          title="Processar inventário"
+          description="Há itens não contados. Deseja processar parcialmente?"
+          open={processNeedConfirm}
+          onCancel={cancelProcess}
+          onConfirm={confirmProcess}
+          onOpenChange={handleOpenProcessChange}
+          okText="Sim"
+          cancelText="Não"
+        >
+          <Button type="primary" onClick={validateItemsFilled}>
+            Processar
+          </Button>
+        </Popconfirm>
+
         <Divider orientation="left">Itens</Divider>
 
         <Form.List name="items">
-          {(fields, { add, remove }, { errors }) => (
+          {(fields, { add, remove }) => (
             <>
-              {fields.map(({ key, name, ...restField }) => (
-                <Space key={key} style={{ display: 'flex', marginBottom: 8 }} align="baseline">
-
-                  <Form.Item
-                    {...restField}
-                    name={[name, "productId"]}
-                    rules={[{ required: true, message: "Produto é obrigatório" }]}
-                  >
-                    <Select {...productSelectProps} placeholder="Selecionar produto" allowClear />
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    name={[name, 'systemQuantity']}
-                  >
-                    <InputNumber readOnly placeholder="Atual" />
-                  </Form.Item>
-                  <Form.Item
-                    {...restField}
-                    name={[name, 'countedQuantity']}
-                  >
-                    <InputNumber
-                      placeholder="Contagem"
-                    />
-                  </Form.Item>
-                  <MinusCircleOutlined onClick={() => remove(name)} />
-                </Space>
-              ))}
+              {fields.map(({ key, name, ...restField }) => {
+                const block = rowIsProcessed(name);
+                const { hasError, message } = rowHasError(name);
+                return (
+                  <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
+                    <Form.Item
+                      {...restField}
+                      name={[name, "productId"]}
+                      rules={[{ required: true, message: "Produto é obrigatório" }]}
+                    >
+                      <Select
+                        {...productSelectProps}
+                        placeholder="Selecionar produto"
+                        allowClear
+                        disabled={block}
+                      />
+                    </Form.Item>
+                    <Form.Item {...restField} name={[name, "systemQuantity"]}>
+                      <InputNumber readOnly placeholder="Atual" />
+                    </Form.Item>
+                    <Form.Item {...restField} name={[name, "countedQuantity"]}>
+                      <InputNumber disabled={block} placeholder="Contagem" />
+                    </Form.Item>
+                    <MinusCircleOutlined disabled={block} onClick={() => remove(name)} />
+                    {hasError && (
+                      <Popover trigger="hover" title="Erro" content={message}>
+                        <CiWarning color="error" />
+                      </Popover>
+                    )}
+                  </Space>
+                );
+              })}
               <Form.Item>
-                <Button type="dashed" onClick={() => add()} block icon={<PlusOutlined />}>
+                {/* TODO: do not let add duplicate entries */}
+                <Button
+                  hidden={!stockTakingOpen}
+                  type="dashed"
+                  onClick={() => add()}
+                  block
+                  icon={<PlusOutlined />}
+                >
                   Adicionar item
                 </Button>
-                <Form.ErrorList errors={errors} />
               </Form.Item>
             </>
           )}

@@ -54,6 +54,10 @@ export const StockTakingList = () => {
         color = "orange";
         text = "Criado";
         break;
+      case "PARTIALLY_PROCESSED":
+        color = "red";
+        text = "Parcialmente processado";
+        break;
       case "CLOSED":
         color = "green";
         text = "Fechado";

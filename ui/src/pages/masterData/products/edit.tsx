@@ -44,10 +44,10 @@ export const ProductEdit = () => {
 
         <Form.Item label="Status" name="status" rules={[{ required: true }]}>
           <Select>
-            <Select.Option value="ACTIVE">Active</Select.Option>
-            <Select.Option value="DISCONTINUED">Blocked</Select.Option>
-            <Select.Option value="OBSOLETE">Discontinued</Select.Option>
-            <Select.Option value="BLOCKED">Obsolete</Select.Option>
+            <Select.Option value="ACTIVE">Ativo</Select.Option>
+            <Select.Option value="DISCONTINUED">Bloqueado</Select.Option>
+            <Select.Option value="OBSOLETE">Descontinuado</Select.Option>
+            <Select.Option value="BLOCKED">Obsoleto</Select.Option>
           </Select>
         </Form.Item>
 
@@ -55,11 +55,11 @@ export const ProductEdit = () => {
           <Input />
         </Form.Item>
 
-        <Form.Item label="Price" name="price">
+        <Form.Item label="Preço" name="price">
           <Input type="number" />
         </Form.Item>
 
-        <Form.Item label="Origin" name="origin" rules={[{ required: true }]}>
+        <Form.Item label="Origem" name="origin" rules={[{ required: true }]}>
           <Select>
             <Select.Option value="PRODUCED">Produced</Select.Option>
             <Select.Option value="SUPPLIED">Supplied</Select.Option>
@@ -68,15 +68,15 @@ export const ProductEdit = () => {
           </Select>
         </Form.Item>
 
-        <Form.Item label="Inventory Unit" name="inventoryUnitId" rules={[{ required: true }]} initialValue={invUn?.id}>
+        <Form.Item label="Unidade de Estoque" name="stockUnitId" rules={[{ required: true }]} initialValue={invUn?.id}>
           <Select {...invUnSelectProps} allowClear />
         </Form.Item>
 
-        <Form.Item label="Purchase Unit" name="purchaseUnitId" initialValue={invUn2?.id}>
+        <Form.Item label="Unidade de Compra" name="purchaseUnitId" initialValue={invUn2?.id}>
           <Select {...invUnSelectProps} allowClear />
         </Form.Item>
 
-        <Form.Item label="Group" name="groupId" initialValue={group?.id}>
+        <Form.Item label="Grupo" name="groupId" initialValue={group?.id}>
           <Select {...groupSelectProps} allowClear />
         </Form.Item>
       </Form>

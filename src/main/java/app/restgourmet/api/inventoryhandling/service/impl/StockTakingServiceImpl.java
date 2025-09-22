@@ -120,6 +120,7 @@ public class StockTakingServiceImpl implements StockTakingService {
 
   @Transactional
   public void edit(UUID id, EditStockTakingDto dto) {
+
     StockTaking st = getById(id);
     stockTakingMapper.updateEntityHeader(dto, st);
 
@@ -135,14 +136,20 @@ public class StockTakingServiceImpl implements StockTakingService {
       StockTakingItem itemEnt;
 
       if (itemDto.getId() == null) {
+        if (st.getStatus() != StockTakingStatus.OPEN) {
+          throw new BadRequestException(ErrorMessages.STOCK_TAKING_ADD_NOT_OPEN);
+        }
+
         // CREATE MODE: create new child
         itemEnt = new StockTakingItem();
+        stockTakingMapper.updateEntityItem(itemDto, itemEnt);
         itemEnt.setStockTaking(st);
+        itemEnt.setStatus(StockTakingItemStatus.PENDING);
       } else {
         // UPDATE MODE : fetch by id
         itemEnt = getItemById(itemDto.getId());
+        stockTakingMapper.updateEntityItem(itemDto, itemEnt);
       }
-      stockTakingMapper.updateEntityItem(itemDto, itemEnt);
 
       if (!productRepository.existsById(itemDto.getProductId())) {
         throw new ResourceNotFoundException(ErrorMessages.PRODUCT_NOT_FOUND);
@@ -162,7 +169,7 @@ public class StockTakingServiceImpl implements StockTakingService {
     StockTaking st = getById(id);
 
     if (st.getStatus() == StockTakingStatus.CLOSED) {
-      throw new BadRequestException(ErrorMessages.STOCK_TAKING_ALREADY_CLOSED);
+      throw new BadRequestException(ErrorMessages.STOCK_TAKING_DELETE_ALREADY_CLOSED);
     }
 
     stockTakingRepository.delete(st);
@@ -174,11 +181,15 @@ public class StockTakingServiceImpl implements StockTakingService {
     boolean hasErrors = false;
 
     if (st.getStatus() == StockTakingStatus.CLOSED) {
-      throw new BadRequestException(ErrorMessages.STOCK_TAKING_ALREADY_CLOSED);
+      throw new BadRequestException(ErrorMessages.STOCK_TAKING_DELETE_ALREADY_CLOSED);
     }
 
     for (StockTakingItem item : stockTakingItemRepository.findByIdAndStatus(st.getId(), StockTakingItemStatus.PENDING)) {
       try {
+        if (item.getCountedQuantity() == null) {
+          continue;
+        }
+
         currentStockService.adjustStock(
             st.getWarehouse(),
             item.getProduct(),
@@ -186,6 +197,7 @@ public class StockTakingServiceImpl implements StockTakingService {
 
         item.setError(false);
         item.setStatus(StockTakingItemStatus.PROCESSED);
+        
         // TODO: salvar estoque atual em systemQuantity antes de processar
 
         // TODO: create stock transaction
@@ -207,6 +219,9 @@ public class StockTakingServiceImpl implements StockTakingService {
 
     if (!hasErrors) {
       st.setStatus(StockTakingStatus.CLOSED);
+      st.setEndDate(LocalDateTime.now());
+    } else {
+      st.setStatus(StockTakingStatus.PARTIALLY_PROCESSED);
     }
 
     stockTakingRepository.save(st);

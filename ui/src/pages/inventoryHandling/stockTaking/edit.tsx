@@ -1,6 +1,15 @@
-import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
+import { MinusCircleOutlined, PlusOutlined, CheckCircleFilled, WarningFilled } from "@ant-design/icons";
 import { Edit, useForm, useSelect } from "@refinedev/antd";
-import { useApiUrl, useCustom, useNotification, useResourceParams } from "@refinedev/core";
+import {
+  type HttpError,
+  useApiUrl,
+  useCustom,
+  useCustomMutation,
+  useInvalidate,
+  useNotification,
+  useResourceParams,
+} from "@refinedev/core";
+import { FaCog } from "react-icons/fa";
 import {
   Button,
   Descriptions,
@@ -15,7 +24,7 @@ import {
   Tag,
 } from "antd";
 import { useEffect, useState } from "react";
-import { CiWarning } from "react-icons/ci";
+
 
 const { TextArea } = Input;
 
@@ -25,8 +34,37 @@ export const StockTakingEdit = () => {
   const [processIsLoading, setProcessIsLoading] = useState(false);
   const [processNeedConfirm, setProcessNeedConfirm] = useState(false);
   const [stockTakingOpen, setStockTakingOpen] = useState(false);
+  const [stockTakingClosed, setStockTakingClosed] = useState(false);
 
   const { open } = useNotification();
+  const apiUrl = useApiUrl();
+  const invalidate = useInvalidate();
+  const { resource, id } = useResourceParams();
+
+  const { refetch } = useCustom<HttpError>({
+    url: `${apiUrl}/${resource.name}/${id}/process`,
+    method: "post",
+    queryOptions: {
+      enabled: false,
+      retry: 0,
+    },
+    successNotification: (data: any, values, resource) => {
+      console.log(data?.data?.message);
+      return {
+        message: `${data?.data?.message}`,
+        description: `Processado com sucesso.`,
+        type: "success",
+      };
+    },
+    errorNotification: (error: any, values, resource) => {
+      console.log(error);
+      return {
+        message: `${error.message}`,
+        description: `Processado com erro(s).`,
+        type: "error",
+      };
+    },
+  });
 
   const {
     formProps: formPropsEdit,
@@ -34,19 +72,72 @@ export const StockTakingEdit = () => {
     form,
     query,
     onFinish,
-  } = useForm({ redirect: "edit" });
+  } = useForm({ redirect: "edit", successNotification: false });
   const { data, isLoading } = query;
 
+  const { selectProps: productSelectProps, query: pdQuery } = useSelect({
+    resource: "products",
+    optionLabel: "description",
+    optionValue: "id",
+    pagination: {
+      mode: "server",
+    },
+  });
+  const { isLoading: pdIsLoading } = pdQuery;
+
+  const { selectProps: warehouseSelectProps, query: whQuery } = useSelect({
+    resource: "warehouses",
+    optionLabel: "name",
+    optionValue: "id",
+    pagination: {
+      mode: "client",
+    },
+  });
+
+  useEffect(() => {
+    if (!isLoading && data?.data) {
+      const st = data.data;
+
+      setStockTakingOpen(st.status === "OPEN");
+      setStockTakingClosed(st.status === "CLOSED");
+
+      setHeaderInfo([
+        {
+          key: "1",
+          label: "Data de início",
+          children: new Date(st.startDate).toLocaleString(),
+        },
+        {
+          key: "2",
+          label: "Data final",
+          children: st.endDate ? new Date(st.endDate).toLocaleString() : null,
+        },
+        {
+          key: "3",
+          label: "Criado por",
+          children: st.createdBy.name,
+        },
+        {
+          key: "4",
+          label: "Status",
+          children: getStatusTag(st.status),
+        },
+      ]);
+
+      setItems(data.data.items);
+    }
+  }, [data, isLoading]);
+
   const rowIsProcessed = (name: any) => {
-    const rowValue = form?.getFieldsValue(["items", name, "status"]);
-    if (rowValue.status === "PROCESSED") return true;
+    const rowValue = form?.getFieldValue(["items", name, "status"]);
+    if (rowValue === "PROCESSED") return true;
     return false;
   };
 
   const rowHasError = (name: any) => {
-    const rowValue = form?.getFieldsValue(["items", name, "error", "message"]);
+    const rowValue = form?.getFieldValue(["items", name]);
     return {
-      hasError: rowValue.error,
+      hasError: rowValue.hasError,
       message: rowValue.message,
     };
   };
@@ -77,24 +168,6 @@ export const StockTakingEdit = () => {
     return <Tag color={color}>{text}</Tag>;
   };
 
-  const { selectProps: productSelectProps, query: pdQuery } = useSelect({
-    resource: "products",
-    optionLabel: "description",
-    optionValue: "id",
-    pagination: {
-      mode: "server",
-    },
-  });
-  const { isLoading: pdIsLoading } = pdQuery;
-
-  const { selectProps: warehouseSelectProps, query: whQuery } = useSelect({
-    resource: "warehouses",
-    optionLabel: "name",
-    optionValue: "id",
-    pagination: {
-      mode: "client",
-    },
-  });
   const { isLoading: whIsLoading } = whQuery;
 
   const validateItemsFilled = async () => {
@@ -102,15 +175,13 @@ export const StockTakingEdit = () => {
       const values = await form.validateFields(); // validate
       await onFinish(values); // refine will call update() for you
     } catch (error) {
-      // console.error("Validation failed:", error);
+      console.error(error)
       return;
     }
 
     // validate if all items are filled with counted quantity.
     let unfilled = 0;
     const fvs = form?.getFieldsValue(true);
-    console.log(fvs.items);
-
     fvs.items.forEach((element) => {
       if (element.countedQuantity === null) {
         unfilled++;
@@ -127,7 +198,10 @@ export const StockTakingEdit = () => {
       return;
     }
 
-    if (unfilled !== 0) {
+    if (unfilled === 0) {
+      await confirmProcess();
+    }
+    else {
       setProcessNeedConfirm(true);
     }
   };
@@ -136,63 +210,20 @@ export const StockTakingEdit = () => {
     setProcessNeedConfirm(false);
   };
 
-  const apiUrl = useApiUrl();
-  const { resource, id } = useResourceParams();
-
-  const confirmProcess = () => {
-    const { isLoading: prcIsLdn } = useCustom({
-      url: `${apiUrl}/${resource}/${id}/process`,
-      method: "post",
+  const confirmProcess = async () => {
+    setProcessIsLoading(true);
+    const { data } = await refetch();
+    setProcessIsLoading(false);
+    await invalidate({
+      resource: resource.name,
+      invalidates: ["detail"],
+      id: id
     });
-    setProcessIsLoading(prcIsLdn);
   };
 
   const handleOpenProcessChange = (newOpen: boolean) => {
-    if (!newOpen) {
-      setProcessNeedConfirm(newOpen);
-    }
-
-    if (processNeedConfirm) {
-      confirmProcess();
-    } else {
-      setProcessNeedConfirm(false);
-    }
+    if (!newOpen) setProcessNeedConfirm(newOpen);
   };
-
-  useEffect(() => {
-    if (!isLoading && data?.data) {
-      const st = data.data;
-
-      if (st.status === "OPEN") {
-        setStockTakingOpen(true);
-      }
-
-      setHeaderInfo([
-        {
-          key: "1",
-          label: "Data de início",
-          children: new Date(st.startDate).toLocaleString(),
-        },
-        {
-          key: "2",
-          label: "Data final",
-          children: st.endDate ? new Date(st.endDate).toLocaleString() : null,
-        },
-        {
-          key: "3",
-          label: "Criado por",
-          children: st.createdBy.name,
-        },
-        {
-          key: "4",
-          label: "Status",
-          children: getStatusTag(st.status),
-        },
-      ]);
-
-      setItems(data.data.items);
-    }
-  }, [data, isLoading]);
 
   return (
     <Edit
@@ -214,11 +245,11 @@ export const StockTakingEdit = () => {
           name="warehouseId"
           rules={[{ required: true, message: "Armazém é obrigatório" }]}
         >
-          <Select {...warehouseSelectProps} allowClear />
+          <Select {...warehouseSelectProps} disabled={!stockTakingOpen} allowClear />
         </Form.Item>
 
         <Form.Item label="Observação" name="observation">
-          <TextArea rows={3} />
+          <TextArea rows={3} disabled={!stockTakingOpen} />
         </Form.Item>
 
         <Popconfirm
@@ -231,7 +262,7 @@ export const StockTakingEdit = () => {
           okText="Sim"
           cancelText="Não"
         >
-          <Button type="primary" onClick={validateItemsFilled}>
+          <Button disabled={stockTakingClosed} icon={<FaCog />} type="primary" onClick={validateItemsFilled}>
             Processar
           </Button>
         </Popconfirm>
@@ -242,7 +273,7 @@ export const StockTakingEdit = () => {
           {(fields, { add, remove }) => (
             <>
               {fields.map(({ key, name, ...restField }) => {
-                const block = rowIsProcessed(name);
+                const lnProc = rowIsProcessed(name);
                 const { hasError, message } = rowHasError(name);
                 return (
                   <Space key={key} style={{ display: "flex", marginBottom: 8 }} align="baseline">
@@ -255,21 +286,22 @@ export const StockTakingEdit = () => {
                         {...productSelectProps}
                         placeholder="Selecionar produto"
                         allowClear
-                        disabled={block}
+                        disabled={lnProc}
                       />
                     </Form.Item>
                     <Form.Item {...restField} name={[name, "systemQuantity"]}>
                       <InputNumber readOnly placeholder="Atual" />
                     </Form.Item>
                     <Form.Item {...restField} name={[name, "countedQuantity"]}>
-                      <InputNumber disabled={block} placeholder="Contagem" />
+                      <InputNumber readOnly={lnProc} placeholder="Contagem" />
                     </Form.Item>
-                    <MinusCircleOutlined disabled={block} onClick={() => remove(name)} />
-                    {hasError && (
+                    <MinusCircleOutlined hidden={lnProc} onClick={() => remove(name)} />
+                    {(hasError && (
                       <Popover trigger="hover" title="Erro" content={message}>
-                        <CiWarning color="error" />
+                        <WarningFilled color="primary" />
                       </Popover>
-                    )}
+                    )) ||
+                      (lnProc && <CheckCircleFilled color="primary" />)}
                   </Space>
                 );
               })}

@@ -80,8 +80,10 @@ public final class AppConstants {
     public static final String STOCK_TAKING_ITEM_NOT_FOUND = "Stock taking item not found";
     public static final String STOCK_TAKING_DELETE_ALREADY_CLOSED = "Cannot delete closed stock taking";
     public static final String STOCK_TAKING_ADD_NOT_OPEN = "Current status doesn't allow adding more items";
-    public static final String STOCK_TAKING_LINE_ALREADY_PROCESSED = "Reprocess stock taking item is forbidden";
+    public static final String STOCK_TAKING_PROCESS_CLOSED = "Reprocess closed stock taking is not allowed";
     public static final String STOCK_TAKING_PROCESS_ERROR = "Could not process stock taking successfully. Check errors";
+    public static final String STOCK_TAKING_PROCESS_SUCCESS = "Stock taking successfully processed";
+    public static final String STOCK_TAKING_PROCESS_SUCCESS_PARTIAL = "Stock taking partially processed";
     
     public static final String STORAGE_UPLOAD_ERROR = "An error occurred when uploading the picture";
     

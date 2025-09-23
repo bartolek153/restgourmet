@@ -38,6 +38,6 @@ public class UnitMeasurement extends BaseEntity {
   private Double conversionFactor;
 
   public String toString() {
-    return StringUtils.hasText(shortDescription) ? shortDescription + " - " : "" + description;
+    return (StringUtils.hasText(shortDescription) ? shortDescription + " - " : "") + description;
   }
 }

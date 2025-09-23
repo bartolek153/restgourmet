@@ -71,9 +71,6 @@ export const authProvider: AuthProvider = {
     if (error.response.status === 401) {
       return { logout: true, redirectTo: "/login", error };
     }
-
-    console.warn("Error caught by authProvider", error);
-
     return { error };
   },
 };

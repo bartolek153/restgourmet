@@ -11,5 +11,5 @@ import app.restgourmet.api.inventoryhandling.models.StockTakingItem;
 public interface StockTakingItemRepository extends JpaRepository<StockTakingItem, UUID> {
   List<StockTakingItem> findByStockTakingId(UUID id);
 
-  List<StockTakingItem> findByIdAndStatus(UUID id, StockTakingItemStatus status);
+  List<StockTakingItem> findByStockTakingIdAndStatus(UUID stid, StockTakingItemStatus status);
 }

@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.CreateStockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.EditStockTakingDto;
+import app.restgourmet.api.inventoryhandling.dto.stocktaking.ProcessStockTakingResultDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListFiltersDto;
@@ -61,7 +62,7 @@ public class StockTakingController {
   public ResponseEntity<UUID> createTaking(@RequestBody @Valid CreateStockTakingDto dto) {
     Authentication auth = SecurityContextHolder.getContext().getAuthentication();
     UserDetailsImpl ud = (UserDetailsImpl) auth.getPrincipal();
-    
+
     UUID id = stockTakingService.create(dto, ud.getId());
     return ResponseEntity.status(HttpStatus.CREATED).body(id);
   }
@@ -80,7 +81,9 @@ public class StockTakingController {
 
   @PostMapping("/{id}/process")
   public ResponseEntity<?> processTaking(@PathVariable UUID id) {
-    stockTakingService.process(id);
-    return ResponseEntity.status(HttpStatus.OK).build();
+    ProcessStockTakingResultDto result = stockTakingService.process(id);
+    return result.isSuccess() ? 
+        ResponseEntity.ok(result) : 
+        ResponseEntity.badRequest().body(result);
   }
 }

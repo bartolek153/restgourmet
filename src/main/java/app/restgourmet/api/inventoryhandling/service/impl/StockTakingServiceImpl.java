@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.CreateStockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.EditStockTakingDto;
+import app.restgourmet.api.inventoryhandling.dto.stocktaking.ProcessStockTakingResultDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingItemDto;
 import app.restgourmet.api.inventoryhandling.dto.stocktaking.StockTakingListDto;
@@ -136,11 +137,11 @@ public class StockTakingServiceImpl implements StockTakingService {
       StockTakingItem itemEnt;
 
       if (itemDto.getId() == null) {
+        // CREATE MODE: create new child
         if (st.getStatus() != StockTakingStatus.OPEN) {
           throw new BadRequestException(ErrorMessages.STOCK_TAKING_ADD_NOT_OPEN);
         }
 
-        // CREATE MODE: create new child
         itemEnt = new StockTakingItem();
         stockTakingMapper.updateEntityItem(itemDto, itemEnt);
         itemEnt.setStockTaking(st);
@@ -148,6 +149,11 @@ public class StockTakingServiceImpl implements StockTakingService {
       } else {
         // UPDATE MODE : fetch by id
         itemEnt = getItemById(itemDto.getId());
+        if (itemEnt.getStatus() == StockTakingItemStatus.PROCESSED) {
+          children.add(itemEnt);
+          continue;
+        }
+        
         stockTakingMapper.updateEntityItem(itemDto, itemEnt);
       }
 
@@ -176,17 +182,21 @@ public class StockTakingServiceImpl implements StockTakingService {
   }
 
   @Transactional
-  public void process(UUID id) {
+  public ProcessStockTakingResultDto process(UUID id) {
     StockTaking st = getById(id);
     boolean hasErrors = false;
+    boolean partialProc = false;
 
     if (st.getStatus() == StockTakingStatus.CLOSED) {
-      throw new BadRequestException(ErrorMessages.STOCK_TAKING_DELETE_ALREADY_CLOSED);
+      throw new BadRequestException(ErrorMessages.STOCK_TAKING_PROCESS_CLOSED);
     }
 
-    for (StockTakingItem item : stockTakingItemRepository.findByIdAndStatus(st.getId(), StockTakingItemStatus.PENDING)) {
+    for (StockTakingItem item : stockTakingItemRepository.findByStockTakingIdAndStatus(
+        st.getId(),
+        StockTakingItemStatus.PENDING)) {
       try {
         if (item.getCountedQuantity() == null) {
+          partialProc = true;
           continue;
         }
 
@@ -196,11 +206,13 @@ public class StockTakingServiceImpl implements StockTakingService {
             item.getCountedQuantity());
 
         item.setError(false);
+        item.setMessage(null);
         item.setStatus(StockTakingItemStatus.PROCESSED);
-        
+
         // TODO: salvar estoque atual em systemQuantity antes de processar
 
         // TODO: create stock transaction
+
       } catch (QuantityExceededException e) {
         if (!hasErrors)
           hasErrors = true;
@@ -217,14 +229,29 @@ public class StockTakingServiceImpl implements StockTakingService {
       }
     }
 
-    if (!hasErrors) {
-      st.setStatus(StockTakingStatus.CLOSED);
-      st.setEndDate(LocalDateTime.now());
-    } else {
+    ProcessStockTakingResultDto res = new ProcessStockTakingResultDto();
+
+    
+    if (hasErrors) {
       st.setStatus(StockTakingStatus.PARTIALLY_PROCESSED);
+      stockTakingRepository.save(st);
+      res.setMessage(ErrorMessages.STOCK_TAKING_PROCESS_ERROR);
+      res.setSuccess(false);
+    } else {
+      res.setSuccess(true);
+
+      if (partialProc) {
+        st.setStatus(StockTakingStatus.PARTIALLY_PROCESSED);
+        res.setMessage(ErrorMessages.STOCK_TAKING_PROCESS_SUCCESS_PARTIAL);
+      }
+      else {
+        st.setStatus(StockTakingStatus.CLOSED);
+        st.setEndDate(LocalDateTime.now());
+        res.setMessage(ErrorMessages.STOCK_TAKING_PROCESS_SUCCESS);
+      }
     }
 
-    stockTakingRepository.save(st);
+    return (res);
   }
 
   private StockTaking getById(UUID id) {

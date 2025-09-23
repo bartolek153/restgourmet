@@ -12,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import app.restgourmet.api.commondata.models.BaseUnit;
 import app.restgourmet.api.commondata.repository.BaseUnitRepository;
 import app.restgourmet.api.commondata.service.impl.GlobalParametersServiceImpl;
+import app.restgourmet.api.inventoryhandling.models.CurrentStock;
+import app.restgourmet.api.inventoryhandling.repository.CurrentStockRepository;
 import app.restgourmet.api.masterdata.enums.ProductOrigin;
 import app.restgourmet.api.masterdata.enums.ProductStatus;
 import app.restgourmet.api.masterdata.enums.ProductType;
@@ -46,6 +48,7 @@ public class DataLoader implements CommandLineRunner {
   private final ProductRepository productRepository;
   private final UnitMeasurementRepository unitMeasurementRepository;
   private final WarehouseRepository warehouseRepository;
+  private final CurrentStockRepository currentStockRepository;
 
   private final PasswordEncoder passwordEncoder;
 
@@ -58,7 +61,8 @@ public class DataLoader implements CommandLineRunner {
       ProductRepository productRepository,
       WarehouseRepository warehouseRepository,
       InventoryParameterServiceImpl inventoryParameterServiceImpl,
-      GlobalParametersServiceImpl globalParametersServiceImpl) {
+      GlobalParametersServiceImpl globalParametersServiceImpl,
+      CurrentStockRepository currentStockRepository) {
     this.baseUnitRepository = baseUnitRepository;
     this.permissionRepository = permissionRepository;
     this.passwordEncoder = passwordEncoder;
@@ -68,6 +72,7 @@ public class DataLoader implements CommandLineRunner {
     this.productRepository = productRepository;
     this.unitMeasurementRepository = unitMeasurementRepository;
     this.warehouseRepository = warehouseRepository;
+    this.currentStockRepository = currentStockRepository;
   }
 
   @Override
@@ -127,19 +132,17 @@ public class DataLoader implements CommandLineRunner {
             bul.get(0),
             10.0));
 
-    warehouseRepository.save(
+    var wh = warehouseRepository.save(
         new Warehouse("ALMOXARIFADO", null, WarehouseStatus.ACTIVE));
 
-    
-
-    productRepository.save(
+    var pd1 = productRepository.save(
         new Product(
             "001",
             "MAÇÃ",
             null,
             // new ProductGroup("FRUTAS",
-            //     new ProductFamily("PERECÍVEIS",
-            //         new ProductCategory("ALIMENTOS"))),
+            // new ProductFamily("PERECÍVEIS",
+            // new ProductCategory("ALIMENTOS"))),
             ProductOrigin.SUPPLIED,
             ProductStatus.ACTIVE,
             um,
@@ -148,6 +151,9 @@ public class DataLoader implements CommandLineRunner {
             false,
             ProductType.INVENTORY_PRODUCT,
             null));
+
+    currentStockRepository.save(
+        new CurrentStock(pd1, wh, 20D, 2D, pd1.getStockUnit(), 30D, pd1.getStockUnit()));
 
     // initialize parameters
     globalParametersServiceImpl.create(

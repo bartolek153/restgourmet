@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class CurrentStockListFiltersDto {
   private String q;  
-  private boolean withStock;
+  private boolean hasStock;
   private UUID productId;
   private UUID warehouseId;
 }

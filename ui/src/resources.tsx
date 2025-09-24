@@ -183,6 +183,15 @@ export const resources: ResourceProps[] = [
     },
   },
   {
+    name: "stock",
+    list: "/stock",
+    meta: {
+      label: "Estoque",
+      parent: INVENTORY_HANDLING_PARENT_MENU,
+      canDelete: false
+    }
+  },
+  {
     name: "stock/takings",
     list: "/stock/takings",
     create: "/stock/takings/create",

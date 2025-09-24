@@ -10,6 +10,7 @@ import app.restgourmet.api.masterdata.dto.product.CreateProductDto;
 import app.restgourmet.api.masterdata.dto.product.EditProductDto;
 import app.restgourmet.api.masterdata.dto.product.ProductDto;
 import app.restgourmet.api.masterdata.dto.product.ProductListDto;
+import app.restgourmet.api.masterdata.dto.product.ProductSummaryDto;
 import app.restgourmet.api.masterdata.models.Product;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING, injectionStrategy = InjectionStrategy.CONSTRUCTOR)
@@ -18,6 +19,8 @@ public interface ProductMapper {
   @Mapping(target = "stockUnitId", source = "stockUnit.id")
   @Mapping(target = "purchaseUnitId", source = "purchaseUnit.id")
   ProductDto toDto(Product entity);
+
+  ProductSummaryDto toSummaryDto(Product ent);
 
   @Mapping(target = "groupId", source = "group.id")
   ProductListDto toListDto(Product entity);

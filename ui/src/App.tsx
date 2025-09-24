@@ -43,6 +43,7 @@ import { PurchaseOrderEdit } from "./pages/procurement/orders/edit";
 import "./i18n";
 import { useTranslation } from "react-i18next";
 import { StockTakingList, StockTakingEdit } from "./pages/inventoryHandling/stockTaking";
+import { StockList } from "./pages/inventoryHandling/stock";
 
 
 function App() {
@@ -122,6 +123,8 @@ function App() {
                   </Route>
 
                   <Route path="stock">
+                    <Route index element={<StockList/>} />
+                    
                     <Route path="takings">
                       <Route index element={<StockTakingList />} />
                       <Route path="create" />

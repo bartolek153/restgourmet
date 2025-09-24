@@ -21,8 +21,20 @@ public class CurrentStockSpecification {
     return (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<>();
 
-      if (filters.isWithStock()) {
+      if (filters.isHasStock()) {
         predicates.add(cb.gt(root.get(QUANTITY), 0));
+      }
+
+      if (filters.getWarehouseId() != null) {
+        predicates.add(
+          cb.equal(root.get(WAREHOUSE).get("id"), filters.getWarehouseId().toString())
+        );
+      }
+
+      if (filters.getProductId() != null) {
+        predicates.add(
+          cb.equal(root.get(PRODUCT).get("id"), filters.getProductId().toString())
+        );
       }
 
       if (StringUtils.hasText(filters.getQ())) {

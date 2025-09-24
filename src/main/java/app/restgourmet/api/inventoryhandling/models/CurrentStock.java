@@ -5,6 +5,7 @@ import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.models.Warehouse;
 import app.restgourmet.api.shared.models.BaseEntity;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -23,11 +24,11 @@ import lombok.Setter;
 @Table(name = "product_inventory", uniqueConstraints = @UniqueConstraint(columnNames = { "product_id",
     "warehouse_id" }))
 public class CurrentStock extends BaseEntity {
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_id", nullable = false)
   private Product product;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "warehouse_id", nullable = false)
   private Warehouse warehouse;
 
@@ -37,14 +38,14 @@ public class CurrentStock extends BaseEntity {
   @Min(0)
   private Double minQty;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "min_quantity_unit_id")
   private UnitMeasurement minQtyUnit;
 
   @Min(0)
   private Double maxQty;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "max_quantity_unit_id")
   private UnitMeasurement maxQtyUnit;
 

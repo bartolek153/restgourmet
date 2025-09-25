@@ -27,13 +27,13 @@ public class CurrentStockSpecification {
 
       if (filters.getWarehouseId() != null) {
         predicates.add(
-          cb.equal(root.get(WAREHOUSE).get("id"), filters.getWarehouseId().toString())
+          cb.equal(root.get(WAREHOUSE).get("id"), filters.getWarehouseId())
         );
       }
 
       if (filters.getProductId() != null) {
         predicates.add(
-          cb.equal(root.get(PRODUCT).get("id"), filters.getProductId().toString())
+          cb.equal(root.get(PRODUCT).get("id"), filters.getProductId())
         );
       }
 

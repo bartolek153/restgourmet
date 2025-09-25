@@ -1,6 +1,7 @@
 import {
   DeleteButton,
   EditButton,
+  FilterDropdown,
   List,
   TextField,
   useModal,
@@ -46,6 +47,7 @@ export const StockList = () => {
   const { selectProps: pdSelectProps } = useSelect({
     resource: "products",
     optionLabel: "description",
+    // optionValue: "id"
   });
 
   const { selectProps: whSelectProps } = useSelect({
@@ -76,9 +78,9 @@ export const StockList = () => {
   const { show, modalProps } = useModal({});
 
   return (
-    <Tabs>
-      <Tabs.TabPane key="1" tab="Listagem">
-        <List>
+    <List>
+      <Tabs>
+        <Tabs.TabPane key="1" tab="Listagem">
           <Table
             {...tableProps}
             rowKey="id"
@@ -90,8 +92,30 @@ export const StockList = () => {
             }}
             showSorterTooltip={false}
           >
-            <Table.Column dataIndex="product.description" title={"Produto"} sorter={true} />
-            <Table.Column dataIndex="warehouse.name" title={"Armazém"} sorter={true} />
+            <Table.Column 
+              dataIndex={["product", "description"]} 
+              title={"Produto"}
+              key={"productId"}
+              sorter={true}
+              filterDropdown={(props) => (
+                <FilterDropdown {...props}>
+                  <Select allowClear {...pdSelectProps} style={{ minWidth: 200 }} />
+                </FilterDropdown>
+              )}
+            />
+            <Table.Column 
+              dataIndex={["warehouse", "name"]} 
+              title={"Armazém"} 
+              key={"warehouseId"}
+              sorter={true}
+              filterDropdown={(props) => (
+                <FilterDropdown {...props}>
+                  <Select allowClear {...whSelectProps} style={{ minWidth: 200 }} />
+                </FilterDropdown>
+              )}
+            />
+            <Table.Column dataIndex="qty" title={"Quantidade Atual"} />
+            <Table.Column dataIndex="minQty" title={"Qtd. Mín."} />
             <Table.Column
               dataIndex="minQtyUnitId"
               sorter={true}
@@ -103,7 +127,13 @@ export const StockList = () => {
 
                 return <TextField value={data?.find((item) => item.id === value)?.description} />;
               }}
+              filterDropdown={(props) => (
+                <FilterDropdown {...props}>
+                  <Select allowClear {...umSelectProps} style={{ minWidth: 200 }} />
+                </FilterDropdown>
+              )}
             />
+            <Table.Column dataIndex="maxQty" title={"Qtd. Máx."} />
             <Table.Column
               dataIndex="maxQtyUnitId"
               sorter={true}
@@ -115,14 +145,16 @@ export const StockList = () => {
 
                 return <TextField value={data?.find((item) => item.id === value)?.description} />;
               }}
+              filterDropdown={(props) => (
+                <FilterDropdown {...props}>
+                  <Select allowClear {...umSelectProps} style={{ minWidth: 200 }} />
+                </FilterDropdown>
+              )}
             />
-            <Table.Column dataIndex="qty" title={"Quantidade Atual"} />
-            <Table.Column dataIndex="maxQty" title={"Qtd. Máx."} />
-            <Table.Column dataIndex="minQty" title={"Qtd. Mín."} />
           </Table>
-        </List>
-      </Tabs.TabPane>
-      <Tabs.TabPane key="2" tab="Dashboard"></Tabs.TabPane>
-    </Tabs>
+        </Tabs.TabPane>
+        <Tabs.TabPane key="2" tab="Dashboard"></Tabs.TabPane>
+      </Tabs>
+    </List>
   );
 }

@@ -16,11 +16,4 @@ public class CurrentStockListDto {
   private UUID minQtyUnitId;
   private Double maxQty;
   private UUID maxQtyUnitId;
-  
-  @SuppressWarnings("unused")
-  private boolean hasStock;
-
-  public boolean getHasStock() {
-    return qty > 0D;
-  }
 }

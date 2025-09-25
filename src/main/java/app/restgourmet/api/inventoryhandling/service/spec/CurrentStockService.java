@@ -8,6 +8,7 @@ import org.springframework.data.web.PagedModel;
 import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockDto;
 import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListDto;
 import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListFiltersDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.EditCurrentStockDto;
 import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.models.Warehouse;
@@ -16,6 +17,8 @@ public interface CurrentStockService {
   PagedModel<CurrentStockListDto> list(PageRequest pagReq, CurrentStockListFiltersDto filters);
 
   CurrentStockDto getOne(UUID id);
+
+  void edit(UUID id, EditCurrentStockDto dto);
 
   boolean checkStockAvailability(Product prod, Double qty);
 

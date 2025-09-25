@@ -72,7 +72,9 @@ public final class AppConstants {
     public static final String SHARED_ITEM_HAS_ERRORS = "Item has errors: %s";
 
     public static final String STOCK_INSUFFICIENT = "Insufficient inventory available to fulfill the request.";
+    public static final String STOCK_INVALID_MAX_MIN_RANGE = "Maximum and minimum stock range is invalid";
     public static final String STOCK_NOT_FOUND = "Inventory record not found.";
+    public static final String STOCK_PRODUCT_BASE_INCOMPATIBLE = "Unit is incompatible with stock base unit";
     public static final String STOCK_QUANTITY_EXCEEDED = "Requested quantity exceeds available inventory.";
     public static final String STOCK_UNAVAILABLE = "Inventory is currently unavailable.";
     

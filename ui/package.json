@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@ant-design/colors": "^7.2.1",
     "@ant-design/icons": "^5.6.1",
     "@ant-design/plots": "^2.3.3",
     "@refinedev/antd": "^5.45.3",

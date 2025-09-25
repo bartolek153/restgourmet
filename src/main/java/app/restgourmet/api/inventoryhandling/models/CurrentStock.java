@@ -11,6 +11,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -39,14 +40,16 @@ public class CurrentStock extends BaseEntity {
   private Double minQty;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "min_quantity_unit_id")
+  @JoinColumn(name = "min_quantity_unit_id", nullable = false)
+  @NotNull
   private UnitMeasurement minQtyUnit;
 
   @Min(0)
   private Double maxQty;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "max_quantity_unit_id")
+  @JoinColumn(name = "max_quantity_unit_id", nullable = false)
+  @NotNull
   private UnitMeasurement maxQtyUnit;
 
   public void increaseQuantity(Double val) {

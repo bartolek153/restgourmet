@@ -8,11 +8,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
+import app.restgourmet.api.commondata.models.BaseUnit;
 import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockDto;
 import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListDto;
 import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListFiltersDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.EditCurrentStockDto;
 import app.restgourmet.api.inventoryhandling.exceptions.QuantityExceededException;
 import app.restgourmet.api.inventoryhandling.mappers.CurrentStockMapper;
 import app.restgourmet.api.inventoryhandling.models.CurrentStock;
@@ -22,6 +25,8 @@ import app.restgourmet.api.inventoryhandling.service.spec.CurrentStockService;
 import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.models.Warehouse;
+import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
+import app.restgourmet.api.shared.exceptions.AppValidationException;
 import app.restgourmet.api.shared.exceptions.BadRequestException;
 import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants.ErrorMessages;
@@ -30,13 +35,16 @@ import app.restgourmet.api.utils.AppConstants.ErrorMessages;
 public class CurrentStockServiceImpl implements CurrentStockService {
 
   private final CurrentStockRepository currentStockRepository;
+  private final UnitMeasurementRepository unitMeasurementRepository;
 
   @Autowired
   private CurrentStockMapper currentStockMapper;
 
   public CurrentStockServiceImpl(
-      CurrentStockRepository currentStockRepository) {
+      CurrentStockRepository currentStockRepository,
+      UnitMeasurementRepository unitMeasurementRepository) {
     this.currentStockRepository = currentStockRepository;
+    this.unitMeasurementRepository = unitMeasurementRepository;
   }
 
   public PagedModel<CurrentStockListDto> list(PageRequest pagReq, CurrentStockListFiltersDto filters) {
@@ -47,6 +55,35 @@ public class CurrentStockServiceImpl implements CurrentStockService {
 
   public CurrentStockDto getOne(UUID id) {
     return currentStockMapper.toDto(getById(id));
+  }
+
+  public void edit(UUID id, EditCurrentStockDto dto) {
+    CurrentStock cs = getById(id);
+    currentStockMapper.updateEntity(dto, cs);
+
+    UnitMeasurement maxUn = unitMeasurementRepository.findById(dto.getMaxQtyUnitId())
+        .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.UNIT_MEASUREMENT_NOT_FOUND));
+    cs.setMaxQtyUnit(maxUn);
+
+    UnitMeasurement minUn = unitMeasurementRepository.findById(dto.getMinQtyUnitId())
+        .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.UNIT_MEASUREMENT_NOT_FOUND));
+    cs.setMinQtyUnit(minUn);
+
+    // compatibility validation
+    BaseUnit prodStockBaseUn = cs.getProduct().getStockUnit().getBaseUnit();
+
+    if (maxUn.getBaseUnit() != prodStockBaseUn) {
+      throw new AppValidationException("maxQtyUnitId", ErrorMessages.STOCK_PRODUCT_BASE_INCOMPATIBLE);
+    }
+
+    if (minUn.getBaseUnit() != prodStockBaseUn) {
+      throw new AppValidationException("minQtyUnitId", ErrorMessages.STOCK_PRODUCT_BASE_INCOMPATIBLE);
+    }
+
+    // logical range validation
+    if (dto.getMaxQty() * maxUn.getConversionFactor() > dto.getMinQty() * minUn.getConversionFactor()) {
+      throw new BadRequestException(ErrorMessages.STOCK_INVALID_MAX_MIN_RANGE);
+    }
   }
 
   public boolean checkStockAvailability(Product prod, Double qty) {
@@ -116,7 +153,7 @@ public class CurrentStockServiceImpl implements CurrentStockService {
 
   private CurrentStock getStockOrCreateIfNotExists(Warehouse wh, Product prod) {
     Optional<CurrentStock> cs = currentStockRepository.findByWarehouseAndProduct(wh, prod);
-    
+
     if (cs.isPresent()) {
       return cs.get();
     }

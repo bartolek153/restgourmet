@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import app.restgourmet.api.commondata.models.BaseUnit;
 import app.restgourmet.api.commondata.repository.BaseUnitRepository;
 import app.restgourmet.api.commondata.service.impl.GlobalParametersServiceImpl;
-import app.restgourmet.api.inventoryhandling.models.CurrentStock;
-import app.restgourmet.api.inventoryhandling.repository.CurrentStockRepository;
+import app.restgourmet.api.inventoryhandling.models.Stock;
+import app.restgourmet.api.inventoryhandling.repository.StockRepository;
 import app.restgourmet.api.masterdata.enums.ProductOrigin;
 import app.restgourmet.api.masterdata.enums.ProductStatus;
 import app.restgourmet.api.masterdata.enums.ProductType;
@@ -25,7 +25,6 @@ import app.restgourmet.api.masterdata.repository.ProductRepository;
 import app.restgourmet.api.masterdata.repository.UnitMeasurementRepository;
 import app.restgourmet.api.masterdata.repository.WarehouseRepository;
 import app.restgourmet.api.shared.models.parameters.GlobalParameters;
-import app.restgourmet.api.shared.service.impl.InventoryParameterServiceImpl;
 import app.restgourmet.api.usermanagement.enums.PermissionCategory;
 import app.restgourmet.api.usermanagement.enums.UserType;
 import app.restgourmet.api.usermanagement.models.Permission;
@@ -40,7 +39,6 @@ public class DataLoader implements CommandLineRunner {
   private final GlobalParametersServiceImpl globalParametersServiceImpl;
 
   private static final Logger logger = LoggerFactory.getLogger(DataLoader.class);
-  private final InventoryParameterServiceImpl inventoryParameterServiceImpl;
 
   private final BaseUnitRepository baseUnitRepository;
   private final PermissionRepository permissionRepository;
@@ -48,7 +46,7 @@ public class DataLoader implements CommandLineRunner {
   private final ProductRepository productRepository;
   private final UnitMeasurementRepository unitMeasurementRepository;
   private final WarehouseRepository warehouseRepository;
-  private final CurrentStockRepository currentStockRepository;
+  private final StockRepository stockRepository;
 
   private final PasswordEncoder passwordEncoder;
 
@@ -60,25 +58,21 @@ public class DataLoader implements CommandLineRunner {
       UserRepository userRepository,
       ProductRepository productRepository,
       WarehouseRepository warehouseRepository,
-      InventoryParameterServiceImpl inventoryParameterServiceImpl,
       GlobalParametersServiceImpl globalParametersServiceImpl,
-      CurrentStockRepository currentStockRepository) {
+      StockRepository stockRepository) {
     this.baseUnitRepository = baseUnitRepository;
     this.permissionRepository = permissionRepository;
     this.passwordEncoder = passwordEncoder;
     this.userRepository = userRepository;
-    this.inventoryParameterServiceImpl = inventoryParameterServiceImpl;
     this.globalParametersServiceImpl = globalParametersServiceImpl;
     this.productRepository = productRepository;
     this.unitMeasurementRepository = unitMeasurementRepository;
     this.warehouseRepository = warehouseRepository;
-    this.currentStockRepository = currentStockRepository;
+    this.stockRepository = stockRepository;
   }
 
   @Override
   public void run(String... args) throws Exception {
-    System.out.println(inventoryParameterServiceImpl.getActive());
-
     globalParametersServiceImpl.getActive().ifPresentOrElse((p) -> {
       logger.info("Database already initialized.");
     }, () -> {
@@ -132,6 +126,20 @@ public class DataLoader implements CommandLineRunner {
             bul.get(0),
             10.0));
 
+    unitMeasurementRepository.saveAll(
+        List.of(
+            new UnitMeasurement(
+                "Tonelada",
+                "t",
+                bul.get(1),
+                1000.0),
+
+            new UnitMeasurement(
+                "Meia dúzia",
+                "1/2 DZ",
+                bul.get(0),
+                6.0)));
+
     var wh = warehouseRepository.save(
         new Warehouse("ALMOXARIFADO", null, WarehouseStatus.ACTIVE));
 
@@ -152,15 +160,18 @@ public class DataLoader implements CommandLineRunner {
             ProductType.INVENTORY_PRODUCT,
             null));
 
-    currentStockRepository.save(
-        new CurrentStock(pd1, wh, 20D, 2D, pd1.getStockUnit(), 30D, pd1.getStockUnit()));
+    stockRepository.save(
+        new Stock(pd1, wh, 20D, 2D, pd1.getStockUnit(), 30D, pd1.getStockUnit()));
 
-    // initialize parameters
-    globalParametersServiceImpl.create(
-        new GlobalParameters(
+    var gp = new GlobalParameters(
             true,
             null,
             "",
-            true));
+            true);
+          
+    gp.setIsActive(true);
+        
+    // initialize parameters
+    globalParametersServiceImpl.create(gp);
   }
 }

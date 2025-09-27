@@ -11,6 +11,7 @@ import { BaseRecord, useMany } from "@refinedev/core";
 import { Form, Input, Space, Table, Tag } from "antd";
 import { AiOutlineSearch } from "react-icons/ai";
 import { StockTakingCreateForm } from "./create";
+import { text } from "stream/consumers";
 
 export const StockTakingList = () => {
   const { tableProps, searchFormProps } = useTable({
@@ -105,7 +106,12 @@ export const StockTakingList = () => {
             sorter={true}
             render={(text) => new Date(text).toLocaleString()}
           />
-          <Table.Column dataIndex="endDate" title={"Data final"} sorter={true} />
+          <Table.Column 
+            dataIndex="endDate" 
+            title={"Data final"} 
+            sorter={true} 
+            render={(text) => new Date(text).toLocaleString()}
+          />
           <Table.Column
             dataIndex={["createdBy", "name"]}
             sorter={true}

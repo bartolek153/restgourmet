@@ -5,20 +5,20 @@ import java.util.UUID;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PagedModel;
 
-import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockDto;
-import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListDto;
-import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListFiltersDto;
-import app.restgourmet.api.inventoryhandling.dto.stock.EditCurrentStockDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.StockDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.StockListDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.stockListFiltersDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.EditStockDto;
 import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.models.Warehouse;
 
-public interface CurrentStockService {
-  PagedModel<CurrentStockListDto> list(PageRequest pagReq, CurrentStockListFiltersDto filters);
+public interface StockService {
+  PagedModel<StockListDto> list(PageRequest pagReq, stockListFiltersDto filters);
 
-  CurrentStockDto getOne(UUID id);
+  StockDto getOne(UUID id);
 
-  void edit(UUID id, EditCurrentStockDto dto);
+  void edit(UUID id, EditStockDto dto);
 
   boolean checkStockAvailability(Product prod, Double qty);
 

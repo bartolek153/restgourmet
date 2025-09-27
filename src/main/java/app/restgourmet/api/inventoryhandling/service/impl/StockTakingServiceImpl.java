@@ -30,7 +30,7 @@ import app.restgourmet.api.inventoryhandling.models.StockTakingItem;
 import app.restgourmet.api.inventoryhandling.repository.StockTakingItemRepository;
 import app.restgourmet.api.inventoryhandling.repository.StockTakingRepository;
 import app.restgourmet.api.inventoryhandling.repository.specifications.StockTakingSpecification;
-import app.restgourmet.api.inventoryhandling.service.spec.CurrentStockService;
+import app.restgourmet.api.inventoryhandling.service.spec.StockService;
 import app.restgourmet.api.inventoryhandling.service.spec.StockTakingService;
 import app.restgourmet.api.masterdata.repository.ProductRepository;
 import app.restgourmet.api.masterdata.repository.WarehouseRepository;
@@ -44,7 +44,7 @@ import jakarta.transaction.Transactional;
 @Service
 public class StockTakingServiceImpl implements StockTakingService {
 
-  private final CurrentStockService currentStockService;
+  private final StockService stockService;
   private final StockTakingRepository stockTakingRepository;
   private final StockTakingItemRepository stockTakingItemRepository;
   private final UserRepository userRepository;
@@ -60,8 +60,8 @@ public class StockTakingServiceImpl implements StockTakingService {
       UserRepository userRepository,
       WarehouseRepository warehouseRepository,
       ProductRepository productRepository,
-      CurrentStockService currentStockService) {
-    this.currentStockService = currentStockService;
+      StockService stockService) {
+    this.stockService = stockService;
     this.stockTakingRepository = stockTakingRepository;
     this.stockTakingItemRepository = stockTakingItemRepository;
     this.userRepository = userRepository;
@@ -200,7 +200,7 @@ public class StockTakingServiceImpl implements StockTakingService {
           continue;
         }
 
-        currentStockService.adjustStock(
+        stockService.adjustStock(
             st.getWarehouse(),
             item.getProduct(),
             item.getCountedQuantity());

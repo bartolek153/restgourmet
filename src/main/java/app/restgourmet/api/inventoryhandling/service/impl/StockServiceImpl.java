@@ -8,20 +8,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PagedModel;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Service;
 
 import app.restgourmet.api.commondata.models.BaseUnit;
-import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockDto;
-import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListDto;
-import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListFiltersDto;
-import app.restgourmet.api.inventoryhandling.dto.stock.EditCurrentStockDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.StockDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.StockListDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.stockListFiltersDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.EditStockDto;
 import app.restgourmet.api.inventoryhandling.exceptions.QuantityExceededException;
-import app.restgourmet.api.inventoryhandling.mappers.CurrentStockMapper;
-import app.restgourmet.api.inventoryhandling.models.CurrentStock;
-import app.restgourmet.api.inventoryhandling.repository.CurrentStockRepository;
-import app.restgourmet.api.inventoryhandling.repository.specifications.CurrentStockSpecification;
-import app.restgourmet.api.inventoryhandling.service.spec.CurrentStockService;
+import app.restgourmet.api.inventoryhandling.mappers.StockMapper;
+import app.restgourmet.api.inventoryhandling.models.Stock;
+import app.restgourmet.api.inventoryhandling.repository.StockRepository;
+import app.restgourmet.api.inventoryhandling.repository.specifications.StockSpecification;
+import app.restgourmet.api.inventoryhandling.service.spec.StockService;
 import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.models.Warehouse;
@@ -32,33 +31,33 @@ import app.restgourmet.api.shared.exceptions.ResourceNotFoundException;
 import app.restgourmet.api.utils.AppConstants.ErrorMessages;
 
 @Service
-public class CurrentStockServiceImpl implements CurrentStockService {
+public class StockServiceImpl implements StockService {
 
-  private final CurrentStockRepository currentStockRepository;
+  private final StockRepository stockRepository;
   private final UnitMeasurementRepository unitMeasurementRepository;
 
   @Autowired
-  private CurrentStockMapper currentStockMapper;
+  private StockMapper currentStockMapper;
 
-  public CurrentStockServiceImpl(
-      CurrentStockRepository currentStockRepository,
+  public StockServiceImpl(
+      StockRepository stockRepository,
       UnitMeasurementRepository unitMeasurementRepository) {
-    this.currentStockRepository = currentStockRepository;
+    this.stockRepository = stockRepository;
     this.unitMeasurementRepository = unitMeasurementRepository;
   }
 
-  public PagedModel<CurrentStockListDto> list(PageRequest pagReq, CurrentStockListFiltersDto filters) {
-    Specification<CurrentStock> spec = CurrentStockSpecification.filterBy(filters);
-    Page<CurrentStock> pg = currentStockRepository.findAll(spec, pagReq);
+  public PagedModel<StockListDto> list(PageRequest pagReq, stockListFiltersDto filters) {
+    Specification<Stock> spec = StockSpecification.filterBy(filters);
+    Page<Stock> pg = stockRepository.findAll(spec, pagReq);
     return new PagedModel<>(pg.map(currentStockMapper::toListDto));
   }
 
-  public CurrentStockDto getOne(UUID id) {
+  public StockDto getOne(UUID id) {
     return currentStockMapper.toDto(getById(id));
   }
 
-  public void edit(UUID id, EditCurrentStockDto dto) {
-    CurrentStock cs = getById(id);
+  public void edit(UUID id, EditStockDto dto) {
+    Stock cs = getById(id);
     currentStockMapper.updateEntity(dto, cs);
 
     UnitMeasurement maxUn = unitMeasurementRepository.findById(dto.getMaxQtyUnitId())
@@ -81,17 +80,19 @@ public class CurrentStockServiceImpl implements CurrentStockService {
     }
 
     // logical range validation
-    if (dto.getMaxQty() * maxUn.getConversionFactor() > dto.getMinQty() * minUn.getConversionFactor()) {
+    if (dto.getMaxQty() * maxUn.getConversionFactor() < dto.getMinQty() * minUn.getConversionFactor()) {
       throw new BadRequestException(ErrorMessages.STOCK_INVALID_MAX_MIN_RANGE);
     }
+
+    stockRepository.save(cs);
   }
 
   public boolean checkStockAvailability(Product prod, Double qty) {
-    return currentStockRepository.sumQuantityByProductId(prod.getId()) > qty;
+    return stockRepository.sumQuantityByProductId(prod.getId()) > qty;
   }
 
   public boolean checkStockAvailability(Warehouse wh, Product prod, Double qty) {
-    CurrentStock stk = getByWarehouseProduct(wh, prod);
+    Stock stk = getByWarehouseProduct(wh, prod);
     return stk.getQty() > qty;
   }
 
@@ -103,7 +104,7 @@ public class CurrentStockServiceImpl implements CurrentStockService {
   }
 
   public void adjustStock(Warehouse wh, Product prod, Double qty) {
-    CurrentStock stk = getStockOrCreateIfNotExists(wh, prod);
+    Stock stk = getStockOrCreateIfNotExists(wh, prod);
     stk.setQty(qty);
 
     // validate max qty rules
@@ -111,11 +112,11 @@ public class CurrentStockServiceImpl implements CurrentStockService {
       throw new QuantityExceededException(qty, prod.getStockUnit(), stk.getMaxQty(), stk.getMaxQtyUnit());
     }
 
-    currentStockRepository.save(stk);
+    stockRepository.save(stk);
   }
 
   public void increaseStock(Warehouse wh, Product prod, Double qty) {
-    CurrentStock stk = getByWarehouseProduct(wh, prod);
+    Stock stk = getByWarehouseProduct(wh, prod);
     stk.increaseQuantity(qty);
 
     // validate max qty rules
@@ -123,7 +124,7 @@ public class CurrentStockServiceImpl implements CurrentStockService {
       throw new QuantityExceededException(qty, prod.getStockUnit(), stk.getMaxQty(), stk.getMaxQtyUnit());
     }
 
-    currentStockRepository.save(stk);
+    stockRepository.save(stk);
   }
 
   public void increaseStock(Warehouse wh, Product prod, Double qty, UnitMeasurement unit) {
@@ -131,34 +132,34 @@ public class CurrentStockServiceImpl implements CurrentStockService {
   }
 
   public void decreaseStock(Warehouse wh, Product prod, Double qty) {
-    CurrentStock stk = getByWarehouseProduct(wh, prod);
+    Stock stk = getByWarehouseProduct(wh, prod);
     stk.decreaseQuantity(qty);
 
-    currentStockRepository.save(stk);
+    stockRepository.save(stk);
   }
 
   public void decreaseStock(Warehouse wh, Product prod, Double qty, UnitMeasurement unit) {
     decreaseStock(wh, prod, qty * unit.getConversionFactor());
   }
 
-  private CurrentStock getById(UUID id) {
-    return currentStockRepository.findById(id)
+  private Stock getById(UUID id) {
+    return stockRepository.findById(id)
         .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.STOCK_NOT_FOUND));
   }
 
-  private CurrentStock getByWarehouseProduct(Warehouse wh, Product prod) {
-    return currentStockRepository.findByWarehouseAndProduct(wh, prod)
+  private Stock getByWarehouseProduct(Warehouse wh, Product prod) {
+    return stockRepository.findByWarehouseAndProduct(wh, prod)
         .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.STOCK_UNAVAILABLE));
   }
 
-  private CurrentStock getStockOrCreateIfNotExists(Warehouse wh, Product prod) {
-    Optional<CurrentStock> cs = currentStockRepository.findByWarehouseAndProduct(wh, prod);
+  private Stock getStockOrCreateIfNotExists(Warehouse wh, Product prod) {
+    Optional<Stock> cs = stockRepository.findByWarehouseAndProduct(wh, prod);
 
     if (cs.isPresent()) {
       return cs.get();
     }
 
-    return new CurrentStock(prod, wh, 0D, 0D, prod.getStockUnit(), 0D, prod.getStockUnit());
+    return new Stock(prod, wh, 0D, 0D, prod.getStockUnit(), 0D, prod.getStockUnit());
   }
 
   @Override

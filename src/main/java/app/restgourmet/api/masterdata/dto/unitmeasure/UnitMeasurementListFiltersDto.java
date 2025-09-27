@@ -9,5 +9,6 @@ import lombok.Data;
 public class UnitMeasurementListFiltersDto {
   private String q;
   private UUID baseUnitId;
+  private UUID referenceUnitId;
   private List<UUID> ids;
 }

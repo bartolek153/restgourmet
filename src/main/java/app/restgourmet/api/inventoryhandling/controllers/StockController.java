@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockDto;
-import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListDto;
-import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListFiltersDto;
-import app.restgourmet.api.inventoryhandling.dto.stock.EditCurrentStockDto;
-import app.restgourmet.api.inventoryhandling.service.spec.CurrentStockService;
+import app.restgourmet.api.inventoryhandling.dto.stock.StockDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.StockListDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.stockListFiltersDto;
+import app.restgourmet.api.inventoryhandling.dto.stock.EditStockDto;
+import app.restgourmet.api.inventoryhandling.service.spec.StockService;
 import app.restgourmet.api.shared.controller.CustomPageRequest;
 import app.restgourmet.api.utils.AppConstants;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,32 +28,32 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/stock")
 @Tag(name = "Current Stock", description = "Current Stock endpoints")
-public class CurrentStockController {
+public class StockController {
 
-  private final CurrentStockService currentStockService;
+  private final StockService StockService;
 
-  public CurrentStockController(CurrentStockService currentStockService) {
-    this.currentStockService = currentStockService;
+  public StockController(StockService StockService) {
+    this.StockService = StockService;
   }
 
   @GetMapping
-  public ResponseEntity<PagedModel<CurrentStockListDto>> listStock(
+  public ResponseEntity<PagedModel<StockListDto>> listStock(
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_PAGE) final Integer page,
       @RequestParam(defaultValue = AppConstants.Pagination.DEFAULT_SIZE) final Integer size,
       @RequestParam(defaultValue = "ASC") final Direction order,
       @RequestParam(defaultValue = "productId") final String sort,
-      @ParameterObject final CurrentStockListFiltersDto filters) {
-    return ResponseEntity.ok(currentStockService.list(CustomPageRequest.of(page, size, order, sort), filters));
+      @ParameterObject final stockListFiltersDto filters) {
+    return ResponseEntity.ok(StockService.list(CustomPageRequest.of(page, size, order, sort), filters));
   }
 
   @GetMapping("/{id}")
-  public ResponseEntity<CurrentStockDto> getStock(@PathVariable UUID id) {
-    return ResponseEntity.ok(currentStockService.getOne(id));
+  public ResponseEntity<StockDto> getStock(@PathVariable UUID id) {
+    return ResponseEntity.ok(StockService.getOne(id));
   }
 
   @PutMapping("/{id}")
-  public ResponseEntity<?> updateStock(@PathVariable UUID id, @RequestBody @Valid EditCurrentStockDto dto) {
-    currentStockService.edit(id, dto);
+  public ResponseEntity<?> updateStock(@PathVariable UUID id, @RequestBody @Valid EditStockDto dto) {
+    StockService.edit(id, dto);
     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
   }
 }

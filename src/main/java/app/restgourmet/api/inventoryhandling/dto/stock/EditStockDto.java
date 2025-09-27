@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class EditCurrentStockDto {
+public class EditStockDto {
   @Min(0) private Double minQty;
   @Min(0) private Double maxQty;
   @NotNull private UUID minQtyUnitId;

@@ -1,5 +1,6 @@
 package app.restgourmet.api.inventoryhandling.models;
 
+import app.restgourmet.api.inventoryhandling.enums.StockLevel;
 import app.restgourmet.api.masterdata.models.Product;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
 import app.restgourmet.api.masterdata.models.Warehouse;
@@ -22,9 +23,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "product_inventory", uniqueConstraints = @UniqueConstraint(columnNames = { "product_id",
-    "warehouse_id" }))
-public class CurrentStock extends BaseEntity {
+@Table(name = "stock", uniqueConstraints = @UniqueConstraint(columnNames = { "product_id", "warehouse_id" }))
+public class Stock extends BaseEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_id", nullable = false)
   private Product product;
@@ -61,10 +61,22 @@ public class CurrentStock extends BaseEntity {
   }
 
   public boolean quantityExceeded() {
-    return this.qty > this.maxQty;
+    return this.maxQty > 0 && this.qty > this.maxQty * this.maxQtyUnit.getConversionFactor();
   }
 
   public boolean insufficientStock() {
-    return this.qty < this.minQty;
+    return this.minQty > 0 && this.qty < this.minQty * this.minQtyUnit.getConversionFactor();
+  }
+
+  public StockLevel getLevel() {
+    if (this.qty == 0) {
+      return StockLevel.OUT_OF_STOCK;
+    } else if (insufficientStock()) {
+      return StockLevel.BELOW_MIN;
+    } else if (quantityExceeded()) {
+      return StockLevel.ABOVE_MAX;
+    } else {
+      return StockLevel.WITHIN_RANGE;
+    }
   }
 }

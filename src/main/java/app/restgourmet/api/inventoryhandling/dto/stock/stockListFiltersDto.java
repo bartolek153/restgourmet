@@ -5,7 +5,7 @@ import java.util.UUID;
 import lombok.Data;
 
 @Data
-public class CurrentStockListFiltersDto {
+public class stockListFiltersDto {
   private String q;  
   private boolean hasStock;
   private UUID productId;

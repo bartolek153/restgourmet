@@ -1,13 +1,16 @@
 package app.restgourmet.api.masterdata.repository.specifications;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
 import app.restgourmet.api.masterdata.dto.unitmeasure.UnitMeasurementListFiltersDto;
 import app.restgourmet.api.masterdata.models.UnitMeasurement;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 
 public class UnitMeasurementSpecification {
   private static final String ID = "id";
@@ -15,31 +18,35 @@ public class UnitMeasurementSpecification {
   private static final String BASE_UNIT = "baseUnit";
 
   public static Specification<UnitMeasurement> filterBy(UnitMeasurementListFiltersDto filters) {
-    return Specification.where(qSearch(filters.getQ()))
-        .and(baseUnitSearch(filters.getBaseUnitId()))
-        .and(hasIds(filters.getIds()));
-  }
-
-  public static Specification<UnitMeasurement> qSearch(String q) {
     return (root, query, cb) -> {
-      if (!StringUtils.hasText(q))
-        return cb.conjunction();
+      List<Predicate> predicates = new ArrayList<>();
 
-      return cb.or(
-          cb.like(cb.lower(root.get(DESCRIPTION)), "%" + q.toLowerCase() + "%"));
+      if (StringUtils.hasText(filters.getQ())) {
+        String q = String.format("%%s%", filters.getQ().toLowerCase());
+        predicates.add(
+            cb.like(cb.lower(root.get(DESCRIPTION)), "%" + q.toLowerCase() + "%"));
+      }
+
+      if (filters.getBaseUnitId() != null) {
+        predicates.add(
+            cb.equal(root.get(BASE_UNIT).get(ID), filters.getBaseUnitId()));
+      }
+
+      if (filters.getIds() != null) {
+        predicates.add(
+            root.get(ID).in(filters.getIds()));
+      }
+
+      if (filters.getReferenceUnitId() != null) {
+        Subquery<String> subquery = query.subquery(String.class);
+        Root<UnitMeasurement> refRoot = subquery.from(UnitMeasurement.class);
+        subquery.select(refRoot.get(BASE_UNIT))
+            .where(cb.equal(refRoot.get(ID), filters.getReferenceUnitId()));
+
+        predicates.add(cb.equal(root.get(BASE_UNIT), subquery));
+      }
+
+      return cb.and(predicates.toArray(new Predicate[0]));
     };
-  }
-
-  public static Specification<UnitMeasurement> baseUnitSearch(UUID baseUnit) {
-    return (root, query, cb) -> {
-      if (baseUnit == null)
-        return cb.conjunction();
-
-      return cb.equal(root.get(BASE_UNIT).get(ID), baseUnit);
-    };
-  }
-
-  public static Specification<UnitMeasurement> hasIds(List<UUID> ids) {
-    return (root, query, cb) -> ids == null ? cb.conjunction() : root.get(ID).in(ids);
   }
 }

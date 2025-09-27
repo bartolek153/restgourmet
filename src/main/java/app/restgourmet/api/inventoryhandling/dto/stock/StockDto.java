@@ -7,7 +7,7 @@ import app.restgourmet.api.masterdata.dto.warehouse.WarehouseSummaryDto;
 import lombok.Data;
 
 @Data
-public class CurrentStockDto {
+public class StockDto {
   private UUID id;
   private ProductSummaryDto product;
   private WarehouseSummaryDto warehouse;

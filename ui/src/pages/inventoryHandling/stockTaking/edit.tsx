@@ -183,7 +183,7 @@ export const StockTakingEdit = () => {
     let unfilled = 0;
     const fvs = form?.getFieldsValue(true);
     fvs.items.forEach((element) => {
-      if (element.countedQuantity === null) {
+      if (element.countedQuantity === undefined) {
         unfilled++;
       }
     });
@@ -212,7 +212,7 @@ export const StockTakingEdit = () => {
 
   const confirmProcess = async () => {
     setProcessIsLoading(true);
-    const { data } = await refetch();
+    await refetch();
     setProcessIsLoading(false);
     await invalidate({
       resource: resource.name,
@@ -227,7 +227,8 @@ export const StockTakingEdit = () => {
 
   return (
     <Edit
-      saveButtonProps={saveButtonPropsEdit}
+      canDelete={!stockTakingClosed}
+      saveButtonProps={{ ...saveButtonPropsEdit, disabled: stockTakingClosed }}
       isLoading={isLoading || pdIsLoading || whIsLoading || processIsLoading}
       title="Editar inventário"
     >

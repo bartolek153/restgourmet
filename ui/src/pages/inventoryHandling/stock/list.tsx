@@ -1,5 +1,5 @@
-import { gold, green, red, yellow } from "@ant-design/colors";
-import { CheckCircleFilled, CheckCircleOutlined, DashboardOutlined, ExclamationCircleFilled, ExclamationCircleOutlined, StopOutlined, UnorderedListOutlined, WarningFilled } from "@ant-design/icons";
+import { gold, green, red } from "@ant-design/colors";
+import { CheckCircleFilled, DashboardOutlined, ExclamationCircleFilled, StopOutlined, UnorderedListOutlined, WarningFilled } from "@ant-design/icons";
 import {
   EditButton,
   FilterDropdown,
@@ -18,9 +18,11 @@ import {
   Space,
   Table, Tabs
 } from "antd";
+import { useState } from "react";
 
 
 export const StockList = () => {
+  const [editingUmId, setEditingUmId] = useState();
   const {
     tableProps,
     searchFormProps,
@@ -62,6 +64,18 @@ export const StockList = () => {
     optionLabel: "description",
   });
 
+  const { selectProps: umSelectInputCellProps } = useSelect({
+    resource: "units/measurement",
+    optionLabel: "description",
+    onSearch: (value) => [
+      {  // TODO: fix
+        field: "referenceUnitId",
+        operator: "eq",
+        value: editingUmId
+      }
+    ]
+  });
+
   const unitIds: any = tableProps?.dataSource?.flatMap((record: any) => [
     record.minQtyUnitId,
     record.maxQtyUnitId,
@@ -83,6 +97,7 @@ export const StockList = () => {
                 onClick: (event: any) => {
                   if (event.target.nodeName === "TD") {
                     setEditId && setEditId(record.id);
+                    setEditingUmId && setEditingUmId(record.stockUnitId)
                   }
                 }
               })}
@@ -120,15 +135,23 @@ export const StockList = () => {
                 dataIndex="qty"
                 width={100}
                 title={"Qtd. Disponível"}
+                sorter={true}
                 render={(value, record) => {
                   let icon;
 
-                  if (value < record.minQty)
-                    icon = <WarningFilled style={{ color: gold[6] }} />
-                  else if (value === 0)
-                    icon = <ExclamationCircleFilled style={{ color: red[5] }} />
-                  else
-                    icon = <CheckCircleFilled style={{ color: green[6] }} />
+                  switch (record.level) {
+                    case "OUT_OF_STOCK":
+                      icon = <ExclamationCircleFilled style={{ color: red[5] }} />
+                      break;
+                    case "BELOW_MIN":
+                    case "ABOVE_MAX":
+                      icon = <WarningFilled style={{ color: gold[6] }} />
+                      break;
+                    case "WITHIN_RANGE":
+                      icon = <CheckCircleFilled style={{ color: green[6] }} />
+                      break;
+                  }
+
                   return (
                     <Space align="baseline">
                       {value}
@@ -138,8 +161,26 @@ export const StockList = () => {
                 }}
               />
               <Table.Column
+                dataIndex="stockUnitId"
+                sorter={true}
+                title={"Unidade"}
+                render={(value, record) => {
+                  if (isLoadingUm) {
+                    return <TextField value="Loading..." />;
+                  }
+
+                  return <TextField value={data?.find((item) => item.id === value)?.description} />;
+                }}
+                filterDropdown={(props) => (
+                  <FilterDropdown {...props}>
+                    <Select allowClear {...umSelectProps} style={{ minWidth: 200 }} />
+                  </FilterDropdown>
+                )}
+              />
+              <Table.Column
                 dataIndex="minQty"
                 title={"Qtd. Mín."}
+                sorter={true}
                 width={100}
                 render={(value, record) => {
                   if (isEditing(record.id)) {
@@ -162,7 +203,7 @@ export const StockList = () => {
                   } else if (isEditing(record.id)) {
                     return (
                       <Form.Item name="minQtyUnitId" style={{ margin: 0 }}>
-                        <Select allowClear {...umSelectProps} />
+                        <Select allowClear {...umSelectInputCellProps} />
                       </Form.Item>
                     );
                   }
@@ -178,6 +219,7 @@ export const StockList = () => {
               <Table.Column
                 dataIndex="maxQty"
                 title={"Qtd. Máx."}
+                sorter={true}
                 width={100}
                 render={(value, record) => {
                   if (isEditing(record.id)) {
@@ -200,7 +242,7 @@ export const StockList = () => {
                   } else if (isEditing(record.id)) {
                     return (
                       <Form.Item name="maxQtyUnitId" style={{ margin: 0 }}>
-                        <Select allowClear {...umSelectProps} />
+                        <Select allowClear {...umSelectInputCellProps} />
                       </Form.Item>
                     );
                   }
@@ -240,7 +282,12 @@ export const StockList = () => {
           </Form>
         </Tabs.TabPane>
         <Tabs.TabPane key="2" tab="Dashboard" icon={<DashboardOutlined />}>
-
+          <Tabs tabPosition="left" size="small">
+            <Tabs.TabPane key="1" tab="Visão geral"></Tabs.TabPane>
+            <Tabs.TabPane key="2" tab="Transações"></Tabs.TabPane>
+            <Tabs.TabPane key="3" tab="Compras e Vendas"></Tabs.TabPane>
+            <Tabs.TabPane key="4" tab="KPIs"></Tabs.TabPane>
+          </Tabs>
         </Tabs.TabPane>
       </Tabs>
     </List>

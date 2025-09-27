@@ -6,18 +6,18 @@ import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.StringUtils;
 
-import app.restgourmet.api.inventoryhandling.dto.stock.CurrentStockListFiltersDto;
-import app.restgourmet.api.inventoryhandling.models.CurrentStock;
+import app.restgourmet.api.inventoryhandling.dto.stock.stockListFiltersDto;
+import app.restgourmet.api.inventoryhandling.models.Stock;
 import jakarta.persistence.criteria.Predicate;
 
-public class CurrentStockSpecification {
+public class StockSpecification {
   private static final String NAME = "name";
   private static final String WAREHOUSE = "warehouse";
   private static final String DESCRIPTION = "description";
   private static final String PRODUCT = "product";
   private static final String QUANTITY = "quantity";
 
-  public static Specification<CurrentStock> filterBy(CurrentStockListFiltersDto filters) {
+  public static Specification<Stock> filterBy(stockListFiltersDto filters) {
     return (root, query, cb) -> {
       List<Predicate> predicates = new ArrayList<>();
 
